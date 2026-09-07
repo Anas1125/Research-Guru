@@ -19,7 +19,7 @@ SECRET_KEY = os.getenv(
 )
 
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 1 day
 
 password_hash = PasswordHash.recommended()
 
