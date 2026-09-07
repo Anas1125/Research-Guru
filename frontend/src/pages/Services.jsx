@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import {
   ArrowRight,
+  ArrowDown,
   Award,
   BarChart3,
   BookOpen,
@@ -53,25 +54,25 @@ const processSteps = [
     number: "01",
     icon: MessageSquare,
     title: "Understand",
-    text: "We begin by understanding your research problem, objectives, existing work, and the support you require.",
+    text: "We begin by understanding your Research Problem, Objectives, Existing Work, and the support you Require.",
   },
   {
     number: "02",
     icon: Search,
     title: "Plan",
-    text: "We identify the appropriate research direction, methodology, technical approach, and expected deliverables.",
+    text: "We identify the appropriate Research Direction, Methodology, Technical Approach, and Expected Deliverables.",
   },
   {
     number: "03",
     icon: FlaskConical,
     title: "Develop",
-    text: "The required writing, implementation, analysis, documentation, or publication support is carried out around the project.",
+    text: "The required Writing, Implementation, Analysis, Documentation, or Publication support is carried out around the Project.",
   },
   {
     number: "04",
     icon: FileCheck2,
     title: "Review",
-    text: "The work is reviewed against the research objectives, technical requirements, and intended academic outcome.",
+    text: "The work is reviewed against the Research Objectives, Technical Requirements, and Intended Academic Outcome.",
   },
 ];
 
@@ -83,32 +84,32 @@ const receiveItems = [
   {
     icon: Target,
     title: "Requirement Analysis",
-    text: "Understand the research problem, objectives, scope, and expected deliverables.",
+    text: "Understand the Research Problem, Objectives, Scope, and Expected Deliverables.",
   },
   {
     icon: Lightbulb,
     title: "Research Direction",
-    text: "Develop a clearer path for methodology, implementation, documentation, or publication.",
+    text: "Develop a clearer path for Methodology, Implementation, Documentation, or Publication.",
   },
   {
     icon: Code2,
     title: "Technical Support",
-    text: "Build and refine technical components required for experiments and research implementation.",
+    text: "Build and Refine Technical Components required for Experiments and Research Implementation.",
   },
   {
     icon: FileText,
     title: "Academic Documentation",
-    text: "Present methodology, results, discussions, and technical work in a structured format.",
+    text: "Present Methodology, Results, Discussions, and Technical work in a structured format.",
   },
   {
     icon: BarChart3,
     title: "Analysis & Evaluation",
-    text: "Support data analysis, experimentation, evaluation, interpretation, and visualization.",
+    text: "Support Data Analysis, Experimentation, Evaluation, Interpretation, and Visualization.",
   },
   {
     icon: Award,
     title: "Publication Readiness",
-    text: "Prepare research content for appropriate journal and publication requirements.",
+    text: "Prepare research content for appropriate Journal and Publication Requirements.",
   },
 ];
 
@@ -400,17 +401,17 @@ function Services() {
             </span>
 
             <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-[#17213A] md:text-6xl lg:text-7xl">
-              Research support
+              Research Support
               <span className="block">
-                built around your goals.
+                Built Around Your Goals.
               </span>
             </h1>
 
             <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
-              From academic writing and
-              publication support to technical
-              implementation and research
-              analysis, Research Guru helps
+              From Academic Writing and
+              Publication support to Technical
+              Implementation and Research
+              Analysis, Reserch Guru helps
               scholars move through the research
               lifecycle with greater structure and
               clarity.
@@ -422,7 +423,7 @@ function Services() {
                 className="inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3.5 font-semibold text-white transition hover:bg-[#0F172A]"
               >
                 Explore Services
-                <ArrowRight size={18} />
+                <ArrowDown className="animate-bounce" size={18} />
               </a>
 
               <Link
@@ -446,22 +447,22 @@ function Services() {
             {
               icon: GraduationCap,
               title: "PhD Focused",
-              text: "Support built around academic research.",
+              text: "Support Built Around Academic Research.",
             },
             {
               icon: Code2,
               title: "Technical",
-              text: "Implementation for research projects.",
+              text: "Implementation for Research Projects.",
             },
             {
               icon: FileText,
               title: "Publication",
-              text: "Research-to-publication support.",
+              text: "Research-to-Publication Support.",
             },
             {
               icon: Users,
               title: "Project Specific",
-              text: "Support tailored to your requirements.",
+              text: "Support Tailored to your Requirements.",
             },
           ].map((item) => {
             const Icon = item.icon;
@@ -505,7 +506,7 @@ function Services() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Three core areas. One research ecosystem.
+              Research support across every stage.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -590,20 +591,6 @@ function Services() {
                           {category.description ||
                             "Research support tailored to your requirements."}
                         </p>
-
-                        <span
-                          className={`mt-6 inline-flex items-center gap-2 text-sm font-semibold ${
-                            active
-                              ? "text-white"
-                              : "text-[#17213A]"
-                          }`}
-                        >
-                          Explore
-                          <ArrowRight
-                            size={16}
-                            className="transition-transform group-hover:translate-x-1"
-                          />
-                        </span>
                       </button>
                     );
                   }
@@ -757,7 +744,7 @@ function Services() {
           WHAT YOU RECEIVE
       ====================================================== */}
 
-      <section className="bg-white px-6 py-24 lg:py-20">
+      <section className="bg-white px-6 py-24 lg:py-15">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
@@ -765,16 +752,16 @@ function Services() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Support that follows the research requirement.
+              Support that follows the Research Requirement.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
-              Research projects differ in scope,
-              methodology, technology, and
-              expected outcomes. Our services are
+              Research Projects differ in Scope,
+              Methodology, Technology, and
+              Expected Outcomes. Our Services are
               structured so that support can be
               aligned with the stage and
-              requirements of the project.
+              requirements of the Project.
             </p>
           </div>
 
@@ -824,10 +811,10 @@ function Services() {
               </h2>
 
               <p className="mt-5 text-lg leading-8 text-slate-600">
-                Research guidance, technical
-                perspectives, publication
-                information, and practical insights
-                for scholars.
+                Research Guidance, Technical
+                Perspectives, Publication
+                Information, and Practical Insights
+                for Scholars.
               </p>
             </div>
 
@@ -1046,8 +1033,8 @@ function Services() {
       </section>
 
 
-      {/* =========================
-          INSTITUTIONS & ORGANIZATIONS
+     {/* =========================
+          PUBLICATION PARTNERS
       ========================= */}
 
       {clients.length > 0 && (
@@ -1055,22 +1042,22 @@ function Services() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
 
             {/* Heading */}
-            <div className="mx-auto max-w-3xl text-center mb-10">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#2563EB]">
-                Institutions & Organizations
+            <div className="mx-auto mb-10 max-w-3xl text-center">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+                Publication Partners
               </p>
 
               <h2 className="text-3xl font-bold tracking-tight text-[#17213A] sm:text-4xl">
-                Institutions & Organizations We Work With
+                Publishers & Journals We Work With
               </h2>
 
               <p className="mt-4 text-base leading-7 text-slate-600">
-                Supporting researchers and organizations across diverse academic
-                and professional fields.
+                Supporting researchers with publication across leading academic
+                publishers and journals.
               </p>
             </div>
 
-            {/* Client Logos */}
+            {/* Publisher Logos */}
             <div className="flex flex-wrap justify-center gap-6">
               {clients.map((client) => (
                 <div
@@ -1088,7 +1075,7 @@ function Services() {
                     </div>
                   )}
 
-                  {/* Client Name */}
+                  {/* Publisher Name */}
                   <p className="mt-5 text-center text-base font-semibold text-[#17213A]">
                     {client.name}
                   </p>
@@ -1175,9 +1162,9 @@ function Services() {
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Publication involves decisions
-              about journal scope, manuscript
-              structure, formatting, presentation,
-              and submission. Our publication
+              about Journal Scope, Manuscript
+              Structure, Formatting, Presentation,
+              and Submission. Our Publication
               support is designed to help
               researchers organize these
               requirements more effectively.
@@ -1223,9 +1210,9 @@ function Services() {
             <p className="mt-4 leading-7 text-slate-600">
               A publication strategy should
               begin with understanding the
-              research contribution, intended
-              audience, journal scope, and
-              submission requirements.
+              Research Contribution, Intended
+              Audience, Journal Scope, and
+              Submission Requirements.
             </p>
 
             <Link

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
+  ArrowDown,
   Award,
   BookOpen,
   CheckCircle2,
@@ -236,17 +237,17 @@ function Home() {
   ) {
     switch (serviceName) {
       case "Implementation":
-        return "Turn research concepts into working technical solutions, prototypes, experiments, and deployable systems.";
+        return "Turn research concepts into working Technical Solutions, Prototypes, Experiments, and Deployable Systems.";
 
       case "Writing":
-        return "Develop clear, structured academic content around your research objectives.";
+        return "Develop Clear, Structured academic content around your Research Objectives.";
 
       case "Publication":
-        return "Prepare and position your research for suitable publication opportunities.";
+        return "Prepare and Position your Research for suitable Publication Opportunities.";
 
       default:
         return (
-          "Research support tailored to your specific requirements."
+          "Research support tailored to your Specific Requirements."
         );
     }
   }
@@ -256,17 +257,17 @@ function Home() {
   ) {
     switch (serviceName) {
       case "Implementation":
-        return "From research algorithms and experimental models to complete working applications, we provide technical implementation support across multiple research domains.";
+        return "From Research Algorithms and Experimental Models to complete working Applications, we provide Technical Implementation support across multiple Research Domains.";
 
       case "Writing":
-        return "Research writing support across literature reviews, research papers, thesis documentation, review papers, conference papers, and technical reports.";
+        return "Research Writing Support across Literature Reviews, Research Papers, Thesis Documentation, Review Papers, Conference Papers, and Technical Reports.";
 
       case "Publication":
-        return "Support for manuscript preparation, journal selection, formatting, submission readiness, and publication-focused presentation of your research.";
+        return "Support for Manuscript Preparation, Journal Selection, Formatting, Submission Readiness, and Publication-Focused Presentation of your Research.";
 
       default:
         return (
-          "Research support tailored to your specific requirements."
+          "Research support Tailored to your Specific Requirements."
         );
     }
   }
@@ -410,25 +411,25 @@ function Home() {
       icon: GraduationCap,
       number: "PhD",
       label: "Research Support",
-      text: "Structured assistance across the research lifecycle.",
+      text: "Structured assistance across the Research Lifecycle.",
     },
     {
       icon: FileText,
       number: "100+",
       label: "Research Outputs",
-      text: "Support across academic and technical research work.",
+      text: "Support across Academic and Technical Research Work.",
     },
     {
       icon: BookOpen,
       number: "50+",
       label: "Publication Support",
-      text: "Guidance for publication-focused research projects.",
+      text: "Guidance for Publication-focused Research Projects.",
     },
     {
       icon: Code2,
       number: "100+",
       label: "Implementations",
-      text: "Technical solutions developed around research requirements.",
+      text: "Technical Solutions developed around Research Requirements.",
     },
   ];
 
@@ -441,19 +442,19 @@ function Home() {
       icon: MapPin,
       type: "RESEARCH HUB",
       city: "Nagercoil",
-      text: "Our research support centre serving scholars and researchers across South India.",
+      text: "Our research support centre serving Scholars and Researchers across South India.",
     },
     {
       icon: MapPin,
       type: "MAIN OFFICE",
       city: "Chennai",
-      text: "Connecting researchers, academic institutions, and technical specialists across India.",
+      text: "Connecting Researchers, Academic Institutions, and Technical Specialists across India.",
     },
     {
       icon: MapPin,
       type: "GLOBAL SUPPORT",
       city: "Singapore",
-      text: "Supporting researchers and academic collaborations beyond geographical boundaries.",
+      text: "Supporting Researchers and Academic Collaborations beyond Geographical Boundaries.",
     },
   ];
 
@@ -464,7 +465,7 @@ function Home() {
       {/* =====================================================
           HERO
       ====================================================== */}
-      <section className="relative min-h-[calc(100vh-73px)] overflow-hidden">
+      <section className="relative min-h-[calc(100vh-73px)] overflow-hidden py-10">
         {/* Background image */}
         {siteSettings.home_background ? (
           <div
@@ -511,8 +512,8 @@ function Home() {
                 href="#services"
                 className="inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3.5 font-semibold text-white shadow-lg shadow-[#17213A]/20 transition hover:bg-[#0F172A]"
               >
-                Explore Services
-                <ArrowRight size={18} />
+                View Details
+                <ArrowDown className="animate-bounce" size={18} />
               </a>
 
               <a
@@ -559,7 +560,7 @@ function Home() {
               <div className="mb-3 h-1.5 w-14 rounded-full bg-[#17213A]" />
 
               <h2 className="text-2xl font-bold tracking-tight text-[#17213A]">
-                Let's discuss your research
+                Let's Discuss your Research
               </h2>
 
               <p className="mt-2 text-sm leading-6 text-slate-500">
@@ -576,12 +577,17 @@ function Home() {
               {/* Name + Phone */}
               <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                    Name *
+                  <label 
+                    htmlFor="hero-name"
+                    className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                      Name *
                   </label>
 
                   <input
+                    id="hero-name"
+                    name="name"
                     type="text"
+                    autoComplete="name"
                     value={heroForm.name}
                     onChange={(e) =>
                       updateHeroField(
@@ -596,13 +602,18 @@ function Home() {
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                    Phone *
+                  <label 
+                     htmlFor="hero-phone"
+                     className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                      Phone *
                   </label>
 
                   <input
+                    id="hero-phone"
+                    name="phone"
                     type="tel"
                     inputMode="numeric"
+                    autoComplete="tel"
                     value={heroForm.phone}
                     onChange={(e) =>
                       updateHeroField(
@@ -619,12 +630,17 @@ function Home() {
 
               {/* Email */}
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                  Email *
+                <label 
+                  htmlFor="hero-email"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                    Email *
                 </label>
 
                 <input
+                  id="hero-email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   value={heroForm.email}
                   onChange={(e) =>
                     updateHeroField(
@@ -643,11 +659,15 @@ function Home() {
                 ref={researchAreaRef}
                 className="relative"
               >
-                <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                  Research Area
+                <label 
+                  htmlFor="hero-research-area"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                    Research Area
                 </label>
 
                 <input
+                  id="hero-research-area"
+                  name="research_area"
                   type="text"
                   value={researchArea}
                   onChange={(event) => {
@@ -700,11 +720,15 @@ function Home() {
 
               {/* Message */}
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                  Message
+                <label 
+                  htmlFor="hero-message"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                    Message
                 </label>
 
                 <textarea
+                  id="hero-message"
+                  name="message"
                   rows="3"
                   value={heroForm.message}
                   onChange={(e) =>
@@ -783,22 +807,22 @@ function Home() {
             {
               icon: GraduationCap,
               title: "PhD Focused",
-              text: "Research-driven support",
+              text: "Research-Driven Support",
             },
             {
               icon: FlaskConical,
               title: "Technical",
-              text: "Implementation expertise",
+              text: "Implementation Expertise",
             },
             {
               icon: FileText,
               title: "Academic",
-              text: "Publication-ready support",
+              text: "Publication-Ready Support",
             },
             {
               icon: ShieldCheck,
               title: "Structured",
-              text: "Project-specific approach",
+              text: "Project-Specific Approach",
             },
           ].map((item) => {
             const Icon = item.icon;
@@ -924,11 +948,11 @@ function Home() {
 
                   <div>
                     <p className="text-sm font-bold text-[#17213A]">
-                      Research-first support
+                      Research-first Support
                     </p>
 
                     <p className="mt-1 text-xs text-slate-500">
-                      Built around your research objectives
+                      Built around your Research Objectives
                     </p>
                   </div>
                 </div>
@@ -953,7 +977,7 @@ function Home() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-[#17213A] md:text-5xl">
-              Dedicated support for scholars and PhD researchers.
+              Dedicated Support for Scholars and PhD Researchers.
             </h2>
 
             <p className="mt-6 text-lg leading-8 text-slate-600">
@@ -967,7 +991,7 @@ function Home() {
             </p>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
-              Research Guru brings these needs
+              {siteSettings.site_name || "Research Guru"} brings these needs
               together under one research
               support ecosystem — helping
               researchers progress from an
@@ -1002,7 +1026,7 @@ function Home() {
               to="/about"
               className="mt-8 inline-flex items-center gap-2 font-semibold text-[#17213A]"
             >
-              Discover Research Guru
+              Discover {siteSettings.site_name || "Research Guru"}
               <ArrowRight size={18} />
             </Link>
           </div>
@@ -1098,9 +1122,7 @@ function Home() {
                     </p>
 
                     <Link
-                      to={`/contact?service=${encodeURIComponent(
-                        service.name
-                      )}`}
+                      to={`/services#service-categories`}
                       onClick={(event) =>
                         event.stopPropagation()
                       }
@@ -1221,7 +1243,7 @@ function Home() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              From research idea to research outcome.
+              From Research Idea to Research Outcome.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -1237,26 +1259,26 @@ function Home() {
               {
                 number: "01",
                 icon: Lightbulb,
-                title: "Understand",
-                text: "Understand the research problem, objectives, requirements, and intended outcome.",
+                title: "Define",
+                text: "Define the Research Problem, Objectives, Requirements, and Intended Outcome.",
               },
               {
                 number: "02",
                 icon: BookOpen,
                 title: "Research",
-                text: "Review relevant work, identify gaps, and establish a suitable research direction.",
+                text: "Review Relevant Work, Identify Gaps, and Establish a Suitable Research Direction.",
               },
               {
                 number: "03",
                 icon: Code2,
                 title: "Implement",
-                text: "Develop experiments, models, applications, algorithms, and technical solutions.",
+                text: "Develop Experiments, Models, Applications, Algorithms, and Technical Solutions.",
               },
               {
                 number: "04",
                 icon: FileText,
                 title: "Present",
-                text: "Turn the work into clear documentation, publications, presentations, and research outputs.",
+                text: "Turn the work into Clear Documentation, Publications, Presentations, and Research Outputs.",
               },
             ].map((step) => {
               const Icon = step.icon;
@@ -1301,11 +1323,11 @@ function Home() {
             </span>
 
             <h2 className="mt-5 text-4xl font-bold leading-tight tracking-tight text-[#17213A] md:text-5xl">
-              Supporting researchers across disciplines.
+              Supporting Researchers Across Disciplines.
             </h2>
 
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              Research Guru brings together
+              {siteSettings.site_name || "Research Guru"} brings together
               academic understanding, technical
               expertise, and practical research
               support to help scholars move
@@ -1379,9 +1401,9 @@ function Home() {
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Building a research support network
-              that connects scholars, technical
-              experts, and academic opportunities
-              across regions.
+              that connects Scholars, Technical
+              Experts, and Academic Opportunities
+              across Regions.
             </p>
           </div>
 

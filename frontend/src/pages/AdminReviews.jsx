@@ -37,6 +37,7 @@ const emptyForm = {
   photo_url: "",
   is_published: false,
   display_order: 0,
+  created_at: new Date().toISOString(),
 };
 
 
@@ -110,6 +111,8 @@ function AdminReviews() {
       photo_url: review.photo_url || "",
       is_published: review.is_published || false,
       display_order: review.display_order || 0,
+      created_at:
+        review.created_at || new Date().toISOString(),
     });
 
     setError("");
@@ -291,6 +294,9 @@ function AdminReviews() {
 
             display_order:
               form.display_order,
+
+            created_at:
+              form.created_at,
           }),
         }
       );
@@ -749,6 +755,19 @@ function AdminReviews() {
                               Order: {review.display_order}
                             </span>
 
+                            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500">
+                              Date:{" "}
+                              {review.created_at
+                                ? new Date(review.created_at).toLocaleString("en-IN", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })
+                                : "—"}
+                            </span>
+
                           </div>
 
                         </div>
@@ -959,6 +978,39 @@ function AdminReviews() {
 
                 </div>
 
+                {/* Review Date */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-[#17213A]">
+                    Review Date
+                  </label>
+
+                  <input
+                    type="datetime-local"
+                    name="created_at"
+                    value={
+                      form.created_at
+                        ? new Date(form.created_at)
+                            .toISOString()
+                            .slice(0, 16)
+                        : ""
+                    }
+                    onChange={(event) => {
+                      const value = event.target.value;
+
+                      setForm((previous) => ({
+                        ...previous,
+                        created_at: value
+                          ? new Date(value).toISOString()
+                          : "",
+                      }));
+                    }}
+                    className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10"
+                  />
+
+                  <p className="mt-2 text-xs leading-5 text-slate-400">
+                    Automatically set to the current date and time. You can change it manually.
+                  </p>
+                </div>
 
                 {/* Review */}
                 <div>
@@ -1054,7 +1106,6 @@ function AdminReviews() {
 
               </div>
 
-
               {/* Footer */}
               <div className="flex flex-col-reverse gap-3 border-t border-[#DCE5F0] bg-[#F8FAFD] px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
 
@@ -1066,7 +1117,6 @@ function AdminReviews() {
                 >
                   Cancel
                 </button>
-
 
                 <button
                   type="submit"

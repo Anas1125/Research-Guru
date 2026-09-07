@@ -27,6 +27,8 @@ import AdminServices from "./pages/AdminServices";
 import AdminReviews from "./pages/AdminReviews";
 import AdminClients from "./pages/AdminClients";
 
+import NotFound from "./pages/NotFound";
+
 
 /* =========================================================
    SCROLL TO TOP
@@ -697,6 +699,8 @@ function App() {
             element={<AdminClients />}
           />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
 
       </Routes>
     </BrowserRouter>

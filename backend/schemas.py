@@ -200,6 +200,7 @@ class ClientReviewUpdate(BaseModel):
     photo_url: Optional[str] = None
     is_published: Optional[bool] = None
     display_order: Optional[int] = None
+    created_at: Optional[str] = None
 
 
 class ClientReviewResponse(BaseModel):

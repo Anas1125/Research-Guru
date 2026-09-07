@@ -337,17 +337,17 @@ function Contact() {
     {
       icon: MessageSquare,
       title: "Research Discussion",
-      text: "Share your research idea, challenge, or current stage with our team.",
+      text: "Share your Research Idea, Challenge, or Current Stage with our team.",
     },
     {
       icon: Search,
       title: "Requirement Review",
-      text: "Tell us what kind of writing, publication, or implementation support you need.",
+      text: "Tell us what kind of Writing, Publication, or Implementation Support you need.",
     },
     {
       icon: GraduationCap,
       title: "PhD Support",
-      text: "Discuss thesis, dissertation, technical research, and publication requirements.",
+      text: "Discuss Thesis, Dissertation, Technical Research, and Publication Requirements.",
     },
   ];
 
@@ -356,19 +356,19 @@ function Contact() {
       number: "01",
       icon: Send,
       title: "Send Your Requirement",
-      text: "Tell us about your research area, current stage, and the support you are looking for.",
+      text: "Tell us about your Research Area, Current Stage, and the Support you are looking for.",
     },
     {
       number: "02",
       icon: MessageSquare,
       title: "Discuss Your Project",
-      text: "Our team reviews your requirement and discusses the appropriate way forward.",
+      text: "Our team reviews your Requirement and Discusses the appropriate way forward.",
     },
     {
       number: "03",
       icon: FileText,
       title: "Define the Scope",
-      text: "The research requirement, expected work, and deliverables are clearly understood.",
+      text: "The Research Requirement, Expected Work, and Deliverables are clearly understood.",
     },
     {
       number: "04",
@@ -417,18 +417,18 @@ function Contact() {
             </span>
 
             <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-[#17213A] md:text-6xl lg:text-7xl">
-              Let's talk about
+              Let's Talk About
               <span className="block">
-                your research.
+                Your Research.
               </span>
             </h1>
 
             <p className="mt-7 max-w-3xl text-lg font-medium leading-8 text-slate-600 md:text-xl">
               Whether you are planning a new
-              research project, developing a
-              technical implementation, preparing
-              a manuscript, or looking for
-              publication support, tell us what
+              Research Project, Developing a
+              Technical Implementation, Preparing
+              a Manuscript, or looking for
+              Publication Support, tell us what
               you are working on.
             </p>
 
@@ -557,15 +557,15 @@ function Contact() {
               Get In Touch
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-[#17213A] md:text-5xl">
-              Tell us where you are in your
-              research journey.
+            <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-[#17213A] md:text-4xl">
+              Tell Us Where You Are In Your
+              Research Journey.
             </h2>
 
             <p className="mt-6 text-lg leading-8 text-slate-600">
               You do not need to have everything
               figured out before contacting us.
-              Share the research area, the current
+              Share the Research Area, the current
               stage of your work, and the specific
               challenge or requirement you are
               facing.
@@ -616,39 +616,39 @@ function Contact() {
             </div>
 
             {/* RESPONSE */}
-<div className="mt-6 rounded-2xl border border-[#D6E2EF] bg-[#F8FAFC] p-6 shadow-sm">
-  <div className="flex items-start gap-4">
+          <div className="mt-6 rounded-2xl border border-[#D6E2EF] bg-[#F8FAFC] p-6 shadow-sm">
+            <div className="flex items-start gap-4">
 
-    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white">
-      <Clock3 size={21} />
-    </div>
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white">
+                <Clock3 size={21} />
+              </div>
 
-    <div>
-      <h3 className="text-lg font-bold text-[#17213A]">
-        Discuss your requirement
-      </h3>
+              <div>
+                <h3 className="text-lg font-bold text-[#17213A]">
+                  Discuss your requirement
+                </h3>
 
-      <p className="mt-2 text-base leading-7 text-slate-600">
-        Provide enough detail for our team to understand your research
-        requirement clearly.
-      </p>
+                <p className="mt-2 text-base leading-7 text-slate-600">
+                  Provide enough detail for our team to understand your research
+                  requirement clearly.
+                </p>
 
-      {siteSettings.contact_hours && (
-        <div className="mt-4 inline-flex items-center rounded-lg bg-white px-4 py-2.5 border border-[#DCE5F0]">
-          <Clock3
-            size={16}
-            className="mr-2 text-[#2563EB]"
-          />
+                {siteSettings.contact_hours && (
+                  <div className="mt-4 inline-flex items-center rounded-lg bg-white px-4 py-2.5 border border-[#DCE5F0]">
+                    <Clock3
+                      size={16}
+                      className="mr-2 text-[#2563EB]"
+                    />
 
-          <p className="text-base font-bold text-[#17213A]">
-            {siteSettings.contact_hours}
-          </p>
-        </div>
-      )}
-    </div>
+                    <p className="text-base font-bold text-[#17213A]">
+                      {siteSettings.contact_hours}
+                    </p>
+                  </div>
+                )}
+              </div>
 
-  </div>
-</div>
+            </div>
+          </div>
 
           </div>
 
@@ -681,11 +681,17 @@ function Contact() {
 
                 {/* NAME */}
                 <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                  <label
+                    htmlFor="contact-name"
+                    className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                  >
                     Name *
                   </label>
 
                   <input
+                    id="contact-name"
+                    name="name"
+                    autoComplete="name"
                     type="text"
                     value={formData.name}
                     onChange={(e) =>
@@ -702,11 +708,17 @@ function Contact() {
 
                 {/* PHONE */}
                 <div>
-                  <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                  <label
+                    htmlFor="contact-phone"
+                    className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                  >
                     Phone *
                   </label>
 
                   <input
+                    id="contact-phone"
+                    name="phone"
+                    autoComplete="tel"
                     type="tel"
                     inputMode="tel"
                     value={formData.phone}
@@ -730,11 +742,17 @@ function Contact() {
 
               <div>
 
-                <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                <label
+                  htmlFor="contact-email"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                >
                   Email *
                 </label>
 
                 <input
+                  id="contact-email"
+                  name="email"
+                  autoComplete="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) =>
@@ -754,11 +772,17 @@ function Contact() {
 
               <div>
 
-                <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                <label
+                  htmlFor="contact-research-area"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                >
                   Research Area
                 </label>
 
                 <select
+                  id="contact-research-area"
+                  name="research_area"
+                  autoComplete="off"
                   value={
                     formData.research_area
                   }
@@ -797,11 +821,17 @@ function Contact() {
 
               <div>
 
-                <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                <label
+                  htmlFor="contact-service"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                >
                   Service Required
                 </label>
 
                 <select
+                  id="contact-service"
+                  name="service"
+                  autoComplete="off"
                   value={
                     formData.service
                   }
@@ -840,11 +870,17 @@ function Contact() {
 
               <div>
 
-                <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                <label
+                  htmlFor="contact-research-stage"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                >
                   Current Research Stage
                 </label>
 
                 <select
+                  id="contact-research-stage"
+                  name="research_stage"
+                  autoComplete="off"
                   value={
                     formData.research_stage
                   }
@@ -905,11 +941,17 @@ function Contact() {
 
               <div>
 
-                <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                <label
+                  htmlFor="contact-message"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                >
                   Tell us about your requirement
                 </label>
 
                 <textarea
+                  id="contact-message"
+                  name="message"
+                  autoComplete="off"
                   rows="5"
                   value={formData.message}
                   onChange={(e) =>
@@ -976,7 +1018,7 @@ function Contact() {
           WAYS TO CONNECT
       ====================================================== */}
 
-      <section className="bg-[#F5F8FC] px-6 py-24 lg:py-28">
+      <section className="bg-[#F5F8FC] px-6 py-24 lg:py-15">
 
         <div className="mx-auto max-w-7xl">
 
@@ -1038,7 +1080,7 @@ function Contact() {
           CONTACT PROCESS
       ====================================================== */}
 
-      <section className="bg-white px-6 py-24 lg:py-28">
+      <section className="bg-white px-6 py-24 lg:py-15">
 
         <div className="mx-auto max-w-7xl">
 
@@ -1103,54 +1145,6 @@ function Contact() {
         </div>
 
       </section>
-
-      {/* =====================================================
-          FINAL CTA
-      ====================================================== */}
-
-      <section className="relative overflow-hidden bg-[#17213A] px-6 py-20">
-
-        {/* Background glow */}
-
-        <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
-
-        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
-
-        <div className="relative mx-auto flex max-w-7xl flex-col items-start justify-between gap-10 md:flex-row md:items-center">
-
-          <div>
-
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
-              Start Your Research
-            </p>
-
-            <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-white md:text-5xl">
-              Have a research requirement?
-              <span className="block text-slate-300">
-                Let's discuss it.
-              </span>
-            </h2>
-
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
-              Tell us where you are in your
-              research journey and what kind of
-              support you need.
-            </p>
-
-          </div>
-
-          <Link
-            to="/contact"
-            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-7 py-4 font-semibold text-[#17213A] shadow-lg transition hover:bg-slate-100"
-          >
-            Talk to an Expert
-            <ArrowRight size={18} />
-          </Link>
-
-        </div>
-
-      </section>
-
       <Footer />
 
     </div>

@@ -5,7 +5,6 @@ import {
   Award,
   BarChart3,
   BookOpen,
-  CheckCircle2,
   Code2,
   FileText,
   FlaskConical,
@@ -49,37 +48,37 @@ const researchStages = [
     number: "01",
     icon: Search,
     title: "Research Planning",
-    text: "Define the research problem, objectives, scope, questions, and overall direction.",
+    text: "Define the Research Problem, Objectives, Scope, Questions, and Overall Direction.",
   },
   {
     number: "02",
     icon: BookOpen,
     title: "Literature & Gap Analysis",
-    text: "Understand existing research, identify relevant work, and establish meaningful research gaps.",
+    text: "Understand existing Research, Identify Relevant Work, and Establish Meaningful Research Gaps.",
   },
   {
     number: "03",
     icon: FlaskConical,
     title: "Methodology",
-    text: "Develop appropriate methodologies, frameworks, models, experiments, and evaluation strategies.",
+    text: "Develop appropriate Methodologies, Frameworks, Models, Experiments, and Evaluation Strategies.",
   },
   {
     number: "04",
     icon: Code2,
     title: "Implementation",
-    text: "Translate research concepts into technical systems, algorithms, models, and working prototypes.",
+    text: "Translate research concepts into Technical Systems, Algorithms, Models, and Working Prototypes.",
   },
   {
     number: "05",
     icon: BarChart3,
     title: "Analysis",
-    text: "Process results, evaluate experiments, visualize findings, and interpret research outcomes.",
+    text: "Process Results, Evaluate Experiments, Visualize Findings, and Interpret Research Outcomes.",
   },
   {
     number: "06",
     icon: FileText,
     title: "Writing & Publication",
-    text: "Organize findings into research papers, thesis documents, presentations, and publication-ready manuscripts.",
+    text: "Organize findings into Research Papers, Thesis Documents, Presentations, and Publication-Ready Manuscripts.",
   },
 ];
 
@@ -380,19 +379,19 @@ function About() {
             <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
               {siteName} is a research
               support platform focused on
-              helping scholars, researchers,
-              and PhD candidates navigate the
+              helping Scholars, Researchers,
+              and PhD Candidates navigate the
               academic and technical stages of
               their research with greater
               clarity, structure, and confidence.
             </p>
 
             <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-              From research planning and
+              From Research Planning and
               literature analysis to
-              implementation, academic writing,
-              data analysis, and publication
-              support, our approach is designed
+              Implementation, Academic Writing,
+              Data Analysis, and Publication
+              Support, our approach is designed
               around the specific requirements
               of each research project.
             </p>
@@ -432,19 +431,19 @@ function About() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-[#17213A] md:text-5xl">
-              More than assistance.
+              Research Support That 
               <span className="block">
-                A research-focused partnership.
+                Moves Your Work Forward.
               </span>
             </h2>
 
             <p className="mt-6 text-lg leading-8 text-slate-600">
               Academic research can involve a
-              combination of conceptual
-              thinking, extensive literature
-              review, technical development,
-              experimentation, analysis,
-              documentation, and publication.
+              combination of Conceptual
+              Thinking, Extensive Literature
+              Review, Technical Development,
+              Experimentation, Analysis,
+              Documentation, and Publication.
               Managing all of these stages can
               become challenging as a project
               grows.
@@ -461,12 +460,12 @@ function About() {
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Whether the requirement is
-              academic writing, technical
-              implementation, publication
-              preparation, or research
-              documentation, our focus remains
-              on the underlying research
-              objective.
+              Academic Writing, Technical
+              Implementation, Publication
+              Preparation, or Research
+              Documentation, our Focus remains
+              on the underlying Research
+              Objective.
             </p>
           </div>
 
@@ -477,22 +476,22 @@ function About() {
               {
                 icon: GraduationCap,
                 title: "For Scholars",
-                text: "Structured research assistance designed around the needs of postgraduate and doctoral researchers.",
+                text: "Structured research assistance designed around the needs of Postgraduate and Doctoral Researchers.",
               },
               {
                 icon: Code2,
                 title: "For Technical Research",
-                text: "Technical support for algorithms, models, applications, experiments, and research prototypes.",
+                text: "Technical support for Algorithms, Models, Applications, Experiments, and Research Prototypes.",
               },
               {
                 icon: FileText,
                 title: "For Publications",
-                text: "Support for preparing research content and manuscripts for publication-oriented outcomes.",
+                text: "Support for preparing Research Content and Manuscripts for Publication-Oriented Outcomes.",
               },
               {
                 icon: BarChart3,
                 title: "For Research Analysis",
-                text: "Assistance with experiments, data analysis, evaluation, visualization, and interpretation.",
+                text: "Assistance with Experiments, Aata Analysis, Evaluation, Visualization, and Interpretation.",
               },
             ].map((item) => {
               const Icon = item.icon;
@@ -568,7 +567,7 @@ function About() {
                 return (
                   <div
                     key={category.id}
-                    className="rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8"
+                    className="flex h-full flex-col rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8"
                   >
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#17213A] text-white">
                       <Icon size={25} />
@@ -584,8 +583,8 @@ function About() {
                     </p>
 
                     <Link
-                      to={`/services#service-categories`}
-                      className="mt-6 inline-flex items-center gap-2 font-semibold text-[#17213A]"
+                      to="/services#service-categories"
+                      className="mt-auto pt-6 inline-flex items-center gap-2 font-semibold text-[#17213A]"
                     >
                       Explore Services
                       <ArrowRight size={17} />
@@ -610,7 +609,7 @@ function About() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Support across the research lifecycle.
+              Support across the Research Lifecycle.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -714,7 +713,7 @@ function About() {
               CLIENT REVIEWS
           ====================================================== */}
           {reviews.length > 0 && (
-            <section className="bg-[#F5F8FC] px-6 py-24 lg:py-28">
+            <section className="bg-[#F5F8FC] px-6 py-24 lg:py-15">
               <div className="mx-auto max-w-7xl">
                 <div className="mx-auto max-w-3xl text-center">
                   <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
@@ -802,6 +801,16 @@ function About() {
                           "{item.review}"
                         </p>
                       </div>
+                      {/* DATE */}
+                        {item.created_at && (
+                          <p className="mt-3 text-xs font-medium text-slate-400">
+                            {new Date(item.created_at).toLocaleDateString("en-IN", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </p>
+                        )}
                     </div>
                   ))}
                 </div>
@@ -845,13 +854,18 @@ function About() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     {/* NAME */}
                     <div>
-                      <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                        Your Name
+                      <label 
+                        htmlFor="review-client-name"
+                        className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                          Your Name
                         <span className="ml-1 text-red-500">*</span>
                       </label>
 
                       <input
+                        id="review-client-name"
+                        name="client_name"
                         type="text"
+                        autoComplete="name"
                         value={reviewForm.client_name}
                         onChange={(event) =>
                           setReviewForm((previous) => ({
@@ -867,15 +881,20 @@ function About() {
 
                     {/* DESIGNATION */}
                     <div>
-                      <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                        Designation
+                      <label 
+                        htmlFor="review-designation"
+                        className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                          Designation
                         <span className="ml-1 font-normal text-slate-400">
                           (optional)
                         </span>
                       </label>
 
                       <input
+                        id="review-designation"
+                        name="designation"
                         type="text"
+                        autoComplete="organization-title"
                         value={reviewForm.designation}
                         onChange={(event) =>
                           setReviewForm((previous) => ({
@@ -892,9 +911,9 @@ function About() {
 
                   {/* RATING */}
                   <div className="mt-4">
-                    <label className="mb-2 block text-sm font-semibold text-[#17213A]">
+                    <p className="mb-2 text-sm font-semibold text-[#17213A]">
                       Your Rating
-                    </label>
+                    </p>
 
                     <div className="flex items-center gap-1">
                       {Array.from({ length: 5 }).map(
@@ -936,12 +955,17 @@ function About() {
 
                   {/* REVIEW */}
                   <div className="mt-4">
-                    <label className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                      Your Review
+                    <label 
+                      htmlFor="review-message"
+                      className="mb-1.5 block text-sm font-semibold text-[#17213A]">
+                        Your Review
                       <span className="ml-1 text-red-500">*</span>
                     </label>
 
                     <textarea
+                     id="review-message"
+                    name="review"
+                    autoComplete="off"
                       value={reviewForm.review}
                       onChange={(event) =>
                         setReviewForm((previous) => ({
