@@ -225,17 +225,12 @@ def seed_services(db: Session):
             db.add(category)
             db.flush()
 
-        else:
-            category.description = data["description"]
-            category.icon = data["icon"]
-            category.is_active = True
-
         category_objects[name] = category
 
     db.flush()
 
     # ---------------------------------------------------------
-    # IMPLEMENTATION DOMAINS
+    # DEFAULT SERVICES
     # ---------------------------------------------------------
 
     implementation_domains = [
@@ -250,10 +245,6 @@ def seed_services(db: Session):
         "Education",
     ]
 
-    # ---------------------------------------------------------
-    # WRITING SERVICES
-    # ---------------------------------------------------------
-
     writing_services = [
         "Research Paper Writing",
         "Thesis & Dissertation",
@@ -262,10 +253,6 @@ def seed_services(db: Session):
         "Conference Paper",
         "Research Documentation",
     ]
-
-    # ---------------------------------------------------------
-    # PUBLICATION SERVICES
-    # ---------------------------------------------------------
 
     publication_services = [
         "SCI Journals",
@@ -283,28 +270,26 @@ def seed_services(db: Session):
     }
 
     # ---------------------------------------------------------
-    # SYNCHRONIZE SERVICES
+    # CREATE DEFAULT SERVICES ONLY IF CATEGORY IS EMPTY
     # ---------------------------------------------------------
 
     for category_name, service_names in service_groups.items():
         category = category_objects[category_name]
 
-        existing_services = (
+        existing_count = (
             db.query(Service)
-            .filter(Service.category_id == category.id)
-            .order_by(Service.display_order.asc())
-            .all()
+            .filter(
+                Service.category_id == category.id
+            )
+            .count()
         )
 
-        # Update existing services first
-        for index, service_name in enumerate(service_names):
-            if index < len(existing_services):
-                service = existing_services[index]
-                service.name = service_name
-                service.display_order = index
-                service.is_active = True
-
-            else:
+        # Never overwrite or delete existing services.
+        # Only seed defaults when the category has no services.
+        if existing_count == 0:
+            for index, service_name in enumerate(
+                service_names
+            ):
                 service = Service(
                     category_id=category.id,
                     name=service_name,
@@ -312,12 +297,8 @@ def seed_services(db: Session):
                     display_order=index,
                     is_active=True,
                 )
-                db.add(service)
 
-        # Remove extra old services
-        if len(existing_services) > len(service_names):
-            for service in existing_services[len(service_names):]:
-                db.delete(service)
+                db.add(service)
 
     db.commit()
 
