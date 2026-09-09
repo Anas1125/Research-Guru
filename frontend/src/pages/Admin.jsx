@@ -760,29 +760,6 @@ function Admin() {
               </div>
             </div>
           </section>
-
-          {/* =====================================================
-              SYSTEM STATUS
-          ====================================================== */}
-
-          <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h2 className="font-bold text-[#17213A]">
-                  System Status
-                </h2>
-
-                <p className="mt-1 text-sm text-slate-500">
-                  Current administration status.
-                </p>
-              </div>
-
-              <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
-                Backend Connected
-              </div>
-            </div>
-          </section>
         </div>
       </main>
     </div>

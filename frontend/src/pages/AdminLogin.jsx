@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LockKeyhole, Eye, EyeOff } from "lucide-react";
 
@@ -13,6 +13,17 @@ function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [lockoutSeconds, setLockoutSeconds] = useState(0);
+
+  useEffect(() => {
+    if (lockoutSeconds <= 0) return;
+
+    const timer = setInterval(() => {
+      setLockoutSeconds((seconds) => seconds - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [lockoutSeconds]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -48,6 +59,11 @@ function AdminLogin() {
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
+        if (response.status === 429) {
+          setLockoutSeconds(60);
+          throw new Error("Too many login attempts.");
+}
+
         throw new Error(
           data?.detail ||
             "Invalid username or password."
@@ -98,10 +114,16 @@ function AdminLogin() {
           </div>
 
           {error && (
-            <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-              {error}
-            </div>
-          )}
+          <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            <div>{error}</div>
+
+            {lockoutSeconds > 0 && (
+              <div className="mt-2 font-semibold">
+                Try again in {lockoutSeconds} seconds.
+              </div>
+            )}
+          </div>
+        )}
 
           <form
             onSubmit={handleSubmit}
@@ -170,12 +192,14 @@ function AdminLogin() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || lockoutSeconds > 0}
               className="w-full rounded-xl bg-[#17213A] px-5 py-3.5 font-semibold text-white transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading
                 ? "Signing in..."
-                : "Sign In"}
+                : lockoutSeconds > 0
+                  ? `Try again in ${lockoutSeconds}s`
+                  : "Sign In"}
             </button>
           </form>
         </div>
