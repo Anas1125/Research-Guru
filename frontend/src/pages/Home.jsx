@@ -1038,7 +1038,7 @@ function Home() {
       ====================================================== */}
       <section
         id="services"
-        className="bg-[#F5F8FC] px-6 py-24 lg:py-28"
+        className="bg-[#F5F8FC] px-6 py-24 lg:py-20"
       >
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
@@ -1235,7 +1235,7 @@ function Home() {
       {/* =====================================================
           HOW WE HELP
       ====================================================== */}
-      <section className="bg-white px-6 py-24 lg:py-28">
+      <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
@@ -1315,7 +1315,7 @@ function Home() {
       {/* =====================================================
           IMPACT
       ====================================================== */}
-      <section className="bg-[#F5F8FC] px-6 py-24 lg:py-28">
+      <section className="bg-[#F5F8FC] px-6 py-24 lg:py-20">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
           <div>
             <span className="text-sm font-semibold uppercase tracking-[0.3em] text-[#17213A]">
@@ -1388,7 +1388,7 @@ function Home() {
       {/* =====================================================
           PRESENCE
       ====================================================== */}
-      <section className="bg-white px-6 py-24 lg:py-28">
+      <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
             <span className="text-sm font-semibold uppercase tracking-[0.3em] text-[#17213A]">

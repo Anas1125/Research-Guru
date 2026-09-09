@@ -11,27 +11,21 @@ from typing import Optional
 class AdminUserCreate(BaseModel):
     username: str
     password: str
-
-
 class AdminUserUpdate(BaseModel):
     username: Optional[str] = None
     password: Optional[str] = None
     is_active: Optional[bool] = None
-
-
 class AdminUserResponse(BaseModel):
     id: int
     username: str
     is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
-
 class ServiceCreate(BaseModel):
     category_id: int
     name: str
     description: Optional[str] = None
     display_order: int = 0
-
 
 class ServiceUpdate(BaseModel):
     category_id: Optional[int] = None
@@ -51,19 +45,16 @@ class ServiceResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-
 class CategoryCreate(BaseModel):
     name: str
     description: Optional[str] = None
     icon: Optional[str] = None
-
 
 class CategoryUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     icon: Optional[str] = None
     is_active: Optional[bool] = None
-
 
 class CategoryResponse(BaseModel):
     id: int
@@ -79,12 +70,10 @@ class ServiceBase(BaseModel):
     description: Optional[str] = None
     display_order: int = 0
 
-
 class ServiceResponse(ServiceBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class ServiceCategoryResponse(BaseModel):
     id: int
@@ -94,7 +83,6 @@ class ServiceCategoryResponse(BaseModel):
     services: List[ServiceResponse] = []
 
     model_config = ConfigDict(from_attributes=True)
-
 class BlogPostCreate(BaseModel):
     title: str
     slug: str
@@ -104,8 +92,6 @@ class BlogPostCreate(BaseModel):
     featured_image: Optional[str] = None
     is_published: bool = False
     display_order: int = 0
-
-
 class BlogPostUpdate(BaseModel):
     title: Optional[str] = None
     slug: Optional[str] = None
@@ -115,7 +101,6 @@ class BlogPostUpdate(BaseModel):
     featured_image: Optional[str] = None
     is_published: Optional[bool] = None
     display_order: Optional[int] = None
-
 
 class BlogPostResponse(BaseModel):
     id: int
@@ -142,6 +127,7 @@ class SiteSettingsUpdate(BaseModel):
     home_intro_image: Optional[str] = None
     about_background: Optional[str] = None
     services_background: Optional[str] = None
+    offers_background: Optional[str] = None
     contact_background: Optional[str] = None
 
     contact_phone: Optional[str] = None
@@ -149,7 +135,6 @@ class SiteSettingsUpdate(BaseModel):
     contact_address: Optional[str] = None
     contact_whatsapp: Optional[str] = None
     contact_hours: Optional[str] = None
-
 
 class SiteSettingsResponse(SiteSettingsUpdate):
     model_config = ConfigDict(from_attributes=True)
@@ -163,11 +148,8 @@ class ContactEnquiryCreate(BaseModel):
     research_stage: Optional[str] = None
     message: Optional[str] = None
 
-
 class ContactEnquiryUpdate(BaseModel):
     status: Optional[str] = None
-
-
 class ContactEnquiryResponse(BaseModel):
     id: int
     name: str
@@ -190,8 +172,6 @@ class ClientReviewCreate(BaseModel):
     photo_url: Optional[str] = None
     is_published: bool = False
     display_order: int = 0
-
-
 class ClientReviewUpdate(BaseModel):
     client_name: Optional[str] = None
     designation: Optional[str] = None
@@ -201,7 +181,6 @@ class ClientReviewUpdate(BaseModel):
     is_published: Optional[bool] = None
     display_order: Optional[int] = None
     created_at: Optional[str] = None
-
 
 class ClientReviewResponse(BaseModel):
     id: int
@@ -232,12 +211,71 @@ class ClientUpdate(BaseModel):
     logo_url: Optional[str] = None
     is_active: Optional[bool] = None
     display_order: Optional[int] = None
-
-
 class ClientResponse(BaseModel):
     id: int
     name: str
     logo_url: Optional[str] = None
+    is_active: bool
+    display_order: int
+    created_at: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+# =====================================================
+# OFFERS
+# =====================================================
+
+class OfferCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+
+    discount_type: str = "percentage"
+    discount_value: Optional[str] = None
+    offer_code: Optional[str] = None
+
+    start_date: str
+    end_date: str
+
+    cta_text: Optional[str] = "Get Started"
+    cta_link: Optional[str] = "/contact"
+
+    is_active: bool = True
+    display_order: int = 0
+
+class OfferUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+
+    discount_type: Optional[str] = None
+    discount_value: Optional[str] = None
+    offer_code: Optional[str] = None
+
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+
+    cta_text: Optional[str] = None
+    cta_link: Optional[str] = None
+
+    is_active: Optional[bool] = None
+    display_order: Optional[int] = None
+
+
+class OfferResponse(BaseModel):
+    id: int
+
+    title: str
+    description: Optional[str] = None
+
+    discount_type: str
+    discount_value: Optional[str] = None
+    offer_code: Optional[str] = None
+
+    start_date: str
+    end_date: str
+
+    cta_text: Optional[str] = None
+    cta_link: Optional[str] = None
+
     is_active: bool
     display_order: int
     created_at: str

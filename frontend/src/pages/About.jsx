@@ -421,7 +421,7 @@ function About() {
           WHO WE ARE
       ====================================================== */}
 
-      <section className="bg-white px-6 py-24 lg:py-28">
+      <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           {/* LEFT */}
 
@@ -491,7 +491,7 @@ function About() {
               {
                 icon: BarChart3,
                 title: "For Research Analysis",
-                text: "Assistance with Experiments, Aata Analysis, Evaluation, Visualization, and Interpretation.",
+                text: "Assistance with Experiments, Data Analysis, Evaluation, Visualization, and Interpretation.",
               },
             ].map((item) => {
               const Icon = item.icon;
@@ -523,7 +523,7 @@ function About() {
           CORE AREAS
       ====================================================== */}
 
-      <section className="bg-[#F5F8FC] px-6 py-24 lg:py-28">
+      <section className="bg-[#F5F8FC] px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
@@ -531,7 +531,7 @@ function About() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Research support built around the work that matters.
+              Research Support Built Around The Work That Matters.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -601,7 +601,7 @@ function About() {
           RESEARCH LIFECYCLE
       ====================================================== */}
 
-      <section className="bg-white px-6 py-24 lg:py-28">
+      <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
@@ -609,7 +609,7 @@ function About() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Support across the Research Lifecycle.
+              Support Across The Research Lifecycle.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -710,113 +710,113 @@ function About() {
       </section>
 
             {/* =====================================================
-              CLIENT REVIEWS
-          ====================================================== */}
-          {reviews.length > 0 && (
-            <section className="bg-[#F5F8FC] px-6 py-24 lg:py-15">
-              <div className="mx-auto max-w-7xl">
-                <div className="mx-auto max-w-3xl text-center">
-                  <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
-                    Client Reviews
-                  </span>
+                CLIENT REVIEWS
+            ====================================================== */}
+            {reviews.length > 0 && (
+              <section className="bg-[#F5F8FC] px-6 py-24 lg:py-15">
+                <div className="mx-auto max-w-7xl">
+                  <div className="mx-auto max-w-3xl text-center">
+                    <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+                      Client Reviews
+                    </span>
 
-                  <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-                    Trusted by researchers.
-                  </h2>
+                    <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
+                      Trusted by Researchers.
+                    </h2>
 
-                  <p className="mt-5 text-lg leading-8 text-slate-600">
-                    Real experiences from researchers who have worked
-                    with {siteName}.
-                  </p>
-                </div>
+                    <p className="mt-5 text-lg leading-8 text-slate-600">
+                      Real experiences from researchers who have worked
+                      with {siteName}.
+                    </p>
+                  </div>
 
-                <div
-                  className={`mx-auto mt-14 grid max-w-6xl gap-6 ${
-                    reviews.length === 1
-                      ? "max-w-3xl"
-                      : "md:grid-cols-2"
-                  }`}
-                >
-                  {reviews.map((item) => (
-                    <div
-                      key={item.id}
-                      className="relative flex h-full flex-col rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8 md:p-9"
-                    >
-                      {/* QUOTE ICON */}
-                      <div className="absolute right-7 top-7 flex h-11 w-11 items-center justify-center rounded-full bg-[#F5F8FC] text-[#17213A]">
-                        <Quote size={22} />
-                      </div>
+                  <div
+                    className={`mx-auto mt-14 grid max-w-6xl gap-6 ${
+                      reviews.length === 1
+                        ? "max-w-3xl"
+                        : "md:grid-cols-2"
+                    }`}
+                  >
+                    {reviews.map((item) => (
+                      <div
+                        key={item.id}
+                        className="relative flex h-full flex-col rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8 md:p-9"
+                      >
+                        {/* QUOTE ICON */}
+                        <div className="absolute right-7 top-7 flex h-11 w-11 items-center justify-center rounded-full bg-[#F5F8FC] text-[#17213A]">
+                          <Quote size={22} />
+                        </div>
 
-                      {/* CLIENT */}
-                      <div className="flex items-center gap-4 pr-12">
-                        {item.photo_url ? (
-                          <img
-                            src={getImageUrl(item.photo_url)}
-                            alt={item.client_name}
-                            className="h-16 w-16 shrink-0 rounded-full border-2 border-white object-cover shadow-md ring-1 ring-[#DCE5F0]"
-                          />
-                        ) : (
-                          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#EAF1FA] text-[#17213A] ring-1 ring-[#DCE5F0]">
-                            <Users size={24} />
+                        {/* CLIENT */}
+                        <div className="flex items-center gap-4 pr-12">
+                          {item.photo_url ? (
+                            <img
+                              src={getImageUrl(item.photo_url)}
+                              alt={item.client_name}
+                              className="h-16 w-16 shrink-0 rounded-full border-2 border-white object-cover shadow-md ring-1 ring-[#DCE5F0]"
+                            />
+                          ) : (
+                            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#EAF1FA] text-[#17213A] ring-1 ring-[#DCE5F0]">
+                              <Users size={24} />
+                            </div>
+                          )}
+
+                          <div className="min-w-0">
+                            <h3 className="truncate text-lg font-bold text-[#17213A]">
+                              {item.client_name}
+                            </h3>
+
+                            {item.designation && (
+                              <p className="mt-1 truncate text-sm text-slate-500">
+                                {item.designation}
+                              </p>
+                            )}
                           </div>
-                        )}
+                        </div>
 
-                        <div className="min-w-0">
-                          <h3 className="truncate text-lg font-bold text-[#17213A]">
-                            {item.client_name}
-                          </h3>
+                        {/* RATING */}
+                        <div className="mt-6 flex items-center gap-1">
+                          {Array.from({ length: 5 }).map(
+                            (_, index) => (
+                              <Star
+                                key={index}
+                                size={17}
+                                className={
+                                  index < item.rating
+                                    ? "fill-[#F59E0B] text-[#F59E0B]"
+                                    : "text-slate-300"
+                                }
+                              />
+                            )
+                          )}
 
-                          {item.designation && (
-                            <p className="mt-1 truncate text-sm text-slate-500">
-                              {item.designation}
+                          <span className="ml-2 text-sm font-semibold text-slate-500">
+                            {item.rating}/5
+                          </span>
+                        </div>
+
+                        {/* REVIEW */}
+                        <div className="mt-6">
+                          <p className="text-lg leading-8 text-slate-600">
+                            "{item.review}"
+                          </p>
+                        </div>
+                        {/* DATE */}
+                          {item.created_at && (
+                            <p className="mt-3 text-xs font-medium text-slate-400">
+                              {new Date(item.created_at).toLocaleDateString("en-IN", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              })}
                             </p>
                           )}
-                        </div>
                       </div>
-
-                      {/* RATING */}
-                      <div className="mt-6 flex items-center gap-1">
-                        {Array.from({ length: 5 }).map(
-                          (_, index) => (
-                            <Star
-                              key={index}
-                              size={17}
-                              className={
-                                index < item.rating
-                                  ? "fill-[#F59E0B] text-[#F59E0B]"
-                                  : "text-slate-300"
-                              }
-                            />
-                          )
-                        )}
-
-                        <span className="ml-2 text-sm font-semibold text-slate-500">
-                          {item.rating}/5
-                        </span>
-                      </div>
-
-                      {/* REVIEW */}
-                      <div className="mt-6">
-                        <p className="text-lg leading-8 text-slate-600">
-                          "{item.review}"
-                        </p>
-                      </div>
-                      {/* DATE */}
-                        {item.created_at && (
-                          <p className="mt-3 text-xs font-medium text-slate-400">
-                            {new Date(item.created_at).toLocaleDateString("en-IN", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </p>
-                        )}
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </section>
-          )}
+              </section>
+            )}
 
       {/* =====================================================
             SUBMIT A REVIEW
@@ -1031,9 +1031,9 @@ function About() {
             </p>
 
             <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-white md:text-5xl">
-              Your research deserves
+              Your Research Deserves
               <span className="block text-slate-300">
-                the right support.
+                The Right Support.
               </span>
             </h2>
 

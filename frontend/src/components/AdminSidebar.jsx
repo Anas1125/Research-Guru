@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   Wrench,
+  Tag,
   PenLine,
   MessageSquare,
   MessageSquareQuote,
@@ -137,6 +138,14 @@ function AdminSidebar({
           label="Our Clients"
           icon={<Handshake size={19} />}
           path="/admin/clients"
+          currentPage={currentPage}
+          onNavigate={handleNavigation}
+        />
+
+        <SidebarItem
+          label="Offers"
+          icon={<Tag size={19} />}
+          path="/admin/offers"
           currentPage={currentPage}
           onNavigate={handleNavigation}
         />

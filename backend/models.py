@@ -132,3 +132,64 @@ class Client(Base):
     display_order = Column(Integer, default=0)
 
     created_at = Column(String(50), nullable=False)
+
+class Offer(Base):
+    __tablename__ = "offers"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+
+    discount_type = Column(
+        String(50),
+        nullable=False,
+        default="percentage",
+    )
+
+    discount_value = Column(
+        String(50),
+        nullable=True,
+    )
+
+    offer_code = Column(
+        String(100),
+        nullable=True,
+    )
+
+    start_date = Column(
+        String(50),
+        nullable=False,
+    )
+
+    end_date = Column(
+        String(50),
+        nullable=False,
+    )
+
+    cta_text = Column(
+        String(100),
+        nullable=True,
+        default="Get Started",
+    )
+
+    cta_link = Column(
+        String(500),
+        nullable=True,
+        default="/contact",
+    )
+
+    is_active = Column(
+        Boolean,
+        default=True,
+    )
+
+    display_order = Column(
+        Integer,
+        default=0,
+    )
+
+    created_at = Column(
+        String(50),
+        nullable=False,
+    )

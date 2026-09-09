@@ -14,6 +14,7 @@ import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import Offers from "./pages/Offers";
 
 import Admin from "./pages/Admin";
 import AdminBlog from "./pages/AdminBlog";
@@ -26,6 +27,7 @@ import AdminContact from "./pages/AdminContact";
 import AdminServices from "./pages/AdminServices";
 import AdminReviews from "./pages/AdminReviews";
 import AdminClients from "./pages/AdminClients";
+import AdminOffers from "./pages/AdminOffers";
 
 import NotFound from "./pages/NotFound";
 
@@ -636,6 +638,15 @@ function App() {
           element={<BlogPost />}
         />
 
+         {/* =====================================================
+            Offers
+        ====================================================== */}
+
+        <Route
+          path="/offers"
+          element={<Offers />}
+        />
+
 
         {/* =====================================================
             ADMIN LOGIN
@@ -698,6 +709,12 @@ function App() {
             path="/admin/clients"
             element={<AdminClients />}
           />
+
+          <Route
+            path="/admin/offers"
+            element={<AdminOffers />}
+          />
+
         </Route>
 
         <Route path="*" element={<NotFound />} />

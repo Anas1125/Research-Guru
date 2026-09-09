@@ -1230,7 +1230,7 @@ function Services() {
           FAQ
       ====================================================== */}
 
-      <section className="bg-white px-6 py-24 lg:py-28">
+      <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-4xl">
           <div className="text-center">
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">

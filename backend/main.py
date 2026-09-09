@@ -27,6 +27,7 @@ from models import (
     ContactEnquiry,
     ClientReview,
     Client,
+    Offer,
 )
 
 from schemas import (
@@ -52,6 +53,9 @@ from schemas import (
     ClientCreate,
     ClientUpdate,
     ClientResponse,
+    OfferCreate,
+    OfferUpdate,
+    OfferResponse,
 )
 
 from auth import (
@@ -323,6 +327,216 @@ def get_services(
         )
 
     return categories
+
+# =====================================================
+# PUBLIC - OFFERS
+# =====================================================
+
+@app.get(
+    "/api/offers",
+    response_model=list[OfferResponse],
+)
+def get_offers(
+    db: Session = Depends(get_db),
+):
+    return (
+        db.query(Offer)
+        .filter(
+            Offer.is_active == True
+        )
+        .order_by(
+            Offer.display_order,
+            Offer.id,
+        )
+        .all()
+    )
+
+
+# =====================================================
+# ADMIN - OFFERS
+# =====================================================
+
+@app.get(
+    "/api/admin/offers",
+    response_model=list[OfferResponse],
+)
+def admin_get_offers(
+    db: Session = Depends(get_db),
+    current_admin: AdminUser = Depends(
+        get_current_admin
+    ),
+):
+    return (
+        db.query(Offer)
+        .order_by(
+            Offer.display_order,
+            Offer.id,
+        )
+        .all()
+    )
+
+
+@app.post(
+    "/api/admin/offers",
+    response_model=OfferResponse,
+)
+def admin_create_offer(
+    data: OfferCreate,
+    db: Session = Depends(get_db),
+    current_admin: AdminUser = Depends(
+        get_current_admin
+    ),
+):
+    title = data.title.strip()
+
+    if not title:
+        raise HTTPException(
+            status_code=400,
+            detail="Offer title is required.",
+        )
+
+    if not data.start_date:
+        raise HTTPException(
+            status_code=400,
+            detail="Start date is required.",
+        )
+
+    if not data.end_date:
+        raise HTTPException(
+            status_code=400,
+            detail="End date is required.",
+        )
+
+    if data.start_date >= data.end_date:
+        raise HTTPException(
+            status_code=400,
+            detail="End date must be after start date.",
+        )
+
+    offer = Offer(
+        title=title,
+        description=data.description,
+        discount_type=data.discount_type,
+        discount_value=data.discount_value,
+        offer_code=data.offer_code,
+        start_date=data.start_date,
+        end_date=data.end_date,
+        cta_text=data.cta_text,
+        cta_link=data.cta_link,
+        is_active=data.is_active,
+        display_order=data.display_order,
+        created_at=datetime.now().isoformat(),
+    )
+
+    db.add(offer)
+    db.commit()
+    db.refresh(offer)
+
+    return offer
+
+
+@app.put(
+    "/api/admin/offers/{offer_id}",
+    response_model=OfferResponse,
+)
+def admin_update_offer(
+    offer_id: int,
+    data: OfferUpdate,
+    db: Session = Depends(get_db),
+    current_admin: AdminUser = Depends(
+        get_current_admin
+    ),
+):
+    offer = (
+        db.query(Offer)
+        .filter(
+            Offer.id == offer_id
+        )
+        .first()
+    )
+
+    if not offer:
+        raise HTTPException(
+            status_code=404,
+            detail="Offer not found.",
+        )
+
+    updates = data.model_dump(
+        exclude_unset=True
+    )
+
+    new_start_date = updates.get(
+        "start_date",
+        offer.start_date,
+    )
+
+    new_end_date = updates.get(
+        "end_date",
+        offer.end_date,
+    )
+
+    if new_start_date >= new_end_date:
+        raise HTTPException(
+            status_code=400,
+            detail="End date must be after start date.",
+        )
+
+    if "title" in updates:
+        title = (
+            updates["title"] or ""
+        ).strip()
+
+        if not title:
+            raise HTTPException(
+                status_code=400,
+                detail="Offer title is required.",
+            )
+
+        updates["title"] = title
+
+    for key, value in updates.items():
+        setattr(
+            offer,
+            key,
+            value,
+        )
+
+    db.commit()
+    db.refresh(offer)
+
+    return offer
+
+
+@app.delete(
+    "/api/admin/offers/{offer_id}"
+)
+def admin_delete_offer(
+    offer_id: int,
+    db: Session = Depends(get_db),
+    current_admin: AdminUser = Depends(
+        get_current_admin
+    ),
+):
+    offer = (
+        db.query(Offer)
+        .filter(
+            Offer.id == offer_id
+        )
+        .first()
+    )
+
+    if not offer:
+        raise HTTPException(
+            status_code=404,
+            detail="Offer not found.",
+        )
+
+    db.delete(offer)
+    db.commit()
+
+    return {
+        "message": "Offer deleted successfully"
+    }
 
 # =====================================================
 # PUBLIC - CLIENT REVIEWS
@@ -1105,6 +1319,7 @@ SITE_SETTING_KEYS = [
     "home_intro_image",
     "about_background",
     "services_background",
+    "offers_background",
     "contact_background",
     "contact_phone",
     "contact_email",
@@ -1212,6 +1427,7 @@ async def upload_site_setting_image(
         "home_intro_image",
         "about_background",
         "services_background",
+        "offers_background",
         "contact_background",
     }
 

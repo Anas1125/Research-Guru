@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 import { apiFetch, API_URL } from "../utils/api";
 
 function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [showNavbar, setShowNavbar] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const [menuOpen, setMenuOpen] =
+    useState(false);
+
+  const [showNavbar, setShowNavbar] =
+    useState(true);
+
+  const [lastScrollY, setLastScrollY] =
+    useState(0);
 
   const [siteName, setSiteName] =
     useState("Research Guru");
@@ -15,12 +20,16 @@ function Navbar() {
   const [logoUrl, setLogoUrl] =
     useState("");
 
+  const [hasLiveOffer, setHasLiveOffer] =
+    useState(false);
+
   const location = useLocation();
 
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Services", path: "/services" },
+    { name: "Offers", path: "/offers" },
     { name: "Contact", path: "/contact" },
   ];
 
@@ -99,6 +108,115 @@ function Navbar() {
   }, []);
 
   /* =====================================================
+     CHECK FOR LIVE OFFERS
+  ====================================================== */
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkLiveOffer() {
+      try {
+        const response = await apiFetch(
+          "/api/offers"
+        );
+
+        if (!response.ok) {
+          if (!cancelled) {
+            setHasLiveOffer(false);
+          }
+
+          return;
+        }
+
+        const offers =
+          await response.json();
+
+        if (!Array.isArray(offers)) {
+          if (!cancelled) {
+            setHasLiveOffer(false);
+          }
+
+          return;
+        }
+
+        const now = new Date();
+
+        const liveOffer =
+          offers.some((offer) => {
+            if (
+              !offer.start_date ||
+              !offer.end_date
+            ) {
+              return false;
+            }
+
+            const start =
+              new Date(
+                offer.start_date
+              );
+
+            const end =
+              new Date(
+                offer.end_date
+              );
+
+            if (
+              Number.isNaN(
+                start.getTime()
+              ) ||
+              Number.isNaN(
+                end.getTime()
+              )
+            ) {
+              return false;
+            }
+
+            return (
+              now >= start &&
+              now <= end
+            );
+          });
+
+        if (!cancelled) {
+          setHasLiveOffer(
+            liveOffer
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Failed to check live offers:",
+          error
+        );
+
+        if (!cancelled) {
+          setHasLiveOffer(false);
+        }
+      }
+    }
+
+    /*
+      Check immediately when Navbar loads.
+    */
+    checkLiveOffer();
+
+    /*
+      Re-check every 60 seconds so an
+      upcoming offer automatically becomes
+      green/blinking when it goes live.
+    */
+    const interval =
+      setInterval(
+        checkLiveOffer,
+        60000
+      );
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  /* =====================================================
      NAVBAR SCROLL BEHAVIOR
   ====================================================== */
 
@@ -122,7 +240,9 @@ function Navbar() {
         setShowNavbar(true);
       }
 
-      setLastScrollY(currentScrollY);
+      setLastScrollY(
+        currentScrollY
+      );
     };
 
     window.addEventListener(
@@ -162,6 +282,33 @@ function Navbar() {
     }
 
     return `${API_URL}${logoUrl}`;
+  }
+
+  /* =====================================================
+     OFFERS NAV ITEM STYLE
+  ====================================================== */
+
+  function getNavItemTextClass(
+    item,
+    active
+  ) {
+    /*
+      Only the Offers item becomes
+      green + blinking when a live
+      offer exists.
+    */
+    if (
+      item.name === "Offers" &&
+      hasLiveOffer
+    ) {
+      return "font-bold text-emerald-500 animate-pulse";
+    }
+
+    if (active) {
+      return "font-semibold text-[#17213A]";
+    }
+
+    return "text-slate-600 hover:text-[#17213A]";
   }
 
   /* =====================================================
@@ -220,13 +367,17 @@ function Navbar() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-medium transition ${
+                className={`relative py-2 text-sm transition ${getNavItemTextClass(
+                  item,
                   active
-                    ? "font-semibold text-[#17213A]"
-                    : "text-slate-600 hover:text-[#17213A]"
-                }`}
+                )}`}
               >
                 {item.name}
+
+                {/* Active Page Underline */}
+                {active && (
+                  <span className="nav-active-underline" />
+                )}
               </Link>
             );
           })}
@@ -273,6 +424,7 @@ function Navbar() {
       {menuOpen && (
         <nav className="border-t border-slate-100 bg-white px-6 py-5 md:hidden">
           <div className="flex flex-col gap-5">
+
             {navItems.map((item) => {
               const active =
                 location.pathname ===
@@ -285,16 +437,16 @@ function Navbar() {
                   onClick={() =>
                     setMenuOpen(false)
                   }
-                  className={`font-medium ${
+                  className={`transition ${getNavItemTextClass(
+                    item,
                     active
-                      ? "font-semibold text-[#17213A]"
-                      : "text-slate-600"
-                  }`}
+                  )}`}
                 >
                   {item.name}
                 </Link>
               );
             })}
+
           </div>
         </nav>
       )}

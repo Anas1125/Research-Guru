@@ -37,6 +37,7 @@ function AdminSettings() {
     home_intro_image: "",
     about_background: "",
     services_background: "",
+    offers_background: "",
     contact_background: "",
     contact_phone: "",
     contact_email: "",
@@ -118,6 +119,9 @@ function AdminSettings() {
 
         services_background:
           data.services_background || "",
+
+        offers_background: 
+          data.offers_background || "",
 
         contact_background:
           data.contact_background || "",
@@ -705,6 +709,25 @@ function AdminSettings() {
                     uploading={
                       uploading ===
                       "services_background"
+                    }
+                    onUpload={
+                      handleImageUpload
+                    }
+                  />
+
+                  <ImageUploadCard
+                    title="Offers Background"
+                    description="Background image for the offers page."
+                    settingKey="offers_background"
+                    value={
+                      settings.offers_background
+                    }
+                    imageUrl={getImageUrl(
+                      settings.offers_background
+                    )}
+                    uploading={
+                      uploading ===
+                      "offers_background"
                     }
                     onUpload={
                       handleImageUpload
