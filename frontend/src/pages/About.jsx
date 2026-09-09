@@ -381,19 +381,19 @@ function About() {
               support platform focused on
               helping Scholars, Researchers,
               and PhD Candidates navigate the
-              academic and technical stages of
-              their research with greater
-              clarity, structure, and confidence.
+              Academic and Technical stages of
+              their Research with greater
+              Clarity, Structure, and Confidence.
             </p>
 
             <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
               From Research Planning and
-              literature analysis to
+              Literature Analysis to
               Implementation, Academic Writing,
               Data Analysis, and Publication
               Support, our approach is designed
               around the specific requirements
-              of each research project.
+              of each Research Project.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">

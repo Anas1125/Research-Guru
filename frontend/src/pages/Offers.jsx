@@ -831,18 +831,18 @@ function Offers() {
             </span>
 
             <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-[#17213A] md:text-6xl lg:text-7xl">
-              Research offers
+              Research Offers
 
               <span className="block">
-                designed around your needs.
+                Designed Around Your Needs.
               </span>
             </h1>
 
             <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
               Explore our current and upcoming
-              offers across research support,
-              academic writing, technical
-              implementation, and publication.
+              offers across Research Support,
+              Academic Writing, Technical
+              Implementation, and Publication.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
@@ -1196,15 +1196,15 @@ function Offers() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Offers across the research lifecycle.
+              Offers Across The Research Lifecycle.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Our research support covers multiple
-              stages of academic and technical work,
-              from implementation and writing to
-              analysis, documentation, and
-              publication.
+              stages of Academic and Technical Work,
+              from Implementation and Writing to
+              Analysis, Documentation, and
+              Publication.
             </p>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -1245,7 +1245,7 @@ function Offers() {
             </div>
 
             <h3 className="mt-7 text-2xl font-bold text-[#17213A]">
-              Have a research requirement?
+              Have a Research Requirement?
             </h3>
 
             <p className="mt-4 leading-7 text-slate-600">

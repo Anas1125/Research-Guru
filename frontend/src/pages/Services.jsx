@@ -506,7 +506,7 @@ function Services() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Research support across every stage.
+              Research Support Across Every Stage.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -1172,12 +1172,12 @@ function Services() {
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {[
-                "SCI publication pathways",
-                "Scopus publication pathways",
-                "Annexure-oriented journals",
-                "Journal selection support",
-                "Manuscript preparation",
-                "Submission readiness",
+                "SCI Publication Pathways",
+                "Scopus Publication Pathways",
+                "Annexure-Oriented Journals",
+                "Journal Selection Support",
+                "Manuscript Preparation",
+                "Submission Readiness",
               ].map(
                 (item) => (
                   <div
@@ -1204,7 +1204,7 @@ function Services() {
             </div>
 
             <h3 className="mt-7 text-2xl font-bold text-[#17213A]">
-              Publication-focused support
+              Publication-Focused Support
             </h3>
 
             <p className="mt-4 leading-7 text-slate-600">

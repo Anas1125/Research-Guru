@@ -889,7 +889,7 @@ function Home() {
                           <span className="font-semibold text-white">
                             Annexure, SCI
                           </span>{" "}
-                          and related research requirements.
+                          and related Research Requirements.
                         </p>
 
                         {/* Small supporting highlight */}
@@ -984,18 +984,18 @@ function Home() {
 
             <p className="mt-6 text-lg leading-8 text-slate-600">
               Research is a journey that goes
-              far beyond writing a paper.
+              far beyond writing just a paper.
               Researchers often need to move
-              between literature, methodology,
-              technical implementation,
-              experimentation, analysis,
-              documentation, and publication.
+              between Literature, Methodology,
+              Technical Implementation,
+              Experimentation, Analysis,
+              Documentation, and Publication.
             </p>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
               {siteSettings.site_name || "Research Guru"} brings these needs
               together under one research
-              support ecosystem — helping
+              support Ecosystem — helping
               researchers progress from an
               initial idea to a structured and
               meaningful outcome.
@@ -1055,8 +1055,8 @@ function Home() {
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Choose your area of need and
               explore the support available
-              across implementation, writing,
-              and publication.
+              across Implementation, Writing,
+              and Publication.
             </p>
           </div>
 
@@ -1064,7 +1064,7 @@ function Home() {
           <div className="mt-14 grid gap-5 md:grid-cols-3">
             {loadingPageData ? (
               <div className="md:col-span-3 rounded-3xl border border-[#DCE5F0] bg-white p-10 text-center text-sm text-slate-500">
-                Loading services...
+                Loading Services...
               </div>
             ) : (
               services.map((service) => {
@@ -1330,19 +1330,19 @@ function Home() {
 
             <p className="mt-6 text-lg leading-8 text-slate-600">
               {siteSettings.site_name || "Research Guru"} brings together
-              academic understanding, technical
-              expertise, and practical research
+              Academic Understanding, Technical
+              Expertise, and Practical Research
               support to help scholars move
               confidently from concepts to
               completed research outcomes.
             </p>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
-              Our work spans research writing,
-              technical implementation,
-              publication preparation,
-              documentation, and
-              project-specific academic support.
+              Our work spans Research Writing,
+              Technical Implementation,
+              Publication Preparation,
+              Documentation, and
+              Project-Specific Academic Support.
             </p>
 
             <Link
@@ -1398,7 +1398,7 @@ function Home() {
             </span>
 
             <h2 className="mt-5 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Research support without boundaries.
+              Research Support Without Boundaries.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">

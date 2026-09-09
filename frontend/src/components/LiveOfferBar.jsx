@@ -347,20 +347,22 @@ function LiveOfferBar() {
           )}
 
           {/* CTA */}
-          {liveOffer.cta_link && (
-            <a
-                href={liveOffer.cta_link}
-                onClick={(event) => {
-                    event.stopPropagation();
-                }}
-              className="hidden shrink-0 items-center gap-2 rounded-full bg-[#17213A] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0F172A] sm:inline-flex"
-            >
-              {liveOffer.cta_text ||
-                "Get Started"}
+          <a
+            href={
+              promoCode
+                ? `/contact?coupon=${encodeURIComponent(promoCode)}`
+                : "/contact"
+            }
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+            className="hidden shrink-0 items-center gap-2 rounded-full bg-[#17213A] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0F172A] sm:inline-flex"
+          >
+            {liveOffer.cta_text ||
+              "Get Started"}
 
-              <ArrowRight size={15} />
-            </a>
-          )}
+            <ArrowRight size={15} />
+          </a>
         </div>
 
         {/* Mobile second row */}
