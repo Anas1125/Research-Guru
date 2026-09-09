@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { apiFetch, API_URL } from "../utils/api";
 
-function Navbar() {
+function Navbar({ showLiveOfferBar = false }) {
   const [menuOpen, setMenuOpen] =
     useState(false);
 
@@ -317,7 +317,11 @@ function Navbar() {
 
   return (
     <header
-      className={`fixed left-0 top-0 z-[100] w-full border-b border-slate-200/70 bg-white transition-transform duration-300 ${
+      className={`fixed left-0 ${
+          showLiveOfferBar && hasLiveOffer
+            ? "top-[58px]"
+            : "top-0"
+        } z-[100] w-full border-b border-slate-200/70 bg-white transition-transform duration-300 ${
         showNavbar
           ? "translate-y-0"
           : "-translate-y-full"

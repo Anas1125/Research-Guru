@@ -18,6 +18,7 @@ import {
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import LiveOfferBar from "../components/LiveOfferBar";
 
 import { Link } from "react-router-dom";
 
@@ -460,7 +461,8 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      <Navbar />
+      <LiveOfferBar />
+      <Navbar showLiveOfferBar />
 
       {/* =====================================================
           HERO

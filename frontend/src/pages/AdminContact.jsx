@@ -14,6 +14,7 @@ import {
   MessageSquare,
   Wrench,
   Users,
+  Tag,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -360,6 +361,9 @@ function AdminContact() {
             ?.toLowerCase()
             .includes(search) ||
           enquiry.message
+            ?.toLowerCase()
+            .includes(search) ||
+          enquiry.coupon
             ?.toLowerCase()
             .includes(search);
 
@@ -1076,6 +1080,26 @@ function AdminContact() {
                   />
                 </div>
               </div>
+
+              {/* OFFER */}
+
+              {selectedEnquiry.coupon && (
+                <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+                  <h3 className="font-semibold text-[#17213A]">
+                    Offer Applied
+                  </h3>
+
+                  <div className="mt-4">
+                    <InfoItem
+                      icon={
+                        <Tag size={17} />
+                      }
+                      label="Offer Code"
+                      value={selectedEnquiry.coupon}
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* MESSAGE */}
 

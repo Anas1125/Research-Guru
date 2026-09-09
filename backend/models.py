@@ -90,6 +90,11 @@ class ContactEnquiry(Base):
 
     message = Column(Text, nullable=True)
 
+    coupon = Column(
+        String(100),
+        nullable=True,
+    )
+
     status = Column(
         String(50),
         nullable=False,

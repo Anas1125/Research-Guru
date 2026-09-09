@@ -66,6 +66,9 @@ function Contact() {
      FORM
   ========================================================== */
 
+  const selectedCoupon =
+    searchParams.get("coupon") || "";
+
   const selectedResearch =
     searchParams.get("research") || "";
 
@@ -82,6 +85,7 @@ function Contact() {
       service: selectedService,
       research_stage: "",
       message: "",
+      coupon: selectedCoupon.toUpperCase(),
     });
 
   const [submitting, setSubmitting] =
@@ -201,6 +205,11 @@ function Contact() {
       service:
         selectedService ||
         prev.service,
+
+        coupon:
+          selectedCoupon
+            ? selectedCoupon.toUpperCase()
+            : prev.coupon,
     }));
   }, [
     selectedResearch,
@@ -573,10 +582,10 @@ function Contact() {
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
               This helps us understand whether you
-              need support with research writing,
-              technical implementation, publication,
-              analysis, or another part of your
-              project.
+              need support with Research Writing,
+              Technical Implementation, Publication,
+              Analysis, or another part of your
+              Project.
             </p>
 
             {/* WHAT TO INCLUDE */}
@@ -940,6 +949,30 @@ function Contact() {
                 </select>
 
               </div>
+
+              {formData.coupon && (
+                <div>
+                  <label
+                    htmlFor="contact-coupon"
+                    className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                  >
+                    Offer Code
+                  </label>
+
+                  <input
+                    id="contact-coupon"
+                    name="coupon"
+                    type="text"
+                    value={formData.coupon}
+                    readOnly
+                    className="w-full rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3.5 text-sm font-bold tracking-wide text-emerald-700 outline-none"
+                  />
+
+                  <p className="mt-2 text-xs text-slate-500">
+                    This offer code was automatically added from the offer you selected.
+                  </p>
+                </div>
+              )}
 
               {/* MESSAGE */}
 

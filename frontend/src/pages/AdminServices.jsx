@@ -328,6 +328,16 @@ function AdminServices() {
 
     setShowServiceForm(true);
     setShowCategoryForm(false);
+
+    setTimeout(() => {
+      document
+        .getElementById("service-form")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+    }, 100);
+
   }
 
   function openEditService(
@@ -357,7 +367,16 @@ function AdminServices() {
 
     setShowServiceForm(true);
     setShowCategoryForm(false);
-  }
+
+    setTimeout(() => {
+      document
+        .getElementById("service-form")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+    }, 100);
+    }
 
   function closeServiceForm() {
     setEditingService(null);
@@ -818,7 +837,10 @@ function AdminServices() {
           ================================================== */}
 
           {showServiceForm && (
-            <section className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <section
+              id="service-form"
+              className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm"
+            >
               <div className="flex items-center justify-between border-b border-slate-100 px-5 py-5 sm:px-6">
                 <div>
                   <h2 className="font-bold text-[#17213A]">

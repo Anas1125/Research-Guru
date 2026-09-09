@@ -1,19 +1,11 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, EmailStr
 from typing import List, Optional
-
-from pydantic import BaseModel, ConfigDict
-from typing import Optional
-
-from pydantic import BaseModel, ConfigDict
-from typing import Optional
-
-
 class AdminUserCreate(BaseModel):
-    username: str
-    password: str
+    username: str = Field(min_length=3, max_length=50)
+    password: str = Field(min_length=12, max_length=128)
 class AdminUserUpdate(BaseModel):
     username: Optional[str] = None
-    password: Optional[str] = None
+    password: Optional[str] = Field(default=None, min_length=12, max_length=128)
     is_active: Optional[bool] = None
 class AdminUserResponse(BaseModel):
     id: int
@@ -140,13 +132,14 @@ class SiteSettingsResponse(SiteSettingsUpdate):
     model_config = ConfigDict(from_attributes=True)
 
 class ContactEnquiryCreate(BaseModel):
-    name: str
-    phone: str
-    email: str
-    research_area: Optional[str] = None
-    service: Optional[str] = None
-    research_stage: Optional[str] = None
-    message: Optional[str] = None
+    name: str = Field(max_length=100)
+    phone: str = Field(max_length=30)
+    email: EmailStr
+    research_area: Optional[str] = Field(default=None, max_length=200)
+    service: Optional[str] = Field(default=None, max_length=200)
+    research_stage: Optional[str] = Field(default=None, max_length=200)
+    message: Optional[str] = Field(default=None, max_length=5000)
+    coupon: Optional[str] = Field(default=None, max_length=100)
 
 class ContactEnquiryUpdate(BaseModel):
     status: Optional[str] = None
@@ -159,6 +152,7 @@ class ContactEnquiryResponse(BaseModel):
     service: Optional[str] = None
     research_stage: Optional[str] = None
     message: Optional[str] = None
+    coupon: Optional[str] = None
     status: str
     created_at: str
 

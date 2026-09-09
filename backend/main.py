@@ -2,6 +2,10 @@ import os
 import uuid
 from datetime import datetime
 from uuid import uuid4
+from PIL import Image
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 from fastapi import (
     FastAPI,
@@ -9,7 +13,10 @@ from fastapi import (
     HTTPException,
     UploadFile,
     File,
+    Request,
 )
+
+
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
@@ -75,6 +82,37 @@ app = FastAPI(
     version="1.0.0",
 )
 
+from starlette.middleware.base import BaseHTTPMiddleware
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "img-src 'self' data: https://images.unsplash.com; "
+            "style-src 'self' 'unsafe-inline'; "
+            "script-src 'self'; "
+            "font-src 'self' data:; "
+            "connect-src 'self' http://localhost:8000 http://127.0.0.1:8000; "
+            "frame-ancestors 'none';"
+        )
+
+        return response
+
+app.add_middleware(SecurityHeadersMiddleware)
+
+limiter = Limiter(key_func=get_remote_address)
+
+app.state.limiter = limiter
+app.add_exception_handler(
+    RateLimitExceeded,
+    _rate_limit_exceeded_handler,
+)
+
 
 # =====================================================
 # CORS
@@ -116,6 +154,17 @@ os.makedirs(
     SITE_UPLOAD_DIR,
     exist_ok=True,
 )
+
+def validate_image(contents: bytes) -> bool:
+    try:
+        from io import BytesIO
+
+        image = Image.open(BytesIO(contents))
+        image.verify()
+
+        return True
+    except Exception:
+        return False
 
 app.mount(
     "/uploads",
@@ -778,10 +827,16 @@ def upload_client_logo(
         filename,
     )
 
-    with open(file_path, "wb") as buffer:
-        buffer.write(
-            file.file.read()
+    contents = file.file.read()
+
+    if not validate_image(contents):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid image file.",
         )
+
+    with open(file_path, "wb") as buffer:
+        buffer.write(contents)
 
     return {
         "image_url": (
@@ -970,10 +1025,16 @@ def upload_review_photo(
         filename,
     )
 
-    with open(file_path, "wb") as buffer:
-        buffer.write(
-            file.file.read()
+    contents = file.file.read()
+
+    if not validate_image(contents):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid image file.",
         )
+
+    with open(file_path, "wb") as buffer:
+        buffer.write(contents)
 
     return {
         "image_url":
@@ -999,10 +1060,14 @@ def startup():
 # =====================================================
 
 @app.post("/api/auth/login")
+@limiter.limit("5/minute")
+
 def admin_login(
+    request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ):
+    
     admin = (
         db.query(AdminUser)
         .filter(
@@ -1470,6 +1535,12 @@ async def upload_site_setting_image(
     try:
         contents = await file.read()
 
+        if not validate_image(contents):
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid image file.",
+            )
+
         max_size = 10 * 1024 * 1024
 
         if len(contents) > max_size:
@@ -1563,6 +1634,11 @@ def create_contact_enquiry(
         message=(
             data.message.strip()
             if data.message
+            else None
+        ),
+        coupon=(
+            data.coupon.strip().upper()
+            if data.coupon
             else None
         ),
         status="New",
@@ -2080,6 +2156,12 @@ async def upload_blog_image(
 
     try:
         contents = await file.read()
+
+        if not validate_image(contents):
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid image file.",
+            )
 
         # 5 MB limit
         max_size = 5 * 1024 * 1024

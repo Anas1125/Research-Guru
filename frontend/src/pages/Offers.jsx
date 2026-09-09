@@ -471,7 +471,7 @@ function OfferCard({
             OFFER CODE
         ================================================== */}
 
-        {offer.offer_code && (
+        {offer.offer_code && status === "live" && (
           <div className="mt-5">
 
             <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">
@@ -539,20 +539,23 @@ function OfferCard({
               <Clock3 size={16} />
               This offer has ended.
             </div>
+          ) : status === "upcoming" ? (
+            <div className="flex items-center gap-2 text-xs font-semibold text-amber-600">
+              <Clock3 size={16} />
+              Available when the offer starts.
+            </div>
           ) : (
             <Link
               to={
-                offer.cta_link ||
-                "/contact"
+                offer.offer_code
+                  ? `/contact?coupon=${encodeURIComponent(
+                      offer.offer_code.toUpperCase()
+                    )}`
+                  : offer.cta_link || "/contact"
               }
-              className={`inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition ${
-                status === "live"
-                  ? "bg-white text-[#17213A] hover:bg-slate-100"
-                  : "bg-[#17213A] text-white hover:bg-[#0F172A]"
-              }`}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#17213A] transition hover:bg-slate-100"
             >
-              {offer.cta_text ||
-                "Get Started"}
+              {offer.cta_text || "Get Started"}
 
               <ArrowRight
                 size={16}
@@ -1107,13 +1110,13 @@ function Offers() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Simple offers. Clear requirements.
+              Simple Offers. Clear Requirements.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
-              Every offer has a defined period,
-              eligibility details, and a clear way
-              to discuss your research requirement.
+              Every offer has a defined Period,
+              Eligibility Details, and a clear way
+              to discuss your Research Requirement.
             </p>
 
           </div>
