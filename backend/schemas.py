@@ -17,7 +17,7 @@ class ServiceCreate(BaseModel):
     category_id: int
     name: str
     description: Optional[str] = None
-    display_order: int = 0
+    display_order: Optional[int] = None
 
 class ServiceUpdate(BaseModel):
     category_id: Optional[int] = None
@@ -83,7 +83,7 @@ class BlogPostCreate(BaseModel):
     content: str
     featured_image: Optional[str] = None
     is_published: bool = False
-    display_order: int = 0
+    display_order: Optional[int] = None
 class BlogPostUpdate(BaseModel):
     title: Optional[str] = None
     slug: Optional[str] = None
@@ -234,7 +234,7 @@ class OfferCreate(BaseModel):
     cta_link: Optional[str] = "/contact"
 
     is_active: bool = True
-    display_order: int = 0
+    display_order: Optional[int] = None
 
 class OfferUpdate(BaseModel):
     title: Optional[str] = None

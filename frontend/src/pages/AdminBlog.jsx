@@ -33,7 +33,7 @@ const emptyForm = {
   content: "",
   featured_image: "",
   is_published: false,
-  display_order: 0,
+  display_order: "",
 };
 
 /* =====================================================
@@ -458,10 +458,10 @@ function AdminBlog() {
           ),
 
         display_order:
-          Number(
-            form.display_order
-          ) || 0,
-      };
+          form.display_order === ""
+            ? null
+            : Number(form.display_order),
+        };
 
       const response =
         await apiFetch(url, {

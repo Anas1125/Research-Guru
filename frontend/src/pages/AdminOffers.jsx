@@ -24,7 +24,7 @@ const emptyForm = {
   cta_text: "Get Started",
   cta_link: "/contact",
   is_active: true,
-  display_order: 0,
+  display_order: '',
 };
 
 function getOfferStatus(offer) {
@@ -297,8 +297,10 @@ export default function AdminOffers() {
           "/contact",
         is_active: form.is_active,
         display_order:
-          Number(form.display_order) || 0,
-      };
+          form.display_order === ""
+            ? null
+            : Number(form.display_order),
+        };
 
       let response;
 

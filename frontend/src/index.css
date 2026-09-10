@@ -60,3 +60,25 @@ body {
   animation:
     offerUrgentPulse 1.4s ease-in-out infinite;
 }
+/* =====================================================
+   LIVE OFFER CONTINUOUS MARQUEE
+===================================================== */
+
+.offer-marquee-track {
+  animation: offerMarquee 70s linear infinite;
+  will-change: transform;
+}
+
+.offer-marquee-paused {
+  animation-play-state: paused !important;
+}
+
+@keyframes offerMarquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}

@@ -72,6 +72,8 @@ from auth import (
     create_access_token,
 )
 
+from sqlalchemy import func
+
 
 # =====================================================
 # APP
@@ -442,6 +444,26 @@ def admin_create_offer(
             status_code=400,
             detail="End date must be after start date.",
         )
+    if data.display_order is None:
+        max_order = (
+            db.query(func.max(Offer.display_order))
+            .scalar()
+        )
+
+        display_order = (
+            max_order + 1
+            if max_order is not None
+            else 0
+        )
+    else:
+        display_order = data.display_order
+
+    # Display order cannot be negative.
+    if display_order < 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Display order cannot be negative.",
+        )
 
     offer = Offer(
         title=title,
@@ -454,7 +476,7 @@ def admin_create_offer(
         cta_text=data.cta_text,
         cta_link=data.cta_link,
         is_active=data.is_active,
-        display_order=data.display_order,
+        display_order=display_order,
         created_at=datetime.now().isoformat(),
     )
 
@@ -463,7 +485,6 @@ def admin_create_offer(
     db.refresh(offer)
 
     return offer
-
 
 @app.put(
     "/api/admin/offers/{offer_id}",
@@ -1934,11 +1955,38 @@ def admin_create_service(
             detail="Category not found",
         )
 
+    if data.display_order is None:
+        max_order = (
+            db.query(
+                func.max(
+                    Service.display_order
+                )
+            )
+            .filter(
+                Service.name.ilike("Other") == False
+            )
+            .scalar()
+        )
+
+        display_order = (
+            max_order + 1
+            if max_order is not None
+            else 0
+        )
+    else:
+        display_order = data.display_order
+
+    if display_order < 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Display order cannot be negative.",
+        )
+
     service = Service(
         category_id=data.category_id,
         name=data.name,
         description=data.description,
-        display_order=data.display_order,
+        display_order=display_order,
     )
 
     db.add(service)
@@ -1946,7 +1994,6 @@ def admin_create_service(
     db.refresh(service)
 
     return service
-
 
 @app.put(
     "/api/admin/services/{service_id}"
@@ -2213,6 +2260,30 @@ def create_blog_post(
             ),
         )
 
+    if blog_data.display_order is None:
+        max_order = (
+            db.query(
+                func.max(
+                    models.BlogPost.display_order
+                )
+            )
+            .scalar()
+        )
+
+        display_order = (
+            max_order + 1
+            if max_order is not None
+            else 0
+        )
+    else:
+        display_order = blog_data.display_order
+
+    if display_order < 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Display order cannot be negative",
+        )
+
     now = datetime.now().isoformat()
 
     post = models.BlogPost(
@@ -2227,9 +2298,7 @@ def create_blog_post(
         is_published=(
             blog_data.is_published
         ),
-        display_order=(
-            blog_data.display_order
-        ),
+        display_order=display_order,
         published_at=(
             now
             if blog_data.is_published

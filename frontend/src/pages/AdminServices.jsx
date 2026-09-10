@@ -59,7 +59,7 @@ function AdminServices() {
     useState("");
 
   const [serviceDisplayOrder, setServiceDisplayOrder] =
-    useState(0);
+    useState("");
 
   const [sidebarOpen, setSidebarOpen] =
     useState(false);
@@ -314,7 +314,7 @@ function AdminServices() {
 
     setServiceName("");
     setServiceDescription("");
-    setServiceDisplayOrder(0);
+    setServiceDisplayOrder("");
 
     if (categories.length > 0) {
       setServiceCategory(
@@ -441,9 +441,9 @@ function AdminServices() {
           null,
 
         display_order:
-          Number(
-            serviceDisplayOrder
-          ) || 0,
+          serviceDisplayOrder === ""
+            ? null
+            : Number(serviceDisplayOrder),
       };
 
       if (editingService) {

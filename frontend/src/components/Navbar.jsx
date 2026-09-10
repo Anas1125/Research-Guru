@@ -319,7 +319,7 @@ function Navbar({ showLiveOfferBar = false }) {
     <header
       className={`fixed left-0 ${
           showLiveOfferBar && hasLiveOffer
-            ? "top-[58px]"
+            ? "top-[82px]  md:top-[58px]"
             : "top-0"
         } z-[100] w-full border-b border-slate-200/70 bg-white transition-transform duration-300 ${
         showNavbar
@@ -392,11 +392,15 @@ function Navbar({ showLiveOfferBar = false }) {
         ================================================== */}
 
         <Link
-          to="/contact"
-          className="hidden rounded-full bg-[#17213A] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition hover:bg-[#0F172A] md:block"
-        >
-          Get Started
-        </Link>
+        to="/contact"
+        className={`hidden rounded-full bg-[#17213A] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition hover:bg-[#0F172A] md:block ${
+          location.pathname === "/contact"
+            ? "invisible"
+            : ""
+        }`}
+      >
+        Get Started
+      </Link>
 
         {/* =================================================
             MOBILE BUTTON

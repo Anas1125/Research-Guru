@@ -467,7 +467,7 @@ function Home() {
       {/* =====================================================
           HERO
       ====================================================== */}
-      <section className="relative min-h-[calc(100vh-73px)] overflow-hidden py-10">
+      <section className="relative min-h-[calc(100vh-73px)] overflow-hidden pt-28 pb-10 lg:py-10">
         {/* Background image */}
         {siteSettings.home_background ? (
           <div
