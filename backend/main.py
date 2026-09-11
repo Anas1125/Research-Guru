@@ -1662,6 +1662,33 @@ def create_contact_enquiry(
             detail="Email is required.",
         )
 
+    coupon = None
+
+    if data.coupon:
+        normalized_coupon = data.coupon.strip().upper()
+
+        if normalized_coupon:
+            now = datetime.now(timezone.utc).isoformat()
+
+            offer = (
+                db.query(Offer)
+                .filter(
+                    func.upper(Offer.offer_code) == normalized_coupon,
+                    Offer.is_active == True,
+                    Offer.start_date <= now,
+                    Offer.end_date >= now,
+                )
+                .first()
+            )
+
+            if not offer:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid or expired offer code.",
+                )
+
+            coupon = offer.offer_code.upper()
+
     enquiry = ContactEnquiry(
         name=name,
         phone=phone,
@@ -1686,11 +1713,8 @@ def create_contact_enquiry(
             if data.message
             else None
         ),
-        coupon=(
-            data.coupon.strip().upper()
-            if data.coupon
-            else None
-        ),
+        coupon=coupon,
+        
         status="New",
         created_at=datetime.now(timezone.utc).isoformat(),
     )

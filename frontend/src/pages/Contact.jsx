@@ -97,6 +97,18 @@ function Contact() {
   const [submitError, setSubmitError] =
     useState("");
 
+  const [couponChecking, setCouponChecking] =
+    useState(false);
+
+  const [couponError, setCouponError] =
+    useState("");
+
+  const [couponSuccess, setCouponSuccess] =
+    useState("");
+
+  const [appliedOffer, setAppliedOffer] =
+    useState(null);
+
   /* =========================================================
      LOAD BACKEND DATA
   ========================================================== */
@@ -214,6 +226,7 @@ function Contact() {
   }, [
     selectedResearch,
     selectedService,
+    selectedCoupon,
   ]);
 
   /* =========================================================
@@ -269,11 +282,75 @@ function Contact() {
   /* =========================================================
      SUBMIT CONTACT ENQUIRY
   ========================================================== */
+  async function handleApplyCoupon() {
+    const code = formData.coupon.trim().toUpperCase();
+
+    setCouponError("");
+    setCouponSuccess("");
+    setAppliedOffer(null);
+
+    if (!code) {
+      setCouponError("Please enter an offer code.");
+      return;
+    }
+
+    setCouponChecking(true);
+
+    try {
+      const response = await apiFetch(
+        `/api/offers/validate?code=${encodeURIComponent(code)}`
+      );
+
+      const data = await response
+        .json()
+        .catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          data?.detail ||
+            "Invalid or expired offer code."
+        );
+      }
+
+      setAppliedOffer(data);
+
+      setFormData((prev) => ({
+        ...prev,
+        coupon: data.offer_code.toUpperCase(),
+      }));
+
+      const discountText =
+        data.discount_type === "percentage"
+          ? `${data.discount_value}% off`
+          : data.discount_value
+            ? `${data.discount_value} off`
+            : "special offer";
+
+      setCouponSuccess(
+        `${data.title} — ${discountText}`
+      );
+    } catch (error) {
+      setCouponError(
+        error.message ||
+          "Invalid or expired offer code."
+      );
+    } finally {
+      setCouponChecking(false);
+    }
+  }
 
   async function handleSubmit(
     event
   ) {
     event.preventDefault();
+
+    if (formData.coupon?.trim() && !appliedOffer) {
+      setSubmitError(
+        "Please apply your offer code or clear the field."
+      );
+      setSubmitMessage("");
+      return;
+    }
 
     setSubmitting(true);
     setSubmitMessage("");
@@ -291,9 +368,12 @@ function Contact() {
                 "application/json",
             },
 
-            body: JSON.stringify(
-              formData
-            ),
+            body: JSON.stringify({
+              ...formData,
+              coupon: appliedOffer
+                ? appliedOffer.offer_code.toUpperCase()
+                : null,
+            }),
           }
         );
 
@@ -325,7 +405,11 @@ function Contact() {
           selectedService || "",
         research_stage: "",
         message: "",
+        coupon: "",
       });
+      setAppliedOffer(null);
+      setCouponError("");
+      setCouponSuccess("");
     } catch (error) {
       setSubmitError(
         error.message ||
@@ -950,29 +1034,74 @@ function Contact() {
 
               </div>
 
-              {formData.coupon && (
-                <div>
-                  <label
-                    htmlFor="contact-coupon"
-                    className="mb-1.5 block text-sm font-semibold text-[#17213A]"
-                  >
-                    Offer Code
-                  </label>
+              {/* OFFER CODE */}
+              <div>
+                <label
+                  htmlFor="contact-coupon"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                >
+                  Offer Code
+                  <span className="ml-1 font-normal text-slate-400">
+                    (Optional)
+                  </span>
+                </label>
 
+                <div className="flex flex-col gap-2 sm:flex-row">
                   <input
                     id="contact-coupon"
                     name="coupon"
                     type="text"
-                    value={formData.coupon}
-                    readOnly
-                    className="w-full rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3.5 text-sm font-bold tracking-wide text-emerald-700 outline-none"
+                    value={formData.coupon || ""}
+                    onChange={(e) => {
+                      updateFormField(
+                        "coupon",
+                        e.target.value.toUpperCase()
+                      );
+
+                      setAppliedOffer(null);
+                      setCouponError("");
+                      setCouponSuccess("");
+                    }}
+                    placeholder="Enter offer code"
+                    autoComplete="off"
+                    className="w-full rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm font-semibold uppercase tracking-wide outline-none transition placeholder:normal-case placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10"
                   />
 
-                  <p className="mt-2 text-xs text-slate-500">
-                    This offer code was automatically added from the offer you selected.
-                  </p>
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    disabled={
+                      couponChecking ||
+                      !formData.coupon?.trim()||
+                      !!appliedOffer
+                    }
+                    className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-xl bg-[#17213A] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {couponChecking
+                      ? "Checking..."
+                      : appliedOffer
+                        ? "Applied"
+                        : "Apply"}
+                  </button>
                 </div>
-              )}
+
+                {couponError && (
+                  <p className="mt-2 text-sm font-medium text-red-600">
+                    {couponError}
+                  </p>
+                )}
+
+                {couponSuccess && appliedOffer && (
+                  <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                    <p className="text-sm font-semibold text-emerald-700">
+                      ✓ Offer applied
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-emerald-600">
+                      {couponSuccess}
+                    </p>
+                  </div>
+                )}
+              </div>
 
               {/* MESSAGE */}
 
