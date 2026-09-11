@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   ArrowRight,
   BarChart3,
+  Menu,
   BookOpen,
   FileText,
   LayoutDashboard,
@@ -34,6 +35,9 @@ function Admin() {
 
   const [loading, setLoading] =
     useState(true);
+
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false);
 
   /* =====================================================
      FETCH DASHBOARD DATA
@@ -256,38 +260,86 @@ function Admin() {
   return (
     <div className="min-h-screen bg-[#F5F8FC] text-slate-900">
       {/* =====================================================
-          SIDEBAR
-      ====================================================== */}
+                  SIDEBAR
+        ====================================================== */}
 
-      <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
-          <AdminSidebar currentPage="/admin" />
-      </aside>
+        <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
+          <AdminSidebar
+            currentPage="/admin"
+            onLogout={handleLogout}
+          />
+        </aside>
 
-      {/* =====================================================
-          MAIN
-      ====================================================== */}
+        {/* =====================================================
+            MOBILE SIDEBAR
+        ====================================================== */}
 
-      <main className="lg:ml-64">
-        {/* HEADER */}
+        {mobileMenuOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-[#17213A]/40 lg:hidden"
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
+            />
 
-        <header className="border-b border-slate-200 bg-white">
-          <div className="flex items-center justify-between gap-4 px-6 py-5 lg:px-8">
-            <div>
-              <h1 className="text-2xl font-bold text-[#17213A]">
-                Dashboard
-              </h1>
+            <aside className="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#17213A] shadow-2xl lg:hidden">
+              <AdminSidebar
+                currentPage="/admin"
+                mobile
+                onClose={() =>
+                  setMobileMenuOpen(false)
+                }
+                onLogout={handleLogout}
+              />
+            </aside>
+          </>
+        )}
 
-              <p className="mt-1 text-sm text-slate-500">
-                Manage and monitor your Research
-                Guru website.
-              </p>
+        {/* =====================================================
+            MAIN
+        ====================================================== */}
+
+        <main className="lg:ml-64">
+          {/* HEADER */}
+
+          <header className="border-b border-slate-200 bg-white">
+            <div className="flex items-center justify-between gap-4 px-6 py-4 lg:px-8 lg:py-5">
+
+              {/* LEFT */}
+
+              <div className="flex min-w-0 items-center gap-3">
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setMobileMenuOpen(true)
+                  }
+                  className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-slate-200 text-[#17213A] transition hover:bg-[#EEF4FA] lg:hidden"
+                  aria-label="Open admin menu"
+                >
+                  <Menu size={21} />
+                </button>
+
+                <div className="min-w-0">
+                  <h1 className="text-2xl font-bold text-[#17213A]">
+                    Dashboard
+                  </h1>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Manage and monitor your Research
+                    Guru website.
+                  </p>
+                </div>
+              </div>
+
+              {/* RIGHT */}
+
+              <div className="shrink-0 rounded-full bg-[#EEF4FA] px-4 py-2 text-sm font-medium text-[#17213A]">
+                {username}
+              </div>
             </div>
-
-            <div className="rounded-full bg-[#EEF4FA] px-4 py-2 text-sm font-medium text-[#17213A]">
-              {username}
-            </div>
-          </div>
-        </header>
+          </header>
 
         <div className="p-6 lg:p-8">
           {/* =====================================================

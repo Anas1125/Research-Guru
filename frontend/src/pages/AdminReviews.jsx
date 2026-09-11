@@ -9,6 +9,7 @@ import {
   X,
   User,
   Loader2,
+  Menu,
 } from "lucide-react";
 
 import AdminSidebar from "../components/AdminSidebar";
@@ -506,28 +507,30 @@ function AdminReviews() {
         <main className="min-h-screen lg:ml-64">
 
         {/* Mobile Header */}
-        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-[#DCE5F0] bg-white px-5 py-4 lg:hidden">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Admin
-            </p>
+        <div className="sticky top-0 z-30 border-b border-[#DCE5F0] bg-white px-5 py-4 lg:hidden">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                setMobileSidebarOpen(true)
+              }
+              className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-[#D6E2EF] bg-white text-[#17213A] transition hover:bg-[#EEF4FA]"
+              aria-label="Open admin menu"
+            >
+              <Menu size={21} />
+            </button>
 
-            <h1 className="text-lg font-bold text-[#17213A]">
-              Client Reviews
-            </h1>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Admin
+              </p>
+
+              <h1 className="text-lg font-bold text-[#17213A]">
+                Client Reviews
+              </h1>
+            </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              setMobileSidebarOpen(true)
-            }
-            className="rounded-xl border border-[#D6E2EF] bg-white px-3 py-2 text-sm font-semibold text-[#17213A]"
-          >
-            Menu
-          </button>
         </div>
-
 
         <div className="mx-auto max-w-7xl px-5 py-8 sm:px-7 lg:px-10 lg:py-10">
 

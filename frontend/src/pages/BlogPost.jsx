@@ -569,18 +569,18 @@ function BlogPost() {
       ================================================== */}
 
       {imageUrl && (
-        <section className="px-6 pt-8 md:pt-10">
-          <div className="mx-auto max-w-5xl">
-            <div className="aspect-[16/8] overflow-hidden rounded-3xl border border-[#DCE5F0] bg-[#F5F8FC] shadow-lg shadow-[#17213A]/8">
-              <img
-                src={imageUrl}
-                alt={post.title}
-                className="h-full w-full object-cover"
-              />
-            </div>
+      <section className="px-6 pt-8 md:pt-10">
+        <div className="mx-auto max-w-4xl">
+          <div className="h-[360px] overflow-hidden rounded-3xl border border-[#DCE5F0] bg-[#F5F8FC] shadow-lg shadow-[#17213A]/8 md:h-[400px]">
+            <img
+              src={imageUrl}
+              alt={post.title}
+              className="h-full w-full object-cover"
+            />
           </div>
-        </section>
-      )}
+        </div>
+      </section>
+    )}
 
       {/* =================================================
           ARTICLE CONTENT

@@ -7,6 +7,7 @@ import {
   Upload,
   Loader2,
   Check,
+  Menu,
   Image as ImageIcon,
 } from "lucide-react";
 
@@ -47,6 +48,9 @@ export default function AdminClients() {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const [mobileSidebarOpen, setMobileSidebarOpen] =
+    useState(false);
 
   // =====================================================
   // LOAD CLIENTS
@@ -429,7 +433,65 @@ export default function AdminClients() {
 
       {/* MAIN */}
 
+      {/* MOBILE SIDEBAR */}
+
+      {mobileSidebarOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+            onClick={() =>
+              setMobileSidebarOpen(false)
+            }
+          />
+
+          <aside className="fixed inset-y-0 left-0 z-50 w-72 lg:hidden">
+            <AdminSidebar
+              currentPage="/admin/clients"
+              mobile
+              onClose={() =>
+                setMobileSidebarOpen(false)
+              }
+              onLogout={() => {
+                localStorage.removeItem("adminToken");
+                localStorage.removeItem("adminUsername");
+                window.location.href = "/admin/login";
+              }}
+            />
+          </aside>
+        </>
+      )}
+
+      {/* MAIN */}
+
       <main className="min-h-screen lg:ml-64">
+
+        {/* MOBILE HEADER */}
+
+        <div className="sticky top-0 z-30 border-b border-[#DCE5F0] bg-white px-5 py-4 lg:hidden">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                setMobileSidebarOpen(true)
+              }
+              className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-[#D6E2EF] bg-white text-[#17213A] transition hover:bg-[#EEF4FA]"
+              aria-label="Open admin menu"
+            >
+              <Menu size={21} />
+            </button>
+
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Admin
+              </p>
+
+              <h1 className="text-lg font-bold text-[#17213A]">
+                Our Clients
+              </h1>
+            </div>
+          </div>
+        </div>
+
         <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
           {/* HEADER */}
 

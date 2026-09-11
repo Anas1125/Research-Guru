@@ -659,32 +659,29 @@ function AdminBlog() {
       ================================================== */}
 
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white lg:hidden">
-        <div className="flex items-center justify-between px-5 py-4">
-          <div>
-            <p className="text-lg font-bold text-[#17213A]">
-              Research
-              <span className="text-slate-500">
-                Guru
-              </span>
-            </p>
+        <div className="flex items-center justify-between gap-4 px-5 py-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                setMobileMenuOpen(true)
+              }
+              className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-slate-200 text-[#17213A] transition hover:bg-[#EEF4FA]"
+              aria-label="Open admin menu"
+            >
+              <Menu size={21} />
+            </button>
 
-            <p className="text-xs text-slate-500">
-              Blog Management
-            </p>
+            <div className="min-w-0">
+              <p className="text-lg font-bold text-[#17213A]">
+                Blog
+              </p>
+
+              <p className="text-xs text-slate-500">
+                Blog Management
+              </p>
+            </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              setMobileMenuOpen(
-                true
-              )
-            }
-            className="cursor-pointer rounded-xl p-2 text-[#17213A] transition hover:bg-slate-100"
-            aria-label="Open admin menu"
-          >
-            <Menu size={22} />
-          </button>
         </div>
       </header>
 
