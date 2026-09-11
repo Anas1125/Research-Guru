@@ -99,7 +99,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
             "style-src 'self' 'unsafe-inline'; "
             "script-src 'self'; "
             "font-src 'self' data:; "
-            "connect-src 'self' http://localhost:8000 http://127.0.0.1:8000; "
+            "connect-src 'self' http://localhost:8000 http://127.0.0.1:8000 https://research-guru-production.up.railway.app; "#change this to frontend url
             "frame-ancestors 'none';"
         )
 
@@ -124,7 +124,10 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "http://localhost:4173",#chnage this to frontend url after deployment
+        "http://localhost:4173",
+        "https://research-guru.pages.dev",
+        "https://227982a5.research-guru.pages.dev"
+        #change this to frontend url after deployment
     ],
     allow_credentials=True,
     allow_methods=["*"],
