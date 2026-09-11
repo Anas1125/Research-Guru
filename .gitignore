@@ -19,9 +19,6 @@ backend/.venv/
 .env
 *.env
 
-# Backend uploads
-backend/uploads/
-
 # Logs
 *.log
 
