@@ -441,9 +441,9 @@ function LiveOfferBar() {
             FIXED LIVE OFFERS BADGE
         ================================================== */}
 
-        <div className="relative z-10 flex shrink-0 items-center bg-white px-3 py-2.5 sm:px-4">
-          <div className="flex items-center gap-2 rounded-full bg-red-500 px-3.5 py-2.5 text-xs font-extrabold tracking-wide text-white shadow-sm">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
+        <div className="relative z-10 flex shrink-0 items-center bg-white px-4 py-2.5 sm:px-5">
+          <div className="flex items-center gap-2.5 rounded-full bg-red-500 px-4 py-2.5 text-xs font-extrabold tracking-wide text-white shadow-sm">
+            <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" />
 
             <span className="hidden sm:inline">
               LIVE OFFERS

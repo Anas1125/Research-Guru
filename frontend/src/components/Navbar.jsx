@@ -319,7 +319,7 @@ function Navbar({ showLiveOfferBar = false }) {
     <header
       className={`fixed left-0 ${
           showLiveOfferBar && hasLiveOffer
-            ? "top-[82px]  md:top-[58px]"
+            ? "top-[56px]"
             : "top-0"
         } z-[100] w-full border-b border-slate-200/70 bg-white transition-transform duration-300 ${
         showNavbar
@@ -352,7 +352,7 @@ function Navbar({ showLiveOfferBar = false }) {
             </div>
           )}
 
-          <span className="text-xl font-bold tracking-tight text-[#17213A]">
+          <span className="text-2xl font-bold tracking-tight text-[#17213A]">
             {siteName}
           </span>
         </Link>
