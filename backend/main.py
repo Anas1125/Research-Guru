@@ -386,6 +386,51 @@ def get_offers(
         .all()
     )
 
+# =====================================================
+# PUBLIC - VALIDATE OFFER CODE
+# =====================================================
+
+@app.get("/api/offers/validate")
+def validate_offer_code(
+    code: str,
+    db: Session = Depends(get_db),
+):
+    normalized_code = code.strip().upper()
+
+    if not normalized_code:
+        raise HTTPException(
+            status_code=400,
+            detail="Offer code is required.",
+        )
+
+    now = datetime.now(timezone.utc).isoformat()
+
+    offer = (
+        db.query(Offer)
+        .filter(
+            func.upper(Offer.offer_code) == normalized_code,
+            Offer.is_active == True,
+            Offer.start_date <= now,
+            Offer.end_date >= now,
+        )
+        .first()
+    )
+
+    if not offer:
+        raise HTTPException(
+            status_code=404,
+            detail="Invalid or inactive offer code.",
+        )
+
+    return {
+        "valid": True,
+        "offer_id": offer.id,
+        "title": offer.title,
+        "description": offer.description,
+        "discount_type": offer.discount_type,
+        "discount_value": offer.discount_value,
+        "offer_code": offer.offer_code,
+    }
 
 # =====================================================
 # ADMIN - OFFERS
