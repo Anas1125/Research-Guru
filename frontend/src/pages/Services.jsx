@@ -851,7 +851,7 @@ function Services() {
               </p>
             </div>
           ) : (
-            <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            <div className="mt-12 flex gap-6 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0">
               {blogs.map(
                 (blog) => {
                   const imageUrl =
@@ -862,7 +862,7 @@ function Services() {
                   return (
                     <article
                       key={blog.id}
-                      className="group overflow-hidden rounded-3xl border border-[#DCE5F0] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8"
+                       className="group w-[85%] shrink-0 overflow-hidden rounded-3xl border border-[#DCE5F0] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8 lg:w-auto lg:shrink"
                     >
                       <div className="h-56 overflow-hidden bg-[#EAF1FA]">
                         {imageUrl ? (
@@ -1058,11 +1058,11 @@ function Services() {
             </div>
 
             {/* Publisher Logos */}
-            <div className="flex flex-wrap justify-center gap-6">
+            <div className="flex gap-6 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-wrap lg:justify-center lg:overflow-visible lg:pb-0">
               {clients.map((client) => (
                 <div
                   key={client.id}
-                  className="group flex w-[240px] min-h-[170px] flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                  className="group flex w-[240px] shrink-0 min-h-[170px] flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                   {/* Logo */}
                   {client.logo_url && (

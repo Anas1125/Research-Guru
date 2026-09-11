@@ -1629,6 +1629,74 @@ async def upload_site_setting_image(
     }
 
 # =====================================================
+# ADMIN - REMOVE SITE SETTING IMAGE
+# =====================================================
+
+@app.delete("/api/admin/site-settings/image")
+def remove_site_setting_image(
+    setting_key: str,
+    db: Session = Depends(get_db),
+    current_admin: AdminUser = Depends(
+        get_current_admin
+    ),
+):
+    allowed_keys = {
+        "logo_url",
+        "favicon_url",
+        "home_background",
+        "home_intro_image",
+        "about_background",
+        "services_background",
+        "offers_background",
+        "contact_background",
+    }
+
+    if setting_key not in allowed_keys:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid site image setting.",
+        )
+
+    setting = (
+        db.query(SiteSetting)
+        .filter(
+            SiteSetting.key == setting_key
+        )
+        .first()
+    )
+
+    if not setting or not setting.value:
+        raise HTTPException(
+            status_code=404,
+            detail="No image found for this setting.",
+        )
+
+    image_url = setting.value
+
+    # Only delete files belonging to the site's
+    # local upload directory.
+    if image_url.startswith("/uploads/site/"):
+        filename = os.path.basename(image_url)
+
+        file_path = os.path.join(
+            SITE_UPLOAD_DIR,
+            filename,
+        )
+
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+    # Clear the setting from the database.
+    setting.value = None
+
+    db.commit()
+
+    return {
+        "message": "Site image removed successfully",
+        "setting_key": setting_key,
+    }
+
+# =====================================================
 # PUBLIC CONTACT ENQUIRIES
 # =====================================================
 

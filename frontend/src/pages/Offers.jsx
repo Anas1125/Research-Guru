@@ -622,15 +622,18 @@ function OfferSection({
             OFFER GRID
         ================================================== */}
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-10 flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 md:overflow-visible md:pb-0 md:snap-none lg:grid-cols-3 xl:grid-cols-4">
 
           {offers.map((offer) => (
-            <OfferCard
+            <div 
               key={offer.id}
-              offer={offer}
-              status={status}
-              currentTime={currentTime}
-            />
+              className="w-[85%] shrink-0 snap-start sm:w-[70%] md:w-auto md:shrink">
+              <OfferCard
+                offer={offer}
+                status={status}
+                currentTime={currentTime}
+              />
+            </div>
           ))}
 
         </div>

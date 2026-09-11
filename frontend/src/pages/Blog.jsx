@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  ArrowLeft,
   ArrowRight,
   CalendarDays,
   Clock3,
   BookOpen,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const API_URL =
   import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
@@ -80,6 +82,7 @@ function Blog() {
 
   return (
     <div className="min-h-screen bg-white text-[#17213A]">
+      <Navbar />
       {/* HERO */}
       <section className="relative overflow-hidden bg-[#F5F8FC] pt-32 pb-20">
         <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#EAF1FA]" />
@@ -87,6 +90,13 @@ function Blog() {
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="max-w-3xl">
+            <Link
+              to="/services"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#CBD7E6] bg-white px-4 py-2 text-sm font-semibold text-[#17213A] shadow-sm transition hover:border-[#17213A] hover:bg-[#F8FAFC]"
+            >
+              <ArrowLeft size={16} />
+              Back to Services
+            </Link>
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.25em] text-slate-500">
               Research Guru Blog
             </p>
@@ -116,13 +126,13 @@ function Blog() {
               </p>
 
               <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-                Research knowledge that moves you forward
+                Research Knowledge That Moves You Forward
               </h2>
             </div>
 
-            <p className="max-w-xl text-slate-600">
-              Guidance for scholars, researchers, students, and professionals
-              working across technical and academic research.
+            <p className="max-w-2xl text-slate-600">
+              Guidance For Scholars, Researchers, Students, And Professionals 
+              Working Across Technical And Academic Research.
             </p>
           </div>
 
@@ -163,11 +173,11 @@ function Blog() {
 
           {/* Posts */}
           {!loading && !error && publishedBlogs.length > 0 && (
-            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+            <div className="flex gap-7 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 md:overflow-visible md:pb-0 md:snap-none lg:grid-cols-3">
               {publishedBlogs.map((blog) => (
                 <article
                   key={blog.id}
-                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  className="group flex h-full w-[85%] shrink-0 snap-start flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl md:w-auto md:shrink"
                 >
                   {/* IMAGE */}
                   <div className="relative h-52 overflow-hidden bg-[#EAF1FA]">

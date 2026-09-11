@@ -4,6 +4,7 @@ import {
   Menu,
   Save,
   Upload,
+  Trash2,
   Image as ImageIcon,
   Phone,
   Mail,
@@ -308,6 +309,63 @@ function AdminSettings() {
     }
   }
 
+    /* =====================================================
+     REMOVE IMAGE
+  ====================================================== */
+
+  async function handleImageRemove(settingKey) {
+    if (!window.confirm("Are you sure you want to remove this image?")) {
+      return;
+    }
+
+    try {
+      setUploading(settingKey);
+      setError("");
+      setSuccess("");
+
+      const response = await apiFetch(
+        `/api/admin/site-settings/image?setting_key=${encodeURIComponent(
+          settingKey
+        )}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await response
+        .json()
+        .catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          data?.detail ||
+            "Failed to remove image."
+        );
+      }
+
+      setSettings((previous) => ({
+        ...previous,
+        [settingKey]: "",
+      }));
+
+      setSuccess(
+        "Image removed successfully."
+      );
+    } catch (err) {
+      console.error(
+        "Failed to remove image:",
+        err
+      );
+
+      setError(
+        err.message ||
+          "Failed to remove image."
+      );
+    } finally {
+      setUploading("");
+    }
+  }
+
   /* =====================================================
      IMAGE URL
   ====================================================== */
@@ -583,6 +641,7 @@ function AdminSettings() {
                     title="Navbar Logo"
                     description="Logo displayed in the website navigation."
                     settingKey="logo_url"
+                    onRemove={handleImageRemove}
                     value={
                       settings.logo_url
                     }
@@ -602,6 +661,7 @@ function AdminSettings() {
                     title="Favicon"
                     description="Small icon displayed in the browser tab."
                     settingKey="favicon_url"
+                    onRemove={handleImageRemove}
                     value={
                       settings.favicon_url
                     }
@@ -645,6 +705,7 @@ function AdminSettings() {
                     title="Home Background"
                     description="Background image for the Home page."
                     settingKey="home_background"
+                    onRemove={handleImageRemove}
                     value={
                       settings.home_background
                     }
@@ -665,6 +726,7 @@ function AdminSettings() {
                     description="Image displayed in the Home page research introduction section."
                     settingKey="home_intro_image"
                     value={settings.home_intro_image}
+                    onRemove={handleImageRemove}
                     imageUrl={getImageUrl(
                         settings.home_intro_image
                     )}
@@ -681,6 +743,7 @@ function AdminSettings() {
                     title="About Background"
                     description="Background image for the About page."
                     settingKey="about_background"
+                    onRemove={handleImageRemove}
                     value={
                       settings.about_background
                     }
@@ -700,6 +763,7 @@ function AdminSettings() {
                     title="Services Background"
                     description="Background image for the Services page."
                     settingKey="services_background"
+                    onRemove={handleImageRemove}
                     value={
                       settings.services_background
                     }
@@ -719,6 +783,7 @@ function AdminSettings() {
                     title="Offers Background"
                     description="Background image for the offers page."
                     settingKey="offers_background"
+                    onRemove={handleImageRemove}
                     value={
                       settings.offers_background
                     }
@@ -738,6 +803,7 @@ function AdminSettings() {
                     title="Contact Background"
                     description="Background image for the Contact page."
                     settingKey="contact_background"
+                    onRemove={handleImageRemove}
                     value={
                       settings.contact_background
                     }
@@ -926,6 +992,7 @@ function ImageUploadCard({
   imageUrl,
   uploading,
   onUpload,
+  onRemove,
 }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#F8FAFC]">
@@ -978,41 +1045,63 @@ function ImageUploadCard({
           </div>
         )}
 
-        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[#17213A] transition hover:bg-slate-50">
+        <div className="flex gap-2">
 
-          <Upload size={17} />
+          {/* UPLOAD / REPLACE */}
+          <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[#17213A] transition hover:bg-slate-50">
 
-          {uploading
-            ? "Uploading..."
-            : value
-            ? "Replace Image"
-            : "Upload Image"}
+            <Upload size={17} />
 
-          <input
-            type="file"
-            accept={
-              settingKey ===
-              "favicon_url"
-                ? ".ico,.png,.jpg,.jpeg,.webp"
-                : ".jpg,.jpeg,.png,.webp"
-            }
-            className="hidden"
-            disabled={uploading}
-            onChange={(event) => {
-              const file =
-                event.target.files?.[0];
+            {uploading
+              ? "Processing..."
+              : value
+              ? "Replace Image"
+              : "Upload Image"}
 
-              onUpload(
-                settingKey,
-                file
-              );
+            <input
+              type="file"
+              accept={
+                settingKey === "favicon_url"
+                  ? ".ico,.png,.jpg,.jpeg,.webp"
+                  : ".jpg,.jpeg,.png,.webp"
+              }
+              className="hidden"
+              disabled={uploading}
+              onChange={(event) => {
+                const file =
+                  event.target.files?.[0];
 
-              event.target.value =
-                "";
-            }}
-          />
+                onUpload(
+                  settingKey,
+                  file
+                );
 
-        </label>
+                event.target.value = "";
+              }}
+            />
+
+          </label>
+
+          {/* REMOVE */}
+          {value && (
+            <button
+              type="button"
+              onClick={() =>
+                onRemove(settingKey)
+              }
+              disabled={uploading}
+              className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
+              aria-label={`Remove ${title}`}
+            >
+              <Trash2 size={17} />
+
+              <span className="hidden sm:inline">
+                Remove
+              </span>
+            </button>
+          )}
+
+        </div>
 
         {value && (
           <p className="mt-3 truncate text-xs text-slate-400">

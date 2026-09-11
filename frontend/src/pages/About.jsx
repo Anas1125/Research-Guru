@@ -345,7 +345,7 @@ function About() {
       ====================================================== */}
 
       <section
-        className="relative h-[calc(110vh-73px)] overflow-hidden bg-cover bg-center"
+        className="relative min-h-[calc(100vh-73px)] overflow-hidden bg-cover bg-center"
         style={{
           backgroundImage:
             aboutBackground
@@ -731,7 +731,7 @@ function About() {
                   </div>
 
                   <div
-                    className={`mx-auto mt-14 grid max-w-6xl gap-6 ${
+                    className={`mx-auto mt-14 flex max-w-6xl gap-6 overflow-x-auto pb-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:overflow-visible md:pb-0 md:snap-none ${
                       reviews.length === 1
                         ? "max-w-3xl"
                         : "md:grid-cols-2"
@@ -740,7 +740,7 @@ function About() {
                     {reviews.map((item) => (
                       <div
                         key={item.id}
-                        className="relative flex h-full flex-col rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8 md:p-9"
+                        className="relative flex h-full w-[85%] shrink-0 snap-start flex-col rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8 md:w-auto md:shrink md:p-9"
                       >
                         {/* QUOTE ICON */}
                         <div className="absolute right-7 top-7 flex h-11 w-11 items-center justify-center rounded-full bg-[#F5F8FC] text-[#17213A]">
