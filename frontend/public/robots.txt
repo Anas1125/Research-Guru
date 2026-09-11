@@ -4,4 +4,5 @@ Allow: /
 Disallow: /admin/
 Disallow: /login
 Disallow: /admin/login
-Sitemap: https://yourdomain.com/sitemap.xml
+#Sitemap: https://yourdomain.com/sitemap.xml change this frontend url
+Sitemap: https://research-guru.pages.dev/sitemap.xml
