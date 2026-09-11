@@ -1,6 +1,6 @@
 import os
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import uuid4
 from PIL import Image
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -480,7 +480,7 @@ def admin_create_offer(
         cta_link=data.cta_link,
         is_active=data.is_active,
         display_order=display_order,
-        created_at=datetime.now().isoformat(),
+        created_at=datetime.now(timezone.utc).isoformat(),
     )
 
     db.add(offer)
@@ -612,7 +612,7 @@ def submit_client_review(
         photo_url=data.photo_url,
         is_published=False,
         display_order=0,
-        created_at=datetime.now().isoformat(),
+        created_at=datetime.now(timezone.utc).isoformat(),
     )
 
     db.add(review)
@@ -704,7 +704,7 @@ def admin_create_client(
         logo_url=data.logo_url,
         is_active=data.is_active,
         display_order=data.display_order,
-        created_at=datetime.now().isoformat(),
+        created_at=datetime.now(timezone.utc).isoformat(),
     )
 
     db.add(client)
@@ -899,7 +899,7 @@ def admin_create_review(
         photo_url=data.photo_url,
         is_published=data.is_published,
         display_order=data.display_order,
-        created_at=datetime.now().isoformat(),
+        created_at=datetime.now(timezone.utc).isoformat(),
     )
 
     db.add(review)
@@ -1647,7 +1647,7 @@ def create_contact_enquiry(
             else None
         ),
         status="New",
-        created_at=datetime.now().isoformat(),
+        created_at=datetime.now(timezone.utc).isoformat(),
     )
 
     db.add(enquiry)
