@@ -2,23 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://yourdomain.com/</loc>
+    <loc>https://research-guru.pages.dev/</loc> #change this to frontend url
   </url>
 
   <url>
-    <loc>https://yourdomain.com/about</loc>
+    <loc>https://research-guru.pages.dev/about</loc> #change this to frontend url
   </url>
 
   <url>
-    <loc>https://yourdomain.com/services</loc>
+    <loc>https://research-guru.pages.dev/services</loc> #change this to frontend url
   </url>
 
   <url>
-    <loc>https://yourdomain.com/contact</loc>
+    <loc>https://research-guru.pages.dev/contact</loc> #change this to frontend url
   </url>
 
   <url>
-    <loc>https://yourdomain.com/blog</loc>
+    <loc>https://research-guru.pages.dev/blog</loc> #change this to frontend url
   </url>
 
 </urlset>
