@@ -356,7 +356,7 @@ function About() {
         }}
       >
         {aboutBackground && (
-          <div className="absolute inset-0 bg-white/75" />
+          <div className="absolute inset-0 " />
         )}
 
         <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-[#DCE7F5]/40 blur-3xl" />

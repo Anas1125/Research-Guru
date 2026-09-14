@@ -492,9 +492,9 @@ function Home() {
           <div className="absolute inset-0 bg-[#F5F8FC]" />
         )}
 
-        <div className="absolute inset-0 bg-white/45" />
+        <div className="absolute inset-0" />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-white/75 via-white/45 to-[#EAF1FA]/35" />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/45 to-[#EAF1FA]/35" />
 
         {/* Background glow */}
         <div className="absolute -left-40 top-20 h-96 w-96 rounded-full bg-[#DCE7F5]/30 blur-3xl" />
