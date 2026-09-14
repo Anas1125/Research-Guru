@@ -448,7 +448,7 @@ function Home() {
     {
       icon: MapPin,
       type: "MAIN OFFICE",
-      city: "Chennai",
+      city: "Mumbai",
       text: "Connecting Researchers, Academic Institutions, and Technical Specialists across India.",
     },
     {

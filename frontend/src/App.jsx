@@ -94,6 +94,13 @@ function SEOManager() {
             robots: "index, follow",
           },
 
+          "/offers": {
+            title: `Research Offers | ${siteName}`,
+            description:
+              `Explore current research, academic, PhD, thesis, publication, and technical support offers from ${siteName}.`,
+            robots: "index, follow",
+          },
+
           "/contact": {
             title: `Contact Us | ${siteName}`,
             description:
