@@ -668,7 +668,7 @@ function About() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              How we approach research support.
+              How We Approach Research Support.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -721,7 +721,7 @@ function About() {
                     </span>
 
                     <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-                      Trusted by Researchers.
+                      Trusted By Researchers.
                     </h2>
 
                     <p className="mt-5 text-lg leading-8 text-slate-600">

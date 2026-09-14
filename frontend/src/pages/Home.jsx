@@ -1092,7 +1092,7 @@ function Home() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Everything you need to move your research forward.
+              Everything You Need To Move Your Research Forward.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">

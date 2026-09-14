@@ -752,7 +752,7 @@ function Services() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Support that follows the Research Requirement.
+              Support That Follows The Research Requirement.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -807,7 +807,7 @@ function Services() {
               </span>
 
               <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-                Insights for researchers.
+                Insights For Researchers.
               </h2>
 
               <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -959,7 +959,7 @@ function Services() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Implementation support across research disciplines.
+              Implementation Support Across Research Disciplines.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -1111,7 +1111,7 @@ function Services() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              A structured approach to research support.
+              A Structured Approach To Research Support.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -1169,7 +1169,7 @@ function Services() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Move from completed research to publication-ready work.
+              Move From Completed Research To Publication-Ready Work.
             </h2>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
@@ -1358,7 +1358,7 @@ function Services() {
             </p>
 
             <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-white md:text-5xl">
-              Have a research requirement?
+              Have a Research Requirement?
               <span className="block text-slate-300">
                 Let's discuss it.
               </span>

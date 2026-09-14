@@ -763,7 +763,7 @@ function Contact() {
               <div className="mb-3 h-1.5 w-14 rounded-full bg-[#17213A]" />
 
               <h2 className="text-2xl font-bold tracking-tight text-[#17213A] md:text-3xl">
-                Send us your requirement
+                Send us your Requirement
               </h2>
 
               <p className="mt-2 text-sm leading-6 text-slate-500">
