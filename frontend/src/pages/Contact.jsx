@@ -109,6 +109,8 @@ function Contact() {
   const [appliedOffer, setAppliedOffer] =
     useState(null);
 
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+
   /* =========================================================
      LOAD BACKEND DATA
   ========================================================== */
@@ -343,6 +345,12 @@ function Contact() {
     event
   ) {
     event.preventDefault();
+    if (!agreedToTerms) {
+      setSubmitError(
+        "Please agree to the Terms & Conditions and Privacy Policy before submitting."
+      );
+      return;
+    }
 
     if (formData.coupon?.trim() && !appliedOffer) {
       setSubmitError(
@@ -410,6 +418,7 @@ function Contact() {
       setAppliedOffer(null);
       setCouponError("");
       setCouponSuccess("");
+      setAgreedToTerms(false);
     } catch (error) {
       setSubmitError(
         error.message ||
@@ -1150,9 +1159,42 @@ function Contact() {
 
               {/* SUBMIT */}
 
+              <div className="flex items-start gap-3">
+                <input
+                  id="contact-terms"
+                  type="checkbox"
+                  checked={agreedToTerms}
+                  onChange={(e) =>
+                    setAgreedToTerms(e.target.checked)
+                  }
+                  className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-slate-300 text-[#17213A] focus:ring-[#17213A]"
+                />
+
+                <label
+                  htmlFor="contact-terms"
+                  className="text-xs leading-5 text-slate-500"
+                >
+                  I agree to the{" "}
+                  <Link
+                    to="/terms-and-conditions"
+                    className="font-medium text-[#17213A] underline underline-offset-2 hover:text-slate-600"
+                  >
+                    Terms & Conditions
+                  </Link>{" "}
+                  and acknowledge the{" "}
+                  <Link
+                    to="/privacy-policy"
+                    className="font-medium text-[#17213A] underline underline-offset-2 hover:text-slate-600"
+                  >
+                    Privacy Policy
+                  </Link>
+                  .
+                </label>
+              </div>
+
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !agreedToTerms}
                 className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#17213A] px-6 py-4 font-semibold text-white shadow-lg shadow-[#17213A]/15 transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {submitting

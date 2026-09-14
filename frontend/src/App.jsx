@@ -28,6 +28,8 @@ import AdminServices from "./pages/AdminServices";
 import AdminReviews from "./pages/AdminReviews";
 import AdminClients from "./pages/AdminClients";
 import AdminOffers from "./pages/AdminOffers";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 import NotFound from "./pages/NotFound";
 
@@ -112,6 +114,20 @@ function SEOManager() {
             title: `Research Blog | ${siteName}`,
             description:
               `Research guidance, technical perspectives, publication information, and practical insights for scholars from ${siteName}.`,
+            robots: "index, follow",
+          },
+
+          "/privacy-policy": {
+            title: "Privacy Policy | Research Guru",
+            description:
+              "Read the Research Guru Privacy Policy to understand how we collect, use, and protect information submitted through our website.",
+            robots: "index, follow",
+          },
+
+          "/terms-and-conditions": {
+            title: "Terms & Conditions | Research Guru",
+            description:
+              "Read the Research Guru Terms & Conditions covering website use, enquiries, services, payments, intellectual property, and other applicable terms.",
             robots: "index, follow",
           },
 
@@ -645,6 +661,11 @@ function App() {
           element={<BlogPost />}
         />
 
+        <Route
+          path="/terms-and-conditions"
+          element={<TermsAndConditions />}
+        />
+
          {/* =====================================================
             Offers
         ====================================================== */}
@@ -652,6 +673,11 @@ function App() {
         <Route
           path="/offers"
           element={<Offers />}
+        />
+
+        <Route
+          path="/privacy-policy"
+          element={<PrivacyPolicy />}
         />
 
 

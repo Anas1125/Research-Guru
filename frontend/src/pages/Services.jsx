@@ -1058,6 +1058,7 @@ function Services() {
 
             {/* Publisher Logos Marquee */}
             <div className="relative overflow-hidden">
+              <div className="py-3">
               <div className="publisher-marquee">
                 <div className="publisher-marquee-track">
 
@@ -1065,7 +1066,7 @@ function Services() {
                     (client, index) => (
                       <div
                         key={`${client.id}-${index}`}
-                        className="group flex h-[190px] w-[240px] shrink-0 flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:w-[260px]"
+                        className="group flex h-[190px] w-[240px] shrink-0 flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-md sm:w-[260px]"
                       >
 
                         {/* Logo */}
@@ -1089,7 +1090,7 @@ function Services() {
                       </div>
                     )
                   )}
-
+                  </div>
                 </div>
               </div>
             </div>
@@ -1249,7 +1250,7 @@ function Services() {
             </span>
 
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Questions researchers often ask.
+              Questions Researchers often ask.
             </h2>
           </div>
 
@@ -1257,33 +1258,33 @@ function Services() {
             {[
               {
                 question:
-                  "Can I request only implementation support?",
+                  "Can I request only Implementation Support?",
                 answer:
-                  "Yes. Support can be focused on a specific part of the research project such as implementation, experiments, analysis, documentation, or another defined requirement.",
+                  "Yes. Support can be focused on a specific part of the Research Project such as Implementation, Experiments, Analysis, Documentation, or another defined Requirement.",
               },
               {
                 question:
-                  "Do you support PhD thesis and dissertation work?",
+                  "Do you support PhD Thesis and Dissertation Work?",
                 answer:
-                  "Yes. Thesis and dissertation support can cover research structure, documentation, methodology, technical implementation, analysis, and related academic requirements.",
+                  "Yes. Thesis and Dissertation support can cover Research Structure, Documentation, Methodology, Technical Implementation, Analysis, and Related Academic Requirements.",
               },
               {
                 question:
-                  "Can publication support be requested separately?",
+                  "Can Publication Support be Requested Separately?",
                 answer:
-                  "Yes. Publication support can be requested independently based on the stage of the manuscript and the researcher's publication requirements.",
+                  "Yes. Publication Support can be requested independently based on the stage of the Manuscript and the Researcher's Publication Requirements.",
               },
               {
                 question:
-                  "Can the technical implementation be based on a specific research domain?",
+                  "Can the Technical Implementation be based on a Specific Research Domain?",
                 answer:
-                  "Yes. Implementation requirements can be discussed around the specific technology, domain, research problem, and expected technical outcome.",
+                  "Yes. Implementation Requirements can be discussed around the Specific Technology, Domain, Research Problem, and Expected Technical Outcome.",
               },
               {
                 question:
-                  "How do I explain my research requirement?",
+                  "How do I explain my Research Requirement?",
                 answer:
-                  "You can provide your research area, current stage, objective, and the specific support you need. The contact form is designed to capture those details.",
+                  "You can provide your Research Area, Current stage, Objective, and the specific support you need. The contact form is designed to capture those details.",
               },
             ].map(
               (faq, index) => {

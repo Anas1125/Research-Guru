@@ -2,23 +2,35 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://research-guru.pages.dev/</loc> #change this to frontend url
+    <loc>https://research-guru.pages.dev/</loc>
   </url>
 
   <url>
-    <loc>https://research-guru.pages.dev/about</loc> #change this to frontend url
+    <loc>https://research-guru.pages.dev/about</loc>
   </url>
 
   <url>
-    <loc>https://research-guru.pages.dev/services</loc> #change this to frontend url
+    <loc>https://research-guru.pages.dev/services</loc>
   </url>
 
   <url>
-    <loc>https://research-guru.pages.dev/contact</loc> #change this to frontend url
+    <loc>https://research-guru.pages.dev/contact</loc>
   </url>
 
   <url>
-    <loc>https://research-guru.pages.dev/blog</loc> #change this to frontend url
+    <loc>https://research-guru.pages.dev/blog</loc>
+  </url>
+
+  <url>
+    <loc>https://research-guru.pages.dev/offers</loc>
+  </url>
+
+  <url>
+    <loc>https://research-guru.pages.dev/privacy-policy</loc>
+  </url>
+
+  <url>
+    <loc>https://research-guru.pages.dev/terms-and-conditions</loc>
   </url>
 
 </urlset>

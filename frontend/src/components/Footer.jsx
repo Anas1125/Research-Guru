@@ -152,30 +152,72 @@ function Footer() {
 
               <Link
                 to="/"
-                className="cursor-pointer text-sm text-slate-300 transition hover:text-white"
+                className="group flex w-fit cursor-pointer items-center gap-1.5 text-sm text-slate-300 transition hover:text-white"
               >
-                Home
+                <span className="underline underline-offset-2">
+                  Home
+                </span>
+
+                <ArrowUpRight
+                  size={14}
+                  className="opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                />
               </Link>
 
               <Link
                 to="/about"
-                className="cursor-pointer text-sm text-slate-300 transition hover:text-white"
+                className="group flex w-fit cursor-pointer items-center gap-1.5 text-sm text-slate-300 transition hover:text-white"
               >
-                About
+                <span className="underline underline-offset-2">
+                  About
+                </span>
+
+                <ArrowUpRight
+                  size={14}
+                  className="opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                />
               </Link>
 
               <Link
                 to="/services"
-                className="cursor-pointer text-sm text-slate-300 transition hover:text-white"
+                className="group flex w-fit cursor-pointer items-center gap-1.5 text-sm text-slate-300 transition hover:text-white"
               >
-                Services
+                <span className="underline underline-offset-2">
+                  Services
+                </span>
+
+                <ArrowUpRight
+                  size={14}
+                  className="opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                />
+              </Link>
+
+              <Link
+                to="/offers"
+                className="group flex w-fit cursor-pointer items-center gap-1.5 text-sm text-slate-300 transition hover:text-white"
+              >
+                <span className="underline underline-offset-2">
+                  Offers
+                </span>
+
+                <ArrowUpRight
+                  size={14}
+                  className="opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                />
               </Link>
 
               <Link
                 to="/contact"
-                className="cursor-pointer text-sm text-slate-300 transition hover:text-white"
+                className="group flex w-fit cursor-pointer items-center gap-1.5 text-sm text-slate-300 transition hover:text-white"
               >
-                Contact
+                <span className="underline underline-offset-2">
+                  Contact
+                </span>
+
+                <ArrowUpRight
+                  size={14}
+                  className="opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                />
               </Link>
 
             </div>
@@ -209,10 +251,18 @@ function Footer() {
                     Phone
                   </p>
 
-                  <p className="mt-1 text-sm font-medium text-white">
-                    {settings.contact_phone ||
-                      "Not provided"}
-                  </p>
+                  {settings.contact_phone ? (
+                    <a
+                      href={`tel:${settings.contact_phone}`}
+                      className="mt-1 block text-sm font-medium text-white underline underline-offset-2 transition hover:text-slate-300"
+                    >
+                      {settings.contact_phone}
+                    </a>
+                  ) : (
+                    <p className="mt-1 text-sm font-medium text-white">
+                      Not provided
+                    </p>
+                  )}
 
                 </div>
 
@@ -228,16 +278,22 @@ function Footer() {
                 />
 
                 <div>
-
                   <p className="text-sm text-slate-300">
                     Email
                   </p>
 
-                  <p className="mt-1 text-sm font-medium text-white">
-                    {settings.contact_email ||
-                      "Not provided"}
-                  </p>
-
+                  {settings.contact_email ? (
+                    <a
+                      href={`mailto:${settings.contact_email}`}
+                      className="mt-1 block text-sm font-medium text-white underline underline-offset-2 transition hover:text-slate-300"
+                    >
+                      {settings.contact_email}
+                    </a>
+                  ) : (
+                    <p className="mt-1 text-sm font-medium text-white">
+                      Not provided
+                    </p>
+                  )}
                 </div>
 
               </div>
@@ -252,16 +308,26 @@ function Footer() {
                 />
 
                 <div>
-
                   <p className="text-sm text-slate-300">
                     Location
                   </p>
 
-                  <p className="mt-1 text-sm font-medium text-white">
-                    {settings.contact_address ||
-                      "India"}
-                  </p>
-
+                  {settings.contact_address ? (
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        settings.contact_address
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 block text-sm font-medium text-white underline underline-offset-2 transition hover:text-slate-300"
+                    >
+                      {settings.contact_address}
+                    </a>
+                  ) : (
+                    <p className="mt-1 text-sm font-medium text-white">
+                      India
+                    </p>
+                  )}
                 </div>
 
               </div>
@@ -280,7 +346,7 @@ function Footer() {
 
       <div className="border-t border-white/10">
 
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-5 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-5 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
 
           <p>
             © {new Date().getFullYear()}{" "}
@@ -288,9 +354,31 @@ function Footer() {
             All rights reserved.
           </p>
 
-          <p>
-            Research • Innovation • Excellence
-          </p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+
+            <Link
+              to="/privacy-policy"
+             className="underline underline-offset-2 transition hover:text-white"
+            >
+              Privacy Policy
+            </Link>
+
+            <Link
+              to="/terms-and-conditions"
+             className="underline underline-offset-2 transition hover:text-white"
+            >
+              Terms & Conditions
+            </Link>
+
+            <span className="hidden text-slate-600 md:inline">
+              |
+            </span>
+
+            <p className="hidden md:block">
+              Research • Innovation • Excellence
+            </p>
+
+          </div>
 
         </div>
 

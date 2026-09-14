@@ -81,6 +81,9 @@ function Home() {
   const [heroError, setHeroError] =
     useState("");
 
+  const [heroAgreedToTerms, setHeroAgreedToTerms] =
+    useState(false);
+
   /* =========================================================
      LOAD BACKEND DATA
   ========================================================== */
@@ -338,6 +341,12 @@ function Home() {
     event
   ) {
     event.preventDefault();
+    if (!heroAgreedToTerms) {
+      setHeroError(
+        "Please agree to the Terms & Conditions and Privacy Policy before submitting."
+      );
+      return;
+    }
 
     setHeroSubmitting(true);
     setHeroSuccess("");
@@ -393,6 +402,7 @@ function Home() {
       });
 
       setResearchArea("");
+      setHeroAgreedToTerms(false);
     } catch (error) {
       setHeroError(
         error.message ||
@@ -757,9 +767,42 @@ function Home() {
                 </div>
               )}
 
+              <div className="flex items-start gap-3 pt-1">
+                <input
+                  id="hero-terms"
+                  type="checkbox"
+                  checked={heroAgreedToTerms}
+                  onChange={(e) =>
+                    setHeroAgreedToTerms(e.target.checked)
+                  }
+                  className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-slate-300 text-[#17213A] focus:ring-[#17213A]"
+                />
+
+                <label
+                  htmlFor="hero-terms"
+                  className="text-xs leading-5 text-slate-500"
+                >
+                  I agree to the{" "}
+                  <Link
+                    to="/terms-and-conditions"
+                    className="font-medium text-[#17213A] underline underline-offset-2 hover:text-slate-600"
+                  >
+                    Terms & Conditions
+                  </Link>{" "}
+                  and acknowledge the{" "}
+                  <Link
+                    to="/privacy-policy"
+                    className="font-medium text-[#17213A] underline underline-offset-2 hover:text-slate-600"
+                  >
+                    Privacy Policy
+                  </Link>
+                  .
+                </label>
+              </div>
+
               <button
                 type="submit"
-                disabled={heroSubmitting}
+                disabled={heroSubmitting || !heroAgreedToTerms}
                 className="w-full cursor-pointer rounded-xl bg-[#17213A] px-6 py-3.5 font-semibold text-white shadow-lg shadow-[#17213A]/15 transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {heroSubmitting
