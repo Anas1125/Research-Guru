@@ -1032,13 +1032,12 @@ function Services() {
         </div>
       </section>
 
-
-     {/* =========================
+     {/* =====================================================
           PUBLICATION PARTNERS
-      ========================= */}
+      ===================================================== */}
 
       {clients.length > 0 && (
-        <section className="bg-[#F5F8FC] py-20">
+        <section className="bg-[#F5F8FC] py-10">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
 
             {/* Heading */}
@@ -1057,30 +1056,42 @@ function Services() {
               </p>
             </div>
 
-            {/* Publisher Logos */}
-            <div className="flex gap-6 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-wrap lg:justify-center lg:overflow-visible lg:pb-0">
-              {clients.map((client) => (
-                <div
-                  key={client.id}
-                  className="group flex w-[240px] shrink-0 min-h-[170px] flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
-                >
-                  {/* Logo */}
-                  {client.logo_url && (
-                    <div className="flex h-[85px] w-full items-center justify-center">
-                      <img
-                        src={getImageUrl(client.logo_url)}
-                        alt={client.name}
-                        className="max-h-[80px] max-w-[170px] object-contain"
-                      />
-                    </div>
+            {/* Publisher Logos Marquee */}
+            <div className="relative overflow-hidden">
+              <div className="publisher-marquee">
+                <div className="publisher-marquee-track">
+
+                  {[...clients, ...clients].map(
+                    (client, index) => (
+                      <div
+                        key={`${client.id}-${index}`}
+                        className="group flex h-[190px] w-[240px] shrink-0 flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:w-[260px]"
+                      >
+
+                        {/* Logo */}
+                        {client.logo_url && (
+                          <div className="flex h-[90px] w-full items-center justify-center">
+                            <img
+                              src={getImageUrl(
+                                client.logo_url
+                              )}
+                              alt={client.name}
+                              className="max-h-[80px] max-w-[170px] object-contain"
+                            />
+                          </div>
+                        )}
+
+                        {/* Publisher Name */}
+                        <p className="mt-5 text-center text-base font-semibold text-[#17213A]">
+                          {client.name}
+                        </p>
+
+                      </div>
+                    )
                   )}
 
-                  {/* Publisher Name */}
-                  <p className="mt-5 text-center text-base font-semibold text-[#17213A]">
-                    {client.name}
-                  </p>
                 </div>
-              ))}
+              </div>
             </div>
 
           </div>

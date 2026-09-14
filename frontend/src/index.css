@@ -82,3 +82,86 @@ body {
     transform: translateX(-50%);
   }
 }
+
+/* =====================================================
+   ABOUT PAGE - REVIEWS MARQUEE
+===================================================== */
+
+.reviews-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.reviews-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 24px;
+  animation: reviewsMarquee 55s linear infinite;
+  will-change: transform;
+}
+
+.reviews-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes reviewsMarquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 12px));
+  }
+}
+
+/* Mobile */
+@media (max-width: 639px) {
+  .reviews-marquee-track {
+    gap: 16px;
+    animation-duration: 45s;
+  }
+}
+
+/* =====================================================
+   SERVICES PAGE - PUBLISHER MARQUEE
+===================================================== */
+
+.publisher-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.publisher-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 24px;
+  animation: publisherMarquee 45s linear infinite;
+  will-change: transform;
+}
+
+.publisher-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes publisherMarquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 12px));
+  }
+}
+
+/* Mobile */
+@media (max-width: 639px) {
+  .publisher-marquee-track {
+    gap: 16px;
+    animation-duration: 40s;
+  }
+
+  .publisher-marquee-track > div {
+    width: 280px;
+    height: 180px;
+  }
+}
