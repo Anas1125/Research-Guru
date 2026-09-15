@@ -986,10 +986,7 @@ function About() {
             </h2>
 
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
-              Tell us about your research
-              requirement and let's explore how
-              {siteName} can support your next
-              step.
+              Tell us about your research requirement and let's explore how {siteName} can support your next step.
             </p>
           </div>
 

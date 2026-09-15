@@ -167,6 +167,12 @@ function OfferCard({
   const discountText =
     getDiscountText(offer);
 
+  const endingSoon =
+    status === "live" &&
+    new Date(offer.end_date).getTime() -
+      currentTime.getTime() <=
+      24 * 60 * 60 * 1000;
+
   const countdown =
     status === "live"
       ? formatCountdown(
@@ -371,7 +377,9 @@ function OfferCard({
           <div
             className={`mt-4 flex items-center justify-between gap-3 rounded-xl px-3.5 py-3 ${
               status === "live"
-                ? "bg-emerald-500/10 text-emerald-300"
+                ? endingSoon
+                  ? "bg-red-500/10 text-red-400"
+                  : "bg-emerald-500/10 text-emerald-300"
                 : "bg-amber-500/10 text-amber-600"
             }`}
           >
