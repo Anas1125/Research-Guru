@@ -84,17 +84,13 @@ function Footer() {
   return (
     <footer className="bg-[#17213A] text-white">
 
-      {/* =================================================
-          MAIN FOOTER
-      ================================================== */}
+      {/* MAIN FOOTER */}
 
       <div className="mx-auto max-w-7xl px-6 py-16">
 
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_1fr]">
 
-          {/* =================================================
-              BRAND
-          ================================================== */}
+          {/* BRAND */}
 
           <div>
 
@@ -122,10 +118,10 @@ function Footer() {
             </Link>
 
             <p className="mt-5 max-w-md text-sm leading-7 text-slate-300">
-              Supporting scholars, researchers, and PhD
-              candidates with research guidance, technical
-              implementation, documentation, and
-              publication support.
+              Supporting Scholars, Researchers, and PhD
+              Candidates with Research Guidance, Technical
+              Implementation, Documentation, and
+              Publication Support.
             </p>
 
             <Link
@@ -138,9 +134,7 @@ function Footer() {
 
           </div>
 
-          {/* =================================================
-              QUICK LINKS
-          ================================================== */}
+          {/* QUICK LINKS */}
 
           <div>
 
@@ -224,9 +218,7 @@ function Footer() {
 
           </div>
 
-          {/* =================================================
-              CONTACT
-          ================================================== */}
+          {/* CONTACT */}
 
           <div>
 
@@ -340,9 +332,7 @@ function Footer() {
 
       </div>
 
-      {/* =================================================
-          BOTTOM BAR
-      ================================================== */}
+      {/* BOTTOM BAR */}
 
       <div className="border-t border-white/10">
 

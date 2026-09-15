@@ -16,10 +16,6 @@ import Footer from "../components/Footer";
 const API_URL =
   import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
-// =====================================================
-// HELPERS
-// =====================================================
-
 const formatDate = (dateString) => {
   if (!dateString) {
     return "Recently published";
@@ -64,10 +60,6 @@ const getImageUrl = (imagePath) => {
   return `${API_URL}${imagePath}`;
 };
 
-// =====================================================
-// SEO HELPERS
-// =====================================================
-
 const setMetaTag = (attribute, key, content) => {
   if (!content) {
     return;
@@ -100,10 +92,6 @@ const setLinkTag = (rel, href) => {
   element.setAttribute("href", href);
 };
 
-// =====================================================
-// BLOG POST
-// =====================================================
-
 function BlogPost() {
   const { slug } = useParams();
 
@@ -111,10 +99,6 @@ function BlogPost() {
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-
-  // ===================================================
-  // LOAD ARTICLE + SEO
-  // ===================================================
 
   useEffect(() => {
     let cancelled = false;
@@ -136,10 +120,6 @@ function BlogPost() {
             ),
             fetch(`${API_URL}/api/site-settings`),
           ]);
-
-        // -------------------------------------------------
-        // ARTICLE NOT FOUND
-        // -------------------------------------------------
 
         if (postResponse.status === 404) {
           if (!cancelled) {
@@ -176,10 +156,6 @@ function BlogPost() {
 
         setPost(data);
 
-        // -------------------------------------------------
-        // SITE NAME
-        // -------------------------------------------------
-
         let siteName = "Research Guru";
 
         if (settingsResponse.ok) {
@@ -189,10 +165,6 @@ function BlogPost() {
           siteName =
             settings.site_name || "Research Guru";
         }
-
-        // -------------------------------------------------
-        // SEO DATA
-        // -------------------------------------------------
 
         const articleTitle =
           data.title || "Research Article";
@@ -211,16 +183,8 @@ function BlogPost() {
           getImageUrl(data.featured_image) ||
           `${siteUrl}/og-image.jpg`;
 
-        // -------------------------------------------------
-        // PAGE TITLE
-        // -------------------------------------------------
-
         document.title =
           `${articleTitle} | ${siteName}`;
-
-        // -------------------------------------------------
-        // STANDARD SEO
-        // -------------------------------------------------
 
         setMetaTag(
           "name",
@@ -233,10 +197,6 @@ function BlogPost() {
           "robots",
           "index, follow"
         );
-
-        // -------------------------------------------------
-        // OPEN GRAPH
-        // -------------------------------------------------
 
         setMetaTag(
           "property",
@@ -268,10 +228,6 @@ function BlogPost() {
           articleImage
         );
 
-        // -------------------------------------------------
-        // TWITTER / X
-        // -------------------------------------------------
-
         setMetaTag(
           "name",
           "twitter:card",
@@ -296,18 +252,10 @@ function BlogPost() {
           articleImage
         );
 
-        // -------------------------------------------------
-        // CANONICAL URL
-        // -------------------------------------------------
-
         setLinkTag(
           "canonical",
           articleUrl
         );
-
-        // -------------------------------------------------
-        // ARTICLE STRUCTURED DATA
-        // -------------------------------------------------
 
         const publishedDate =
           data.published_at ||
@@ -363,10 +311,6 @@ function BlogPost() {
           );
         }
 
-        // -------------------------------------------------
-        // LOAD ALL POSTS FOR NEXT ARTICLE
-        // -------------------------------------------------
-
         const postsResponse = await fetch(
           `${API_URL}/api/blog`
         );
@@ -419,10 +363,6 @@ function BlogPost() {
     };
   }, [slug]);
 
-  // ===================================================
-  // LOADING
-  // ===================================================
-
   if (loading) {
     return (
       <div className="min-h-screen bg-white">
@@ -444,10 +384,6 @@ function BlogPost() {
       </div>
     );
   }
-
-  // ===================================================
-  // NOT FOUND
-  // ===================================================
 
   if (notFound || !post) {
     return (
@@ -488,10 +424,6 @@ function BlogPost() {
     );
   }
 
-  // ===================================================
-  // RELATED ARTICLE
-  // ===================================================
-
   const currentIndex = allPosts.findIndex(
     (item) => item.slug === post.slug
   );
@@ -509,17 +441,9 @@ function BlogPost() {
     post.featured_image
   );
 
-  // ===================================================
-  // ARTICLE
-  // ===================================================
-
   return (
     <div className="min-h-screen bg-white text-[#17213A]">
       <Navbar />
-
-      {/* =================================================
-          ARTICLE HEADER
-      ================================================== */}
 
       <header className="border-b border-slate-200 bg-[#F5F8FC] px-6 pb-12 pt-28 md:pb-14 md:pt-32">
         <div className="mx-auto max-w-4xl">
@@ -564,10 +488,6 @@ function BlogPost() {
         </div>
       </header>
 
-      {/* =================================================
-          FEATURED IMAGE
-      ================================================== */}
-
       {imageUrl && (
       <section className="px-6 pt-8 md:pt-10">
         <div className="mx-auto max-w-4xl">
@@ -581,10 +501,6 @@ function BlogPost() {
         </div>
       </section>
     )}
-
-      {/* =================================================
-          ARTICLE CONTENT
-      ================================================== */}
 
       <main className="px-6 py-12 md:py-16">
         <div className="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-14">
@@ -675,10 +591,6 @@ function BlogPost() {
         </div>
       </main>
 
-      {/* =================================================
-          NEXT ARTICLE
-      ================================================== */}
-
       {nextPost &&
         nextPost.slug !== post.slug && (
           <section className="border-t border-slate-200 bg-[#F5F8FC] px-6 py-12 md:py-14">
@@ -710,10 +622,6 @@ function BlogPost() {
             </div>
           </section>
         )}
-
-      {/* =================================================
-          CTA
-      ================================================== */}
 
       <section className="bg-[#17213A] px-6 py-16">
         <div className="mx-auto max-w-4xl text-center">

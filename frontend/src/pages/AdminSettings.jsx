@@ -26,10 +26,6 @@ import {
 function AdminSettings() {
   const navigate = useNavigate();
 
-  /* =====================================================
-     STATE
-  ====================================================== */
-
   const [settings, setSettings] = useState({
     site_name: "Research Guru",
     logo_url: "",
@@ -64,10 +60,6 @@ function AdminSettings() {
 
   const [sidebarOpen, setSidebarOpen] =
     useState(false);
-
-  /* =====================================================
-     LOAD SETTINGS
-  ====================================================== */
 
   useEffect(() => {
     loadSettings();
@@ -157,10 +149,6 @@ function AdminSettings() {
     }
   }
 
-  /* =====================================================
-     UPDATE FIELD
-  ====================================================== */
-
   function updateField(
     name,
     value
@@ -170,10 +158,6 @@ function AdminSettings() {
       [name]: value,
     }));
   }
-
-  /* =====================================================
-     SAVE SETTINGS
-  ====================================================== */
 
   async function saveSettings() {
     try {
@@ -230,10 +214,6 @@ function AdminSettings() {
       setSaving(false);
     }
   }
-
-  /* =====================================================
-     IMAGE UPLOAD
-  ====================================================== */
 
   async function handleImageUpload(
     settingKey,
@@ -309,10 +289,6 @@ function AdminSettings() {
     }
   }
 
-    /* =====================================================
-     REMOVE IMAGE
-  ====================================================== */
-
   async function handleImageRemove(settingKey) {
     if (!window.confirm("Are you sure you want to remove this image?")) {
       return;
@@ -366,10 +342,6 @@ function AdminSettings() {
     }
   }
 
-  /* =====================================================
-     IMAGE URL
-  ====================================================== */
-
   function getImageUrl(path) {
     if (!path) {
       return "";
@@ -385,10 +357,6 @@ function AdminSettings() {
     return `${API_URL}${path}`;
   }
 
-  /* =====================================================
-     LOGOUT
-  ====================================================== */
-
   function handleLogout() {
     localStorage.removeItem(
       "adminToken"
@@ -403,16 +371,8 @@ function AdminSettings() {
     );
   }
 
-  /* =====================================================
-     RENDER
-  ====================================================== */
-
   return (
     <div className="min-h-screen bg-[#F5F8FC] text-[#17213A]">
-
-      {/* =================================================
-          DESKTOP SIDEBAR
-      ================================================== */}
 
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
         <AdminSidebar
@@ -420,10 +380,6 @@ function AdminSettings() {
           onLogout={handleLogout}
         />
       </aside>
-
-      {/* =================================================
-          MOBILE SIDEBAR
-      ================================================== */}
 
       {sidebarOpen && (
         <>
@@ -447,15 +403,7 @@ function AdminSettings() {
         </>
       )}
 
-      {/* =================================================
-          MAIN
-      ================================================== */}
-
       <main className="lg:ml-64">
-
-        {/* =================================================
-            HEADER
-        ================================================== */}
 
         <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
           <div className="flex min-h-[76px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
@@ -513,10 +461,6 @@ function AdminSettings() {
 
         <div className="p-4 sm:p-6 lg:p-8">
 
-          {/* =================================================
-              ERROR
-          ================================================== */}
-
           {error && (
             <div className="mb-5 flex items-start justify-between gap-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
 
@@ -537,10 +481,6 @@ function AdminSettings() {
 
             </div>
           )}
-
-          {/* =================================================
-              SUCCESS
-          ================================================== */}
 
           {success && (
             <div className="mb-5 flex items-start justify-between gap-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
@@ -563,10 +503,6 @@ function AdminSettings() {
             </div>
           )}
 
-          {/* =================================================
-              LOADING
-          ================================================== */}
-
           {loading ? (
             <div className="flex min-h-[400px] items-center justify-center rounded-2xl border border-slate-200 bg-white">
 
@@ -582,10 +518,6 @@ function AdminSettings() {
           ) : (
             <div className="space-y-8">
 
-              {/* =================================================
-                  BRANDING
-              ================================================== */}
-
               <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
 
                 <div className="border-b border-slate-200 px-5 py-5 sm:px-6">
@@ -599,10 +531,6 @@ function AdminSettings() {
                   </p>
 
                 </div>
-
-                {/* =================================================
-                    WEBSITE NAME
-                ================================================== */}
 
                 <div className="border-b border-slate-200 px-5 py-5 sm:px-6">
 
@@ -630,10 +558,6 @@ function AdminSettings() {
                   />
 
                 </div>
-
-                {/* =================================================
-                    LOGO + FAVICON
-                ================================================== */}
 
                 <div className="grid gap-6 p-5 sm:p-6 lg:grid-cols-2">
 
@@ -680,10 +604,6 @@ function AdminSettings() {
                 </div>
 
               </section>
-
-              {/* =================================================
-                  PAGE BACKGROUNDS
-              ================================================== */}
 
               <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
 
@@ -823,10 +743,6 @@ function AdminSettings() {
 
               </section>
 
-              {/* =================================================
-                  CONTACT INFORMATION
-              ================================================== */}
-
               <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
 
                 <div className="border-b border-slate-200 px-5 py-5 sm:px-6">
@@ -942,10 +858,6 @@ function AdminSettings() {
 
               </section>
 
-              {/* =================================================
-                  BOTTOM SAVE
-              ================================================== */}
-
               <div className="flex justify-end">
 
                 <button
@@ -979,10 +891,6 @@ function AdminSettings() {
     </div>
   );
 }
-
-/* =====================================================
-   IMAGE UPLOAD CARD
-====================================================== */
 
 function ImageUploadCard({
   title,
@@ -1047,7 +955,6 @@ function ImageUploadCard({
 
         <div className="flex gap-2">
 
-          {/* UPLOAD / REPLACE */}
           <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[#17213A] transition hover:bg-slate-50">
 
             <Upload size={17} />
@@ -1082,7 +989,6 @@ function ImageUploadCard({
 
           </label>
 
-          {/* REMOVE */}
           {value && (
             <button
               type="button"
@@ -1114,10 +1020,6 @@ function ImageUploadCard({
     </div>
   );
 }
-
-/* =====================================================
-   CONTACT FIELD
-====================================================== */
 
 function ContactField({
   icon,

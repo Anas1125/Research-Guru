@@ -74,10 +74,7 @@ from auth import (
 
 from sqlalchemy import func
 
-
-# =====================================================
 # APP
-# =====================================================
 
 app = FastAPI(
     title="Research Guru API",
@@ -115,10 +112,7 @@ app.add_exception_handler(
     _rate_limit_exceeded_handler,
 )
 
-
-# =====================================================
 # CORS
-# =====================================================
 
 app.add_middleware(
     CORSMiddleware,
@@ -134,17 +128,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# =====================================================
 # DATABASE
-# =====================================================
 
 Base.metadata.create_all(bind=engine)
 
-
-# =====================================================
 # FILE UPLOADS
-# =====================================================
 
 UPLOAD_DIR = "uploads/blog"
 
@@ -177,10 +165,7 @@ app.mount(
     name="uploads",
 )
 
-
-# =====================================================
 # SEED INITIAL SERVICES
-# =====================================================
 
 def seed_services(db: Session):
     categories = {
@@ -207,9 +192,7 @@ def seed_services(db: Session):
         },
     }
 
-    # ---------------------------------------------------------
     # CREATE CATEGORIES IF THEY DO NOT EXIST
-    # ---------------------------------------------------------
 
     category_objects = {}
 
@@ -234,9 +217,7 @@ def seed_services(db: Session):
 
     db.flush()
 
-    # ---------------------------------------------------------
     # DEFAULT SERVICES
-    # ---------------------------------------------------------
 
     implementation_domains = [
         "Computer Science",
@@ -274,9 +255,7 @@ def seed_services(db: Session):
         "Publication": publication_services,
     }
 
-    # ---------------------------------------------------------
     # CREATE DEFAULT SERVICES ONLY IF CATEGORY IS EMPTY
-    # ---------------------------------------------------------
 
     for category_name, service_names in service_groups.items():
         category = category_objects[category_name]
@@ -289,8 +268,6 @@ def seed_services(db: Session):
             .count()
         )
 
-        # Never overwrite or delete existing services.
-        # Only seed defaults when the category has no services.
         if existing_count == 0:
             for index, service_name in enumerate(
                 service_names
@@ -307,9 +284,7 @@ def seed_services(db: Session):
 
     db.commit()
 
-# =====================================================
 # ROOT
-# =====================================================
 
 @app.get("/")
 def root():
@@ -317,10 +292,7 @@ def root():
         "message": "Research Guru API is running"
     }
 
-
-# =====================================================
 # PUBLIC SERVICES
-# =====================================================
 
 @app.get(
     "/api/services",
@@ -363,9 +335,7 @@ def get_services(
 
     return categories
 
-# =====================================================
 # PUBLIC - OFFERS
-# =====================================================
 
 @app.get(
     "/api/offers",
@@ -386,9 +356,7 @@ def get_offers(
         .all()
     )
 
-# =====================================================
 # PUBLIC - VALIDATE OFFER CODE
-# =====================================================
 
 @app.get("/api/offers/validate")
 def validate_offer_code(
@@ -432,9 +400,7 @@ def validate_offer_code(
         "offer_code": offer.offer_code,
     }
 
-# =====================================================
 # ADMIN - OFFERS
-# =====================================================
 
 @app.get(
     "/api/admin/offers",
@@ -637,9 +603,7 @@ def admin_delete_offer(
         "message": "Offer deleted successfully"
     }
 
-# =====================================================
 # PUBLIC - CLIENT REVIEWS
-# =====================================================
 
 @app.post(
     "/api/reviews",
@@ -666,7 +630,6 @@ def submit_client_review(
 
     return review
 
-
 @app.get(
     "/api/reviews",
     response_model=list[ClientReviewResponse],
@@ -686,9 +649,7 @@ def get_published_reviews(
         .all()
     )
 
-# =====================================================
 # PUBLIC - CLIENTS
-# =====================================================
 
 @app.get(
     "/api/clients",
@@ -709,9 +670,7 @@ def get_clients(
         .all()
     )
 
-# =====================================================
 # ADMIN - CLIENTS
-# =====================================================
 
 @app.get(
     "/api/admin/clients",
@@ -829,9 +788,7 @@ def admin_delete_client(
         "message": "Client deleted successfully"
     }
 
-# =====================================================
 # ADMIN - CLIENT LOGO UPLOAD
-# =====================================================
 
 @app.post("/api/admin/clients/upload-logo")
 def upload_client_logo(
@@ -894,10 +851,7 @@ def upload_client_logo(
         )
     }
 
-
-# =====================================================
 # ADMIN - CLIENT REVIEWS
-# =====================================================
 
 @app.get(
     "/api/admin/reviews",
@@ -1091,9 +1045,7 @@ def upload_review_photo(
             f"/uploads/reviews/{filename}"
     }
 
-# =====================================================
 # STARTUP
-# =====================================================
 
 @app.on_event("startup")
 def startup():
@@ -1105,9 +1057,7 @@ def startup():
         db.close()
 
 
-# =====================================================
 # ADMIN AUTHENTICATION
-# =====================================================
 
 @app.post("/api/auth/login")
 @limiter.limit("5/minute")
@@ -1160,9 +1110,7 @@ def admin_login(
     }
 
 
-# =====================================================
 # ADMIN USER MANAGEMENT
-# =====================================================
 
 @app.get(
     "/api/admin/users",
@@ -1271,9 +1219,7 @@ def update_admin_user(
         exclude_unset=True
     )
 
-    # -----------------------------
     # USERNAME
-    # -----------------------------
 
     if "username" in updates:
         username = (
@@ -1303,9 +1249,7 @@ def update_admin_user(
 
         user.username = username
 
-    # -----------------------------
     # PASSWORD
-    # -----------------------------
 
     if "password" in updates:
         password = updates["password"]
@@ -1324,9 +1268,7 @@ def update_admin_user(
                 password
             )
 
-    # -----------------------------
     # ACTIVE STATUS
-    # -----------------------------
 
     if "is_active" in updates:
         requested_active = updates[
@@ -1422,9 +1364,7 @@ def delete_admin_user(
         )
     }
 
-# =====================================================
 # SITE SETTINGS
-# =====================================================
 
 SITE_SETTING_KEYS = [
     "site_name",
@@ -1628,9 +1568,7 @@ async def upload_site_setting_image(
         "image_url": image_url,
     }
 
-# =====================================================
 # ADMIN - REMOVE SITE SETTING IMAGE
-# =====================================================
 
 @app.delete("/api/admin/site-settings/image")
 def remove_site_setting_image(
@@ -1673,8 +1611,6 @@ def remove_site_setting_image(
 
     image_url = setting.value
 
-    # Only delete files belonging to the site's
-    # local upload directory.
     if image_url.startswith("/uploads/site/"):
         filename = os.path.basename(image_url)
 
@@ -1686,7 +1622,6 @@ def remove_site_setting_image(
         if os.path.isfile(file_path):
             os.remove(file_path)
 
-    # Clear the setting from the database.
     setting.value = None
 
     db.commit()
@@ -1696,9 +1631,7 @@ def remove_site_setting_image(
         "setting_key": setting_key,
     }
 
-# =====================================================
 # PUBLIC CONTACT ENQUIRIES
-# =====================================================
 
 @app.post(
     "/api/contact",
@@ -1793,9 +1726,7 @@ def create_contact_enquiry(
 
     return enquiry
 
-# =====================================================
 # ADMIN - CONTACT ENQUIRIES
-# =====================================================
 
 @app.get(
     "/api/admin/contact",
@@ -1926,9 +1857,7 @@ def delete_contact_enquiry(
         "message": "Contact enquiry deleted successfully"
     }
 
-# =====================================================
 # ADMIN - CATEGORIES
-# =====================================================
 
 @app.get("/api/admin/categories")
 def admin_get_categories(
@@ -2051,9 +1980,7 @@ def admin_delete_category(
     }
 
 
-# =====================================================
 # ADMIN - SERVICES
-# =====================================================
 
 @app.get("/api/admin/services")
 def admin_get_services(
@@ -2206,10 +2133,7 @@ def admin_delete_service(
         "message": "Service deleted"
     }
 
-
-# =====================================================
 # PUBLIC BLOG
-# =====================================================
 
 @app.get(
     "/api/blog",
@@ -2256,10 +2180,8 @@ def get_blog_post(
 
     return post
 
-
-# =====================================================
 # ADMIN BLOG - LIST
-# =====================================================
+
 
 @app.get(
     "/api/admin/blog",
@@ -2280,10 +2202,8 @@ def get_admin_blog_posts(
         .all()
     )
 
-
-# =====================================================
 # ADMIN BLOG - IMAGE UPLOAD
-# =====================================================
+
 
 @app.post(
     "/api/admin/blog/upload-image"
@@ -2367,9 +2287,8 @@ async def upload_blog_image(
     }
 
 
-# =====================================================
 # ADMIN BLOG - CREATE
-# =====================================================
+
 
 @app.post(
     "/api/admin/blog",
@@ -2453,10 +2372,8 @@ def create_blog_post(
 
     return post
 
-
-# =====================================================
 # ADMIN BLOG - UPDATE
-# =====================================================
+
 
 @app.put(
     "/api/admin/blog/{post_id}",
@@ -2537,10 +2454,8 @@ def update_blog_post(
 
     return post
 
-
-# =====================================================
 # ADMIN BLOG - DELETE
-# =====================================================
+
 
 @app.delete(
     "/api/admin/blog/{post_id}"

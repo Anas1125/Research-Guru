@@ -34,10 +34,6 @@ function Contact() {
   const [searchParams] =
     useSearchParams();
 
-  /* =========================================================
-     SITE SETTINGS
-  ========================================================== */
-
   const [siteSettings, setSiteSettings] =
     useState({
       site_name: "Research Guru",
@@ -49,10 +45,6 @@ function Contact() {
       contact_background: "",
     });
 
-  /* =========================================================
-     SERVICES / RESEARCH AREAS
-  ========================================================== */
-
   const [researchAreas, setResearchAreas] =
     useState([]);
 
@@ -61,10 +53,6 @@ function Contact() {
 
   const [loadingData, setLoadingData] =
     useState(true);
-
-  /* =========================================================
-     FORM
-  ========================================================== */
 
   const selectedCoupon =
     searchParams.get("coupon") || "";
@@ -111,10 +99,6 @@ function Contact() {
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
-  /* =========================================================
-     LOAD BACKEND DATA
-  ========================================================== */
-
   useEffect(() => {
     async function loadContactData() {
       try {
@@ -127,10 +111,6 @@ function Contact() {
           apiFetch("/api/site-settings"),
           apiFetch("/api/services"),
         ]);
-
-        /* -----------------------------
-           SITE SETTINGS
-        ----------------------------- */
 
         if (settingsResponse.ok) {
           const settings =
@@ -167,10 +147,6 @@ function Contact() {
           });
         }
 
-        /* -----------------------------
-           SERVICES
-        ----------------------------- */
-
         if (servicesResponse.ok) {
           const categories =
             await servicesResponse.json();
@@ -204,10 +180,6 @@ function Contact() {
     loadContactData();
   }, []);
 
-  /* =========================================================
-     UPDATE FORM WHEN URL QUERY CHANGES
-  ========================================================== */
-
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -230,10 +202,6 @@ function Contact() {
     selectedService,
     selectedCoupon,
   ]);
-
-  /* =========================================================
-     FORM HELPERS
-  ========================================================== */
 
   function updateFormField(
     field,
@@ -281,9 +249,6 @@ function Contact() {
     return `tel:${cleaned}`;
   }
 
-  /* =========================================================
-     SUBMIT CONTACT ENQUIRY
-  ========================================================== */
   async function handleApplyCoupon() {
     const code = formData.coupon.trim().toUpperCase();
 
@@ -431,10 +396,6 @@ function Contact() {
     }
   }
 
-  /* =========================================================
-     STATIC CONTENT
-  ========================================================== */
-
   const waysToConnect = [
     {
       icon: MessageSquare,
@@ -484,10 +445,6 @@ function Contact() {
     <div className="min-h-screen bg-white text-slate-900">
 
       <Navbar />
-
-      {/* =====================================================
-          HERO
-      ====================================================== */}
 
       <section
         className="relative h-[calc(110vh-73px)] overflow-hidden bg-cover bg-center"
@@ -560,10 +517,6 @@ function Contact() {
 
         </div>
       </section>
-
-      {/* =====================================================
-          CONTACT INFORMATION STRIP
-      ====================================================== */}
 
       <section className="border-b border-slate-100 bg-white">
 
@@ -642,10 +595,6 @@ function Contact() {
         </div>
 
       </section>
-
-      {/* =====================================================
-          MAIN CONTACT AREA
-      ====================================================== */}
 
       <section className="bg-white px-6 py-24 lg:py-28">
 
@@ -1222,10 +1171,6 @@ function Contact() {
 
       </section>
 
-      {/* =====================================================
-          WAYS TO CONNECT
-      ====================================================== */}
-
       <section className="bg-[#F5F8FC] px-6 py-24 lg:py-15">
 
         <div className="mx-auto max-w-7xl">
@@ -1283,10 +1228,6 @@ function Contact() {
         </div>
 
       </section>
-
-      {/* =====================================================
-          CONTACT PROCESS
-      ====================================================== */}
 
       <section className="bg-white px-6 py-24 lg:py-15">
 

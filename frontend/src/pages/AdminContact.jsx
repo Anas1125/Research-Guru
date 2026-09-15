@@ -26,10 +26,6 @@ import { apiFetch } from "../utils/api";
 function AdminContact() {
   const navigate = useNavigate();
 
-  /* =====================================================
-     STATE
-  ====================================================== */
-
   const [enquiries, setEnquiries] =
     useState([]);
 
@@ -56,10 +52,6 @@ function AdminContact() {
 
   const [error, setError] =
     useState("");
-
-  /* =====================================================
-     LOAD ENQUIRIES
-  ====================================================== */
 
   useEffect(() => {
     loadEnquiries();
@@ -109,10 +101,6 @@ function AdminContact() {
       setLoading(false);
     }
   }
-
-  /* =====================================================
-     UPDATE STATUS
-  ====================================================== */
 
   async function updateStatus(
     enquiryId,
@@ -181,10 +169,6 @@ function AdminContact() {
       setUpdatingId(null);
     }
   }
-
-  /* =====================================================
-     DELETE ENQUIRY
-  ====================================================== */
 
   async function deleteEnquiry(
     enquiry
@@ -255,10 +239,6 @@ function AdminContact() {
     }
   }
 
-  /* =====================================================
-     LOGOUT
-  ====================================================== */
-
   function handleLogout() {
     localStorage.removeItem(
       "adminToken"
@@ -272,10 +252,6 @@ function AdminContact() {
       "/admin/login"
     );
   }
-
-  /* =====================================================
-     HELPERS
-  ====================================================== */
 
   function formatDate(
     dateString
@@ -328,10 +304,6 @@ function AdminContact() {
     }
   }
 
-  /* =====================================================
-     FILTER
-  ====================================================== */
-
   const filteredEnquiries =
     enquiries.filter(
       (enquiry) => {
@@ -379,10 +351,6 @@ function AdminContact() {
       }
     );
 
-  /* =====================================================
-     COUNTS
-  ====================================================== */
-
   const totalCount =
     enquiries.length;
 
@@ -413,15 +381,8 @@ function AdminContact() {
         "Completed"
     ).length;
 
-  /* =====================================================
-     RENDER
-  ====================================================== */
-
   return (
     <div className="min-h-screen bg-[#F5F8FC] text-[#17213A]">
-      {/* =================================================
-          DESKTOP SIDEBAR
-      ================================================== */}
 
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
         <AdminSidebar
@@ -429,10 +390,6 @@ function AdminContact() {
           onLogout={handleLogout}
         />
       </aside>
-
-      {/* =================================================
-          MOBILE SIDEBAR
-      ================================================== */}
 
       {sidebarOpen && (
         <>
@@ -456,14 +413,7 @@ function AdminContact() {
         </>
       )}
 
-      {/* =================================================
-          MAIN
-      ================================================== */}
-
       <main className="lg:ml-64">
-        {/* =================================================
-            HEADER
-        ================================================== */}
 
         <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
           <div className="flex min-h-[76px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
@@ -517,9 +467,6 @@ function AdminContact() {
         </header>
 
         <div className="p-4 sm:p-6 lg:p-8">
-          {/* =================================================
-              ERROR
-          ================================================== */}
 
           {error && (
             <div className="mb-5 flex items-start justify-between gap-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
@@ -539,10 +486,6 @@ function AdminContact() {
               </button>
             </div>
           )}
-
-          {/* =================================================
-              STATS
-          ================================================== */}
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             <StatCard
@@ -570,10 +513,6 @@ function AdminContact() {
               value={completedCount}
             />
           </div>
-
-          {/* =================================================
-              FILTERS
-          ================================================== */}
 
           <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -626,10 +565,6 @@ function AdminContact() {
             </div>
           </section>
 
-          {/* =================================================
-              ENQUIRIES
-          ================================================== */}
-
           <section className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-200 px-5 py-4 sm:px-6">
               <h2 className="font-semibold text-[#17213A]">
@@ -671,7 +606,6 @@ function AdminContact() {
               </div>
             ) : (
               <>
-                {/* DESKTOP */}
 
                 <div className="hidden overflow-x-auto md:block">
                   <table className="w-full min-w-[950px]">
@@ -712,7 +646,6 @@ function AdminContact() {
                             }
                             className="transition hover:bg-slate-50"
                           >
-                            {/* ENQUIRY */}
 
                             <td className="px-6 py-5">
                               <button
@@ -744,21 +677,15 @@ function AdminContact() {
                               </button>
                             </td>
 
-                            {/* RESEARCH */}
-
                             <td className="px-6 py-5 text-sm text-slate-600">
                               {enquiry.research_area ||
                                 "—"}
                             </td>
 
-                            {/* SERVICE */}
-
                             <td className="px-6 py-5 text-sm text-slate-600">
                               {enquiry.service ||
                                 "—"}
                             </td>
-
-                            {/* STATUS */}
 
                             <td className="px-6 py-5">
                               <select
@@ -801,15 +728,11 @@ function AdminContact() {
                               </select>
                             </td>
 
-                            {/* DATE */}
-
                             <td className="px-6 py-5 text-sm text-slate-500">
                               {formatDate(
                                 enquiry.created_at
                               )}
                             </td>
-
-                            {/* ACTION */}
 
                             <td className="px-6 py-5">
                               <div className="flex justify-end gap-2">
@@ -936,10 +859,6 @@ function AdminContact() {
         </div>
       </main>
 
-      {/* =====================================================
-          DETAIL MODAL
-      ====================================================== */}
-
       {selectedEnquiry && (
         <div
           className="fixed inset-0 z-[100] flex cursor-pointer items-center justify-center bg-black/50 p-4"
@@ -986,7 +905,6 @@ function AdminContact() {
             </div>
 
             <div className="p-5 sm:p-6">
-              {/* CONTACT INFORMATION */}
 
               <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-5">
                 <h3 className="font-semibold text-[#17213A]">
@@ -1036,8 +954,6 @@ function AdminContact() {
                 </div>
               </div>
 
-              {/* RESEARCH REQUIREMENT */}
-
               <div className="mt-5 rounded-2xl border border-slate-200 p-5">
                 <h3 className="font-semibold text-[#17213A]">
                   Research Requirement
@@ -1081,8 +997,6 @@ function AdminContact() {
                 </div>
               </div>
 
-              {/* OFFER */}
-
               {selectedEnquiry.coupon && (
                 <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
                   <h3 className="font-semibold text-[#17213A]">
@@ -1100,8 +1014,6 @@ function AdminContact() {
                   </div>
                 </div>
               )}
-
-              {/* MESSAGE */}
 
               <div className="mt-5 rounded-2xl border border-slate-200 p-5">
                 <div className="flex items-center gap-2">
@@ -1121,8 +1033,6 @@ function AdminContact() {
                   </p>
                 </div>
               </div>
-
-              {/* STATUS */}
 
               <div className="mt-5 rounded-2xl border border-slate-200 p-5">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -1173,8 +1083,6 @@ function AdminContact() {
                 </div>
               </div>
 
-              {/* DELETE */}
-
               <div className="mt-6 flex justify-end">
                 <button
                   type="button"
@@ -1205,10 +1113,6 @@ function AdminContact() {
   );
 }
 
-/* =====================================================
-   STAT CARD
-===================================================== */
-
 function StatCard({
   label,
   value,
@@ -1225,10 +1129,6 @@ function StatCard({
     </div>
   );
 }
-
-/* =====================================================
-   INFO ITEM
-===================================================== */
 
 function InfoItem({
   icon,

@@ -109,10 +109,6 @@ export default function AdminOffers() {
   const [mobileSidebarOpen, setMobileSidebarOpen] =
     useState(false);
 
-  // =====================================================
-  // LOAD OFFERS
-  // =====================================================
-
   const loadOffers = async () => {
     try {
       setLoading(true);
@@ -142,10 +138,6 @@ export default function AdminOffers() {
   useEffect(() => {
     loadOffers();
   }, []);
-
-  // =====================================================
-  // OPEN ADD FORM
-  // =====================================================
 
   const handleAdd = () => {
     const now = new Date();
@@ -180,10 +172,6 @@ export default function AdminOffers() {
     setShowForm(true);
   };
 
-  // =====================================================
-  // OPEN EDIT FORM
-  // =====================================================
-
   const handleEdit = (offer) => {
     setEditingOffer(offer);
 
@@ -215,10 +203,6 @@ export default function AdminOffers() {
     setShowForm(true);
   };
 
-  // =====================================================
-  // CLOSE FORM
-  // =====================================================
-
   const handleCloseForm = () => {
     if (saving) return;
 
@@ -227,10 +211,6 @@ export default function AdminOffers() {
     setForm(emptyForm);
     setError("");
   };
-
-  // =====================================================
-  // SAVE OFFER
-  // =====================================================
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -378,10 +358,6 @@ export default function AdminOffers() {
     }
   };
 
-  // =====================================================
-  // TOGGLE ACTIVE
-  // =====================================================
-
   const handleToggleActive = async (
     offer
   ) => {
@@ -441,10 +417,6 @@ export default function AdminOffers() {
     }
   };
 
-  // =====================================================
-  // DELETE OFFER
-  // =====================================================
-
   const handleDelete = async (offer) => {
     const confirmed =
       window.confirm(
@@ -500,10 +472,6 @@ export default function AdminOffers() {
     }
   };
 
-  // =====================================================
-  // RENDER
-  // =====================================================
-
   return (
     <div className="min-h-screen bg-[#F5F8FC]">
       {/* DESKTOP SIDEBAR */}
@@ -513,9 +481,6 @@ export default function AdminOffers() {
           currentPage="/admin/offers"
         />
       </aside>
-
-      {/* MAIN */}
-      {/* MOBILE SIDEBAR */}
 
       {mobileSidebarOpen && (
         <>
@@ -543,11 +508,7 @@ export default function AdminOffers() {
         </>
       )}
 
-      {/* MAIN */}
-
       <main className="min-h-screen lg:ml-64">
-
-        {/* MOBILE HEADER */}
 
         <div className="sticky top-0 z-30 border-b border-[#DCE5F0] bg-white px-5 py-4 lg:hidden">
           <div className="flex items-center gap-3">
@@ -575,7 +536,6 @@ export default function AdminOffers() {
         </div>
 
         <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
-          {/* HEADER */}
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -604,8 +564,6 @@ export default function AdminOffers() {
             </button>
           </div>
 
-          {/* MESSAGES */}
-
           {success && (
             <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
               {success}
@@ -617,8 +575,6 @@ export default function AdminOffers() {
               {error}
             </div>
           )}
-
-          {/* OFFER LIST */}
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-[#DCE5F0] bg-white shadow-sm">
             {loading ? (
@@ -664,7 +620,6 @@ export default function AdminOffers() {
                       key={offer.id}
                       className="flex flex-col gap-5 px-5 py-5 md:px-6"
                     >
-                      {/* OFFER INFO */}
 
                       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                         <div className="min-w-0">
@@ -754,8 +709,6 @@ export default function AdminOffers() {
                           </div>
                         </div>
 
-                        {/* ACTIONS */}
-
                         <div className="flex shrink-0 items-center gap-2">
                           <button
                             type="button"
@@ -807,12 +760,9 @@ export default function AdminOffers() {
         </div>
       </main>
 
-      {/* FORM MODAL */}
-
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#17213A]/40 px-4 py-6">
           <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-white shadow-2xl">
-            {/* MODAL HEADER */}
 
             <div className="flex items-center justify-between border-b border-[#E8EEF5] px-6 py-5">
               <div>
@@ -839,21 +789,16 @@ export default function AdminOffers() {
               </button>
             </div>
 
-            {/* FORM */}
-
             <form
               onSubmit={handleSubmit}
               className="space-y-6 px-6 py-6"
             >
-              {/* ERROR */}
 
               {error && (
                 <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
                   {error}
                 </div>
               )}
-
-              {/* TITLE */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#17213A]">
@@ -879,8 +824,6 @@ export default function AdminOffers() {
                 />
               </div>
 
-              {/* DESCRIPTION */}
-
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#17213A]">
                   Description
@@ -901,8 +844,6 @@ export default function AdminOffers() {
                   className="w-full resize-none rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm leading-6 text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
                 />
               </div>
-
-              {/* DISCOUNT */}
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
@@ -960,8 +901,6 @@ export default function AdminOffers() {
                 </div>
               </div>
 
-              {/* OFFER CODE */}
-
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#17213A]">
                   Offer Code
@@ -982,8 +921,6 @@ export default function AdminOffers() {
                   className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm uppercase text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
                 />
               </div>
-
-              {/* DATES */}
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
@@ -1033,8 +970,6 @@ export default function AdminOffers() {
                 </div>
               </div>
 
-              {/* CTA */}
-
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-[#17213A]">
@@ -1078,8 +1013,6 @@ export default function AdminOffers() {
                   />
                 </div>
               </div>
-
-              {/* ORDER + ACTIVE */}
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
@@ -1150,8 +1083,6 @@ export default function AdminOffers() {
                   </button>
                 </div>
               </div>
-
-              {/* ACTIONS */}
 
               <div className="flex flex-col-reverse gap-3 border-t border-[#E8EEF5] pt-5 sm:flex-row sm:justify-end">
                 <button

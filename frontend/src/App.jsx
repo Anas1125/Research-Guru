@@ -33,11 +33,6 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 
 import NotFound from "./pages/NotFound";
 
-
-/* =========================================================
-   SCROLL TO TOP
-========================================================= */
-
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -51,11 +46,6 @@ function ScrollToTop() {
 
   return null;
 }
-
-
-/* =========================================================
-   SEO MANAGER
-========================================================= */
 
 function SEOManager() {
   const { pathname } = useLocation();
@@ -182,10 +172,6 @@ function SEOManager() {
 
         let pageSeo = seo[pathname];
 
-        /* -------------------------------------------------------
-           BLOG ARTICLE
-        ------------------------------------------------------- */
-
         if (!pageSeo && pathname.startsWith("/blog/")) {
           pageSeo = {
             title: `Research Article | ${siteName}`,
@@ -194,10 +180,6 @@ function SEOManager() {
             robots: "index, follow",
           };
         }
-
-        /* -------------------------------------------------------
-           FALLBACK
-        ------------------------------------------------------- */
 
         if (!pageSeo) {
           pageSeo = {
@@ -208,15 +190,7 @@ function SEOManager() {
           };
         }
 
-        /* -------------------------------------------------------
-           PAGE TITLE
-        ------------------------------------------------------- */
-
         document.title = pageSeo.title;
-
-        /* -------------------------------------------------------
-           DESCRIPTION
-        ------------------------------------------------------- */
 
         let descriptionTag = document.querySelector(
           'meta[name="description"]'
@@ -241,10 +215,6 @@ function SEOManager() {
           pageSeo.description
         );
 
-        /* -------------------------------------------------------
-           ROBOTS
-        ------------------------------------------------------- */
-
         let robotsTag = document.querySelector(
           'meta[name="robots"]'
         );
@@ -267,10 +237,6 @@ function SEOManager() {
           "content",
           pageSeo.robots
         );
-
-        /* -------------------------------------------------------
-           META HELPERS
-        ------------------------------------------------------- */
 
         function updateMeta(property, content) {
           let tag = document.querySelector(
@@ -316,10 +282,6 @@ function SEOManager() {
           );
         }
 
-        /* -------------------------------------------------------
-           URLS
-        ------------------------------------------------------- */
-
         const siteUrl =
           window.location.origin;
 
@@ -330,10 +292,6 @@ function SEOManager() {
 
         const ogImageUrl =
           `${siteUrl}/og-image.jpg`;
-
-        /* -------------------------------------------------------
-           OPEN GRAPH
-        ------------------------------------------------------- */
 
         updateMeta(
           "og:title",
@@ -361,10 +319,6 @@ function SEOManager() {
           "og:image",
           ogImageUrl
         );
-
-        /* -------------------------------------------------------
-           TWITTER / X
-        ------------------------------------------------------- */
 
         updateMetaName(
           "twitter:card",
@@ -399,11 +353,6 @@ function SEOManager() {
 
   return null;
 }
-
-
-/* =========================================================
-   STRUCTURED DATA / JSON-LD
-========================================================= */
 
 function StructuredDataManager() {
   useEffect(() => {
@@ -466,11 +415,6 @@ function StructuredDataManager() {
           ],
         };
 
-
-        /* -------------------------------------------------------
-           CREATE / UPDATE JSON-LD SCRIPT
-        ------------------------------------------------------- */
-
         let script = document.querySelector(
           'script[data-structured-data="research-guru"]'
         );
@@ -511,11 +455,6 @@ function StructuredDataManager() {
   return null;
 }
 
-
-/* =========================================================
-   FAVICON MANAGER
-========================================================= */
-
 function FaviconManager() {
   useEffect(() => {
     let cancelled = false;
@@ -547,19 +486,9 @@ function FaviconManager() {
             ? settings.favicon_url
             : `${API_URL}${settings.favicon_url}`;
 
-
-        /* -------------------------------------------------------
-           FIND EXISTING FAVICON
-        ------------------------------------------------------- */
-
         let favicon = document.querySelector(
           'link[rel="icon"]'
         );
-
-
-        /* -------------------------------------------------------
-           CREATE FAVICON LINK IF MISSING
-        ------------------------------------------------------- */
 
         if (!favicon) {
           favicon =
@@ -574,11 +503,6 @@ function FaviconManager() {
             favicon
           );
         }
-
-
-        /* -------------------------------------------------------
-           UPDATE FAVICON
-        ------------------------------------------------------- */
 
         favicon.setAttribute(
           "href",
@@ -604,11 +528,6 @@ function FaviconManager() {
   return null;
 }
 
-
-/* =========================================================
-   APP
-========================================================= */
-
 function App() {
   return (
     <BrowserRouter>
@@ -621,10 +540,6 @@ function App() {
       <StructuredDataManager />
 
       <Routes>
-
-        {/* =====================================================
-            PUBLIC WEBSITE
-        ====================================================== */}
 
         <Route
           path="/"
@@ -646,11 +561,6 @@ function App() {
           element={<Contact />}
         />
 
-
-        {/* =====================================================
-            PUBLIC BLOG
-        ====================================================== */}
-
         <Route
           path="/blog"
           element={<Blog />}
@@ -666,10 +576,6 @@ function App() {
           element={<TermsAndConditions />}
         />
 
-         {/* =====================================================
-            Offers
-        ====================================================== */}
-
         <Route
           path="/offers"
           element={<Offers />}
@@ -680,11 +586,6 @@ function App() {
           element={<PrivacyPolicy />}
         />
 
-
-        {/* =====================================================
-            ADMIN LOGIN
-        ====================================================== */}
-
         <Route
           path="/login"
           element={<AdminLogin />}
@@ -694,11 +595,6 @@ function App() {
           path="/admin/login"
           element={<AdminLogin />}
         />
-
-
-        {/* =====================================================
-            PROTECTED ADMIN AREA
-        ====================================================== */}
 
         <Route
           element={<ProtectedRoute />}

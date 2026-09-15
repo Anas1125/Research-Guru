@@ -39,10 +39,6 @@ function Admin() {
   const [mobileMenuOpen, setMobileMenuOpen] =
     useState(false);
 
-  /* =====================================================
-     FETCH DASHBOARD DATA
-  ====================================================== */
-
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -60,20 +56,12 @@ function Admin() {
           apiFetch("/api/admin/blog"),
         ]);
 
-        /* -----------------------------
-           CATEGORIES
-        ----------------------------- */
-
         let categoriesData = [];
 
         if (categoriesResponse.ok) {
           categoriesData =
             await categoriesResponse.json();
         }
-
-        /* -----------------------------
-           SERVICES
-        ----------------------------- */
 
         let servicesData = [];
 
@@ -82,10 +70,6 @@ function Admin() {
             await servicesResponse.json();
         }
 
-        /* -----------------------------
-           ENQUIRIES
-        ----------------------------- */
-
         let enquiriesData = [];
 
         if (enquiriesResponse.ok) {
@@ -93,20 +77,12 @@ function Admin() {
             await enquiriesResponse.json();
         }
 
-        /* -----------------------------
-           BLOG
-        ----------------------------- */
-
         let blogData = [];
 
         if (blogResponse.ok) {
           blogData =
             await blogResponse.json();
         }
-
-        /* -----------------------------
-           SORT ENQUIRIES
-        ----------------------------- */
 
         const sortedEnquiries =
           [...enquiriesData].sort(
@@ -122,10 +98,6 @@ function Admin() {
               return dateB - dateA;
             }
           );
-
-        /* -----------------------------
-           SORT BLOG
-        ----------------------------- */
 
         const sortedBlogs =
           [...blogData].sort(
@@ -185,10 +157,6 @@ function Admin() {
     fetchDashboardData();
   }, []);
 
-  /* =====================================================
-     HELPERS
-  ====================================================== */
-
   const formatDate = (dateString) => {
     if (!dateString) {
       return "—";
@@ -231,10 +199,6 @@ function Admin() {
     }
   };
 
-  /* =====================================================
-     LOGOUT
-  ====================================================== */
-
   const handleLogout = () => {
     localStorage.removeItem(
       "adminToken"
@@ -253,15 +217,8 @@ function Admin() {
       "adminUsername"
     ) || "Admin";
 
-  /* =====================================================
-     RENDER
-  ====================================================== */
-
   return (
     <div className="min-h-screen bg-[#F5F8FC] text-slate-900">
-      {/* =====================================================
-                  SIDEBAR
-        ====================================================== */}
 
         <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
           <AdminSidebar
@@ -269,10 +226,6 @@ function Admin() {
             onLogout={handleLogout}
           />
         </aside>
-
-        {/* =====================================================
-            MOBILE SIDEBAR
-        ====================================================== */}
 
         {mobileMenuOpen && (
           <>
@@ -296,9 +249,7 @@ function Admin() {
           </>
         )}
 
-        {/* =====================================================
-            MAIN
-        ====================================================== */}
+        {/* MAIN */}
 
         <main className="lg:ml-64">
           {/* HEADER */}
@@ -342,9 +293,6 @@ function Admin() {
           </header>
 
         <div className="p-6 lg:p-8">
-          {/* =====================================================
-              WELCOME
-          ====================================================== */}
 
           <section className="rounded-[2rem] bg-[#17213A] p-7 text-white shadow-sm lg:p-9">
             <div className="max-w-3xl">
@@ -365,9 +313,7 @@ function Admin() {
             </div>
           </section>
 
-          {/* =====================================================
-              STATS
-          ====================================================== */}
+          {/* STATS */}
 
           <section className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {/* CATEGORIES */}
@@ -505,9 +451,7 @@ function Admin() {
             </div>
           </section>
 
-          {/* =====================================================
-              QUICK ACTIONS
-          ====================================================== */}
+          {/* QUICK ACTIONS */}
 
           <section className="mt-8">
             <div>
@@ -629,9 +573,7 @@ function Admin() {
             </div>
           </section>
 
-          {/* =====================================================
-              RECENT ACTIVITY
-          ====================================================== */}
+          {/* RECENT ACTIVITY */}
 
           <section className="mt-8 grid gap-6 xl:grid-cols-2">
             {/* RECENT ENQUIRIES */}

@@ -465,7 +465,6 @@ function AdminReviews() {
   return (
     <div className="min-h-screen bg-[#F5F8FC] text-[#17213A]">
 
-        {/* Desktop Sidebar */}
         <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 lg:block">
         <AdminSidebar
             currentPage="/admin/reviews"
@@ -477,7 +476,6 @@ function AdminReviews() {
         />
         </aside>
 
-        {/* Mobile Sidebar */}
         {mobileSidebarOpen && (
         <>
             <div
@@ -506,7 +504,6 @@ function AdminReviews() {
 
         <main className="min-h-screen lg:ml-64">
 
-        {/* Mobile Header */}
         <div className="sticky top-0 z-30 border-b border-[#DCE5F0] bg-white px-5 py-4 lg:hidden">
           <div className="flex items-center gap-3">
             <button
@@ -534,7 +531,6 @@ function AdminReviews() {
 
         <div className="mx-auto max-w-7xl px-5 py-8 sm:px-7 lg:px-10 lg:py-10">
 
-          {/* Header */}
           <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
 
             <div>
@@ -563,8 +559,6 @@ function AdminReviews() {
 
           </div>
 
-
-          {/* Stats */}
           <div className="mb-8 grid gap-4 sm:grid-cols-3">
 
             <div className="rounded-2xl border border-[#DCE5F0] bg-white p-5 shadow-sm">
@@ -601,8 +595,6 @@ function AdminReviews() {
 
           </div>
 
-
-          {/* Messages */}
           {error && (
             <div className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               <X size={17} className="mt-0.5 shrink-0" />
@@ -618,8 +610,6 @@ function AdminReviews() {
             </div>
           )}
 
-
-          {/* Loading */}
           {loading ? (
             <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-[#DCE5F0] bg-white">
               <div className="flex items-center gap-3 text-sm font-medium text-slate-500">
@@ -671,7 +661,6 @@ function AdminReviews() {
 
                     <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
 
-                      {/* Review Content */}
                       <div className="flex min-w-0 gap-4">
 
                         <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#EAF1FA] text-[#17213A]">
@@ -735,7 +724,6 @@ function AdminReviews() {
 
                           </div>
 
-
                           <p className="mt-4 whitespace-pre-line text-sm leading-7 text-slate-600">
                             {review.review}
                           </p>
@@ -777,8 +765,6 @@ function AdminReviews() {
 
                       </div>
 
-
-                      {/* Actions */}
                       <div className="flex shrink-0 flex-wrap gap-2 lg:justify-end">
 
                         <button
@@ -849,8 +835,6 @@ function AdminReviews() {
         </div>
       </main>
 
-
-      {/* Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#17213A]/40 px-4 py-6">
 
@@ -873,7 +857,6 @@ function AdminReviews() {
                 </h2>
               </div>
 
-
               <button
                 type="button"
                 onClick={closeForm}
@@ -886,7 +869,6 @@ function AdminReviews() {
             </div>
 
 
-            {/* Form */}
             <form
               onSubmit={handleSubmit}
               className="overflow-y-auto"
@@ -894,7 +876,6 @@ function AdminReviews() {
 
               <div className="space-y-5 px-5 py-6 sm:px-6">
 
-                {/* Client Name */}
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-[#17213A]">
                     Client Name
@@ -910,8 +891,6 @@ function AdminReviews() {
                   />
                 </div>
 
-
-                {/* Designation */}
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-[#17213A]">
                     Designation
@@ -930,8 +909,6 @@ function AdminReviews() {
                   />
                 </div>
 
-
-                {/* Rating + Order */}
                 <div className="grid gap-5 sm:grid-cols-2">
 
                   <div>
@@ -981,7 +958,6 @@ function AdminReviews() {
 
                 </div>
 
-                {/* Review Date */}
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-[#17213A]">
                     Review Date
@@ -1015,7 +991,6 @@ function AdminReviews() {
                   </p>
                 </div>
 
-                {/* Review */}
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-[#17213A]">
                     Review
@@ -1031,8 +1006,6 @@ function AdminReviews() {
                   />
                 </div>
 
-
-                {/* Client Photo */}
                 <div>
                 <label className="mb-2 block text-sm font-semibold text-[#17213A]">
                     Client Photo
@@ -1109,7 +1082,6 @@ function AdminReviews() {
 
               </div>
 
-              {/* Footer */}
               <div className="flex flex-col-reverse gap-3 border-t border-[#DCE5F0] bg-[#F8FAFD] px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
 
                 <button

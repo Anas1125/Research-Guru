@@ -21,10 +21,6 @@ import {
   API_URL,
 } from "../utils/api";
 
-/* =====================================================
-   HELPERS
-===================================================== */
-
 const getImageUrl = (imagePath) => {
   if (!imagePath) {
     return null;
@@ -39,10 +35,6 @@ const getImageUrl = (imagePath) => {
 
   return `${API_URL}${imagePath}`;
 };
-
-/* =====================================================
-   OFFER STATUS
-===================================================== */
 
 const getOfferStatus = (
   startDate,
@@ -70,10 +62,6 @@ const getOfferStatus = (
   return "expired";
 };
 
-/* =====================================================
-   DATE FORMAT
-===================================================== */
-
 const formatDateTime = (dateString) => {
   if (!dateString) {
     return "—";
@@ -93,10 +81,6 @@ const formatDateTime = (dateString) => {
     minute: "2-digit",
   });
 };
-
-/* =====================================================
-   COUNTDOWN FORMAT
-===================================================== */
 
 const formatCountdown = (
   targetDate,
@@ -150,10 +134,6 @@ const formatCountdown = (
   )}s`;
 };
 
-/* =====================================================
-   DISCOUNT
-===================================================== */
-
 const getDiscountText = (offer) => {
   if (!offer.discount_value) {
     return null;
@@ -176,10 +156,6 @@ const getDiscountText = (offer) => {
   return offer.discount_value;
 };
 
-/* =====================================================
-   OFFER CARD
-===================================================== */
-
 function OfferCard({
   offer,
   status,
@@ -190,10 +166,6 @@ function OfferCard({
 
   const discountText =
     getDiscountText(offer);
-
-  /* ===================================================
-     COUNTDOWN
-  =================================================== */
 
   const countdown =
     status === "live"
@@ -207,10 +179,6 @@ function OfferCard({
           currentTime
         )
       : null;
-
-  /* ===================================================
-     COPY PROMO CODE
-  =================================================== */
 
   const handleCopyCode = async () => {
     if (!offer.offer_code) {
@@ -246,24 +214,12 @@ function OfferCard({
           : "border-[#DCE5F0] bg-white hover:-translate-y-1 hover:shadow-lg hover:shadow-[#17213A]/8"
       }`}
     >
-      {/* =================================================
-          DIAGONAL CUT
-          ONLY FOR EXPIRED CARDS
-      ================================================== */}
 
       {status === "expired" && (
         <div className="pointer-events-none absolute left-[-35%] top-1/2 z-0 h-px w-[170%] rotate-[58deg] bg-[#DCE5F0]" />
       )}
 
-      {/* =================================================
-          CARD CONTENT
-      ================================================== */}
-
       <div className="relative z-10 flex h-full flex-col">
-
-        {/* =================================================
-            HEADER
-        ================================================== */}
 
         <div className="flex items-start justify-between gap-3">
 
@@ -278,20 +234,12 @@ function OfferCard({
             <Gift size={21} />
           </div>
 
-          {/* =================================================
-              LIVE
-          ================================================== */}
-
           {status === "live" && (
             <span className="inline-flex animate-pulse items-center gap-1.5 rounded-full bg-emerald-500 px-3 py-1.5 text-[11px] font-bold text-white shadow-sm shadow-emerald-500/30">
               <span className="h-1.5 w-1.5 rounded-full bg-white" />
               LIVE
             </span>
           )}
-
-          {/* =================================================
-              UPCOMING
-          ================================================== */}
 
           {status === "upcoming" && (
             <span className="inline-flex animate-pulse items-center gap-1.5 rounded-full bg-amber-500 px-3 py-1.5 text-[11px] font-bold text-white shadow-sm shadow-amber-500/30">
@@ -300,10 +248,6 @@ function OfferCard({
             </span>
           )}
 
-          {/* =================================================
-              EXPIRED
-          ================================================== */}
-
           {status === "expired" && (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-[11px] font-bold text-white shadow-sm shadow-red-500/20">
               EXPIRED
@@ -311,10 +255,6 @@ function OfferCard({
           )}
 
         </div>
-
-        {/* =================================================
-            TITLE
-        ================================================== */}
 
         <h3
           className={`mt-5 text-xl font-bold leading-tight ${
@@ -325,10 +265,6 @@ function OfferCard({
         >
           {offer.title}
         </h3>
-
-        {/* =================================================
-            DISCOUNT
-        ================================================== */}
 
         {discountText && (
           <div
@@ -343,10 +279,6 @@ function OfferCard({
           </div>
         )}
 
-        {/* =================================================
-            DESCRIPTION
-        ================================================== */}
-
         {offer.description && (
           <p
             className={`mt-4 text-sm leading-6 ${
@@ -358,10 +290,6 @@ function OfferCard({
             {offer.description}
           </p>
         )}
-
-        {/* =================================================
-            DATES
-        ================================================== */}
 
         <div className="mt-5 space-y-2.5">
 
@@ -439,10 +367,6 @@ function OfferCard({
 
         </div>
 
-        {/* =================================================
-            COUNTDOWN
-        ================================================== */}
-
         {countdown && (
           <div
             className={`mt-4 flex items-center justify-between gap-3 rounded-xl px-3.5 py-3 ${
@@ -466,10 +390,6 @@ function OfferCard({
             </span>
           </div>
         )}
-
-        {/* =================================================
-            OFFER CODE
-        ================================================== */}
 
         {offer.offer_code && status === "live" && (
           <div className="mt-5">
@@ -528,10 +448,6 @@ function OfferCard({
           </div>
         )}
 
-        {/* =================================================
-            CTA
-        ================================================== */}
-
         <div className="mt-auto pt-6">
 
           {status === "expired" ? (
@@ -571,10 +487,6 @@ function OfferCard({
   );
 }
 
-/* =====================================================
-   OFFER SECTION
-===================================================== */
-
 function OfferSection({
   eyebrow,
   title,
@@ -598,10 +510,6 @@ function OfferSection({
     >
       <div className="mx-auto max-w-7xl">
 
-        {/* =================================================
-            SECTION HEADING
-        ================================================== */}
-
         <div className="max-w-3xl">
 
           <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
@@ -617,10 +525,6 @@ function OfferSection({
           </p>
 
         </div>
-
-        {/* =================================================
-            OFFER GRID
-        ================================================== */}
 
         <div className="mt-10 flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 md:overflow-visible md:pb-0 md:snap-none lg:grid-cols-3 xl:grid-cols-4">
 
@@ -643,10 +547,6 @@ function OfferSection({
   );
 }
 
-/* =====================================================
-   OFFERS PAGE
-===================================================== */
-
 function Offers() {
   const [offers, setOffers] =
     useState([]);
@@ -660,16 +560,8 @@ function Offers() {
   const [error, setError] =
     useState("");
 
-  /* ===================================================
-     LIVE CLOCK
-  =================================================== */
-
   const [currentTime, setCurrentTime] =
     useState(new Date());
-
-  /* ===================================================
-     UPDATE CLOCK EVERY SECOND
-  =================================================== */
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -682,10 +574,6 @@ function Offers() {
       clearInterval(timer);
     };
   }, []);
-
-  /* ===================================================
-     LOAD OFFERS + SITE SETTINGS
-  =================================================== */
 
   useEffect(() => {
     const loadPageData = async () => {
@@ -744,10 +632,6 @@ function Offers() {
     loadPageData();
   }, []);
 
-  /* ===================================================
-     CATEGORIZE OFFERS
-  =================================================== */
-
   const categorizedOffers =
     useMemo(() => {
       const live = [];
@@ -785,27 +669,15 @@ function Offers() {
       currentTime,
     ]);
 
-  /* ===================================================
-     HERO BACKGROUND
-  =================================================== */
-
   const heroBackground =
     getImageUrl(
       offersBackground
     );
 
-  /* ===================================================
-     RENDER
-  =================================================== */
-
   return (
     <div className="min-h-screen bg-white text-slate-900">
 
       <Navbar />
-
-      {/* =================================================
-          HERO
-      ================================================== */}
 
       <section
         className="relative h-[calc(110vh-73px)] overflow-hidden bg-cover bg-center"
@@ -875,10 +747,6 @@ function Offers() {
         </div>
       </section>
 
-      {/* =================================================
-          INTRO STRIP
-      ================================================== */}
-
       <section className="border-b border-slate-100 bg-white">
 
         <div className="mx-auto grid max-w-7xl divide-y divide-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
@@ -937,15 +805,7 @@ function Offers() {
         </div>
       </section>
 
-      {/* =================================================
-          OFFERS
-      ================================================== */}
-
       <div id="offers">
-
-        {/* =================================================
-            LOADING
-        ================================================== */}
 
         {loading ? (
           <section className="bg-[#F5F8FC] px-6 py-24">
@@ -967,10 +827,6 @@ function Offers() {
           </section>
 
         ) : error ? (
-
-          /* =================================================
-             ERROR
-          ================================================== */
 
           <section className="bg-[#F5F8FC] px-6 py-24">
 
@@ -997,10 +853,6 @@ function Offers() {
           </section>
 
         ) : offers.length === 0 ? (
-
-          /* =================================================
-             NO OFFERS
-          ================================================== */
 
           <section className="bg-[#F5F8FC] px-6 py-28">
 
@@ -1037,10 +889,6 @@ function Offers() {
           </section>
 
         ) : (
-
-          /* =================================================
-             OFFER SECTIONS
-          ================================================== */
 
           <>
 
@@ -1097,10 +945,6 @@ function Offers() {
         )}
 
       </div>
-
-      {/* =================================================
-          HOW OFFERS WORK
-      ================================================== */}
 
       <section className="bg-white px-6 py-24 lg:py-20">
 
@@ -1184,10 +1028,6 @@ function Offers() {
         </div>
       </section>
 
-      {/* =================================================
-          RESEARCH SUPPORT
-      ================================================== */}
-
       <section className="bg-[#F5F8FC] px-6 py-24 lg:py-20">
 
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
@@ -1270,10 +1110,6 @@ function Offers() {
 
         </div>
       </section>
-
-      {/* =================================================
-          FINAL CTA
-      ================================================== */}
 
       <section className="relative overflow-hidden bg-[#17213A] px-6 py-20">
 

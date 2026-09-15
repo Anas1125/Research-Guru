@@ -21,10 +21,6 @@ import {
   API_URL,
 } from "../utils/api";
 
-/* =====================================================
-   EMPTY FORM
-===================================================== */
-
 const emptyForm = {
   title: "",
   slug: "",
@@ -36,16 +32,8 @@ const emptyForm = {
   display_order: "",
 };
 
-/* =====================================================
-   ADMIN BLOG
-===================================================== */
-
 function AdminBlog() {
   const navigate = useNavigate();
-
-  /* ===================================================
-     STATE
-  =================================================== */
 
   const [posts, setPosts] =
     useState([]);
@@ -80,10 +68,6 @@ function AdminBlog() {
 
   const fileInputRef =
     useRef(null);
-
-  /* ===================================================
-     LOAD POSTS
-  =================================================== */
 
   const fetchPosts = async () => {
     try {
@@ -127,10 +111,6 @@ function AdminBlog() {
   useEffect(() => {
     fetchPosts();
   }, []);
-
-  /* ===================================================
-     FORM HELPERS
-  =================================================== */
 
   const handleChange = (event) => {
     const {
@@ -183,10 +163,6 @@ function AdminBlog() {
     }));
   };
 
-  /* ===================================================
-     IMAGE PREVIEW
-  =================================================== */
-
   useEffect(() => {
     if (!selectedImage) {
       setImagePreview(null);
@@ -207,10 +183,6 @@ function AdminBlog() {
     };
   }, [selectedImage]);
 
-  /* ===================================================
-     CREATE
-  =================================================== */
-
   const openCreate = () => {
     setEditingId(null);
 
@@ -228,10 +200,6 @@ function AdminBlog() {
 
     setShowForm(true);
   };
-
-  /* ===================================================
-     EDIT
-  =================================================== */
 
   const openEdit = (post) => {
     setEditingId(post.id);
@@ -266,10 +234,6 @@ function AdminBlog() {
     setShowForm(true);
   };
 
-  /* ===================================================
-     CLOSE
-  =================================================== */
-
   const closeForm = () => {
     setEditingId(null);
 
@@ -287,10 +251,6 @@ function AdminBlog() {
 
     setShowForm(false);
   };
-
-  /* ===================================================
-     IMAGE SELECT
-  =================================================== */
 
   const handleImageChange = (
     event
@@ -341,10 +301,6 @@ function AdminBlog() {
 
     setSelectedImage(file);
   };
-
-  /* ===================================================
-     UPLOAD IMAGE
-  =================================================== */
 
   const uploadImage = async () => {
     if (!selectedImage) {
@@ -399,10 +355,6 @@ function AdminBlog() {
       );
     }
   };
-
-  /* ===================================================
-     SAVE POST
-  =================================================== */
 
   const savePost = async (
     event
@@ -509,10 +461,6 @@ function AdminBlog() {
     }
   };
 
-  /* ===================================================
-     DELETE POST
-  =================================================== */
-
   const deletePost = async (
     id
   ) => {
@@ -560,10 +508,6 @@ function AdminBlog() {
     }
   };
 
-  /* ===================================================
-     IMAGE URL
-  =================================================== */
-
   const getImageUrl = (
     imagePath
   ) => {
@@ -585,10 +529,6 @@ function AdminBlog() {
     return `${API_URL}${imagePath}`;
   };
 
-  /* ===================================================
-     LOGOUT
-  =================================================== */
-
   const handleLogout = () => {
     localStorage.removeItem(
       "adminToken"
@@ -603,15 +543,8 @@ function AdminBlog() {
     );
   };
 
-  /* ===================================================
-     RENDER
-  =================================================== */
-
   return (
     <div className="min-h-screen bg-[#F5F8FC] text-slate-900">
-      {/* =================================================
-          DESKTOP SIDEBAR
-      ================================================== */}
 
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
         <AdminSidebar
@@ -621,10 +554,6 @@ function AdminBlog() {
           }
         />
       </aside>
-
-      {/* =================================================
-          MOBILE SIDEBAR
-      ================================================== */}
 
       {mobileMenuOpen && (
         <>
@@ -654,10 +583,6 @@ function AdminBlog() {
         </>
       )}
 
-      {/* =================================================
-          MOBILE HEADER
-      ================================================== */}
-
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white lg:hidden">
         <div className="flex items-center justify-between gap-4 px-5 py-4">
           <div className="flex min-w-0 items-center gap-3">
@@ -685,14 +610,7 @@ function AdminBlog() {
         </div>
       </header>
 
-      {/* =================================================
-          MAIN
-      ================================================== */}
-
       <main className="lg:ml-64">
-        {/* =================================================
-            HEADER
-        ================================================== */}
 
         <header className="border-b border-slate-200 bg-white">
           <div className="flex flex-col justify-between gap-4 px-5 py-5 sm:flex-row sm:items-center sm:px-6 lg:px-8">
@@ -722,9 +640,6 @@ function AdminBlog() {
         </header>
 
         <div className="p-5 sm:p-6 lg:p-8">
-          {/* =================================================
-              STATS
-          ================================================== */}
 
           <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">
             <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
@@ -767,10 +682,6 @@ function AdminBlog() {
               </p>
             </div>
           </div>
-
-          {/* =================================================
-              POSTS
-          ================================================== */}
 
           <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-100 px-5 py-5 sm:px-6">
@@ -857,8 +768,6 @@ function AdminBlog() {
                             )}
                           </div>
 
-                          {/* CONTENT */}
-
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               {post.category && (
@@ -919,8 +828,6 @@ function AdminBlog() {
                           </div>
                         </div>
 
-                        {/* ACTIONS */}
-
                         <div className="flex shrink-0 items-center gap-2">
                           <button
                             type="button"
@@ -968,10 +875,6 @@ function AdminBlog() {
         </div>
       </main>
 
-      {/* =====================================================
-          CREATE / EDIT MODAL
-      ====================================================== */}
-
       {showForm && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#17213A]/50 p-3 sm:p-5">
           <div className="max-h-[94vh] w-full max-w-4xl overflow-y-auto rounded-3xl bg-white shadow-2xl">
@@ -1002,13 +905,10 @@ function AdminBlog() {
               </button>
             </div>
 
-            {/* FORM */}
-
             <form
               onSubmit={savePost}
               className="space-y-6 p-5 sm:p-6"
             >
-              {/* TITLE / SLUG */}
 
               <div className="grid gap-5 md:grid-cols-2">
                 <div>
@@ -1052,8 +952,6 @@ function AdminBlog() {
                 </div>
               </div>
 
-              {/* CATEGORY / IMAGE */}
-
               <div className="grid gap-5 md:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-[#17213A]">
@@ -1091,9 +989,7 @@ function AdminBlog() {
                     </option>
                   </select>
                 </div>
-
-                {/* FEATURED IMAGE */}
-
+                
                 <div>
                   <label className="mb-2 block text-sm font-semibold text-[#17213A]">
                     Featured Image
@@ -1134,8 +1030,6 @@ function AdminBlog() {
                   </label>
                 </div>
               </div>
-
-              {/* IMAGE PREVIEW */}
 
               {(imagePreview ||
                 form.featured_image) && (
@@ -1185,8 +1079,6 @@ function AdminBlog() {
                 </div>
               )}
 
-              {/* EXCERPT */}
-
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#17213A]">
                   Excerpt
@@ -1205,8 +1097,6 @@ function AdminBlog() {
                   className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-[#17213A] focus:bg-white"
                 />
               </div>
-
-              {/* CONTENT */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#17213A]">
@@ -1278,8 +1168,6 @@ function AdminBlog() {
                   </span>
                 </label>
               </div>
-
-              {/* ACTIONS */}
 
               <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:justify-end">
                 <button

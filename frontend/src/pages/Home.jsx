@@ -25,9 +25,6 @@ import { Link } from "react-router-dom";
 import { apiFetch, API_URL } from "../utils/api";
 
 function Home() {
-  /* =========================================================
-     SITE SETTINGS
-  ========================================================== */
 
   const [siteSettings, setSiteSettings] = useState({
     site_name: "Research Guru",
@@ -37,20 +34,12 @@ function Home() {
     contact_email: "",
   });
 
-  /* =========================================================
-     SERVICES
-  ========================================================== */
-
   const [services, setServices] = useState([]);
   const [activeService, setActiveService] =
     useState("Implementation");
 
   const [loadingPageData, setLoadingPageData] =
     useState(true);
-
-  /* =========================================================
-     HERO RESEARCH AREA AUTOCOMPLETE
-  ========================================================== */
 
   const researchAreaRef = useRef(null);
 
@@ -59,10 +48,6 @@ function Home() {
 
   const [showResearchAreas, setShowResearchAreas] =
     useState(false);
-
-  /* =========================================================
-     HERO CONTACT FORM
-  ========================================================== */
 
   const [heroForm, setHeroForm] = useState({
     name: "",
@@ -84,10 +69,6 @@ function Home() {
   const [heroAgreedToTerms, setHeroAgreedToTerms] =
     useState(false);
 
-  /* =========================================================
-     LOAD BACKEND DATA
-  ========================================================== */
-
   useEffect(() => {
     async function loadPageData() {
       try {
@@ -100,10 +81,6 @@ function Home() {
           apiFetch("/api/site-settings"),
           apiFetch("/api/services"),
         ]);
-
-        /* -----------------------------
-           SITE SETTINGS
-        ----------------------------- */
 
         if (settingsResponse.ok) {
           const settings =
@@ -122,10 +99,6 @@ function Home() {
               settings.contact_email || "",
           });
         }
-
-        /* -----------------------------
-           SERVICES
-        ----------------------------- */
 
         if (servicesResponse.ok) {
           const serviceData =
@@ -158,10 +131,6 @@ function Home() {
     loadPageData();
   }, []);
 
-  /* =========================================================
-     CLICK OUTSIDE RESEARCH AUTOCOMPLETE
-  ========================================================== */
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -186,10 +155,6 @@ function Home() {
       );
     };
   }, []);
-
-  /* =========================================================
-     HELPERS
-  ========================================================== */
 
   function getImageUrl(path) {
     if (!path) {
@@ -276,10 +241,6 @@ function Home() {
     }
   }
 
-  /* =========================================================
-     BACKEND RESEARCH AREAS
-  ========================================================== */
-
   const implementationCategory =
     services.find(
       (service) =>
@@ -298,19 +259,11 @@ function Home() {
         )
     );
 
-  /* =========================================================
-     ACTIVE SERVICE
-  ========================================================== */
-
   const activeServiceData =
     services.find(
       (service) =>
         service.name === activeService
     );
-
-  /* =========================================================
-     UPDATE HERO FORM
-  ========================================================== */
 
   function updateHeroField(
     field,
@@ -332,10 +285,6 @@ function Home() {
     );
     setShowResearchAreas(false);
   }
-
-  /* =========================================================
-     HERO FORM SUBMIT
-  ========================================================== */
 
   async function handleHeroSubmit(
     event
@@ -413,10 +362,6 @@ function Home() {
     }
   }
 
-  /* =========================================================
-     IMPACT
-  ========================================================== */
-
   const impact = [
     {
       icon: GraduationCap,
@@ -444,10 +389,6 @@ function Home() {
     },
   ];
 
-  /* =========================================================
-     PRESENCE
-  ========================================================== */
-
   const presence = [
     {
       icon: MapPin,
@@ -474,9 +415,6 @@ function Home() {
       <LiveOfferBar />
       <Navbar showLiveOfferBar />
 
-      {/* =====================================================
-          HERO
-      ====================================================== */}
       <section className="relative min-h-[calc(100vh-73px)] overflow-hidden pt-28 pb-10 lg:py-10">
         {/* Background image */}
         {siteSettings.home_background ? (
@@ -842,10 +780,7 @@ function Home() {
           </a>
         )}
       </section>
-
-      {/* =====================================================
-          TRUST STRIP
-      ====================================================== */}
+      
       <section className="border-b border-slate-100 bg-white">
         <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-slate-200 md:grid-cols-4">
           {[
@@ -895,10 +830,6 @@ function Home() {
           })}
         </div>
       </section>
-
-              {/* =====================================================
-                  RESEARCH TIMELINE HIGHLIGHT
-              ====================================================== */}
               <section className="border-b border-[#DCE5F0] bg-[#F5F8FC] px-6 py-12">
                 <div className="mx-auto max-w-7xl">
 
@@ -966,9 +897,7 @@ function Home() {
                 </div>
               </section>
 
-      {/* =====================================================
-          RESEARCH GURU INTRO
-      ====================================================== */}
+
       <section className="bg-white px-6 py-24 lg:py-28">
         <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[0.95fr_1.05fr]">
           {/* IMAGE */}
@@ -1078,9 +1007,6 @@ function Home() {
         </div>
       </section>
 
-      {/* =====================================================
-          SERVICES
-      ====================================================== */}
       <section
         id="services"
         className="bg-[#F5F8FC] px-6 py-24 lg:py-20"
@@ -1277,9 +1203,6 @@ function Home() {
         </div>
       </section>
 
-      {/* =====================================================
-          HOW WE HELP
-      ====================================================== */}
       <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
@@ -1357,9 +1280,6 @@ function Home() {
         </div>
       </section>
 
-      {/* =====================================================
-          IMPACT
-      ====================================================== */}
       <section className="bg-[#F5F8FC] px-6 py-24 lg:py-20">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
           <div>
@@ -1430,9 +1350,6 @@ function Home() {
         </div>
       </section>
 
-      {/* =====================================================
-          PRESENCE
-      ====================================================== */}
       <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
@@ -1487,9 +1404,6 @@ function Home() {
         </div>
       </section>
 
-      {/* =====================================================
-          FINAL CTA
-      ====================================================== */}
       <section className="relative overflow-hidden bg-[#17213A] px-6 py-20">
         <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
 

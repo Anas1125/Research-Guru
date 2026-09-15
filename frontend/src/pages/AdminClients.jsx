@@ -52,10 +52,6 @@ export default function AdminClients() {
   const [mobileSidebarOpen, setMobileSidebarOpen] =
     useState(false);
 
-  // =====================================================
-  // LOAD CLIENTS
-  // =====================================================
-
   const loadClients = async () => {
     try {
       setLoading(true);
@@ -90,10 +86,6 @@ export default function AdminClients() {
     loadClients();
   }, []);
 
-  // =====================================================
-  // OPEN ADD FORM
-  // =====================================================
-
   const handleAdd = () => {
     setEditingClient(null);
     setForm(emptyForm);
@@ -101,10 +93,6 @@ export default function AdminClients() {
     setSuccess("");
     setShowForm(true);
   };
-
-  // =====================================================
-  // OPEN EDIT FORM
-  // =====================================================
 
   const handleEdit = (client) => {
     setEditingClient(client);
@@ -122,10 +110,6 @@ export default function AdminClients() {
     setShowForm(true);
   };
 
-  // =====================================================
-  // CLOSE FORM
-  // =====================================================
-
   const handleCloseForm = () => {
     if (saving || uploadingLogo) return;
 
@@ -134,10 +118,6 @@ export default function AdminClients() {
     setForm(emptyForm);
     setError("");
   };
-
-  // =====================================================
-  // LOGO UPLOAD
-  // =====================================================
 
   const handleLogoUpload = async (event) => {
     const file = event.target.files?.[0];
@@ -201,10 +181,6 @@ export default function AdminClients() {
       event.target.value = "";
     }
   };
-
-  // =====================================================
-  // SAVE CLIENT
-  // =====================================================
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -300,10 +276,6 @@ export default function AdminClients() {
     }
   };
 
-  // =====================================================
-  // TOGGLE ACTIVE
-  // =====================================================
-
   const handleToggleActive = async (client) => {
     try {
       setError("");
@@ -360,10 +332,6 @@ export default function AdminClients() {
     }
   };
 
-  // =====================================================
-  // DELETE CLIENT
-  // =====================================================
-
   const handleDelete = async (client) => {
     const confirmed = window.confirm(
       `Are you sure you want to delete "${client.name}"?`
@@ -417,23 +385,14 @@ export default function AdminClients() {
     }
   };
 
-  // =====================================================
-  // RENDER
-  // =====================================================
-
   return (
     <div className="min-h-screen bg-[#F5F8FC]">
-      {/* DESKTOP SIDEBAR */}
 
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 lg:block">
         <AdminSidebar
           currentPage="/admin/clients"
         />
       </aside>
-
-      {/* MAIN */}
-
-      {/* MOBILE SIDEBAR */}
 
       {mobileSidebarOpen && (
         <>
@@ -461,11 +420,7 @@ export default function AdminClients() {
         </>
       )}
 
-      {/* MAIN */}
-
       <main className="min-h-screen lg:ml-64">
-
-        {/* MOBILE HEADER */}
 
         <div className="sticky top-0 z-30 border-b border-[#DCE5F0] bg-white px-5 py-4 lg:hidden">
           <div className="flex items-center gap-3">
@@ -493,7 +448,6 @@ export default function AdminClients() {
         </div>
 
         <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
-          {/* HEADER */}
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -521,8 +475,6 @@ export default function AdminClients() {
             </button>
           </div>
 
-          {/* MESSAGES */}
-
           {success && (
             <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
               {success}
@@ -534,8 +486,6 @@ export default function AdminClients() {
               {error}
             </div>
           )}
-
-          {/* CLIENT LIST */}
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-[#DCE5F0] bg-white shadow-sm">
             {loading ? (
@@ -576,7 +526,6 @@ export default function AdminClients() {
                     key={client.id}
                     className="flex flex-col gap-5 px-5 py-5 sm:flex-row sm:items-center sm:justify-between md:px-6"
                   >
-                    {/* CLIENT INFO */}
 
                     <div className="flex min-w-0 items-center gap-4">
                       <div className="flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#E1E8F0] bg-white p-2">
@@ -630,8 +579,6 @@ export default function AdminClients() {
                       </div>
                     </div>
 
-                    {/* ACTIONS */}
-
                     <div className="flex shrink-0 items-center gap-2">
                       <button
                         type="button"
@@ -679,8 +626,6 @@ export default function AdminClients() {
         </div>
       </main>
 
-      {/* FORM MODAL */}
-
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#17213A]/40 px-4 py-6">
           <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white shadow-2xl">
@@ -712,21 +657,16 @@ export default function AdminClients() {
               </button>
             </div>
 
-            {/* FORM */}
-
             <form
               onSubmit={handleSubmit}
               className="space-y-6 px-6 py-6"
             >
-              {/* ERROR */}
 
               {error && (
                 <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
                   {error}
                 </div>
               )}
-
-              {/* CLIENT NAME */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#17213A]">
@@ -750,8 +690,6 @@ export default function AdminClients() {
                   className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
                 />
               </div>
-
-              {/* LOGO */}
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-[#17213A]">
@@ -813,8 +751,6 @@ export default function AdminClients() {
                   </div>
                 </div>
               </div>
-
-              {/* ORDER + ACTIVE */}
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
@@ -883,8 +819,6 @@ export default function AdminClients() {
                   </button>
                 </div>
               </div>
-
-              {/* ACTIONS */}
 
               <div className="flex flex-col-reverse gap-3 border-t border-[#E8EEF5] pt-5 sm:flex-row sm:justify-end">
                 <button

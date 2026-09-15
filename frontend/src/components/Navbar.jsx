@@ -33,9 +33,7 @@ function Navbar({ showLiveOfferBar = false }) {
     { name: "Contact", path: "/contact" },
   ];
 
-  /* =====================================================
-     LOAD SITE SETTINGS
-  ====================================================== */
+  /* LOAD SITE SETTINGS */
 
   useEffect(() => {
     async function loadSiteSettings() {
@@ -59,10 +57,6 @@ function Navbar({ showLiveOfferBar = false }) {
         setLogoUrl(
           data.logo_url || ""
         );
-
-        /* =================================================
-           UPDATE FAVICON
-        ================================================== */
 
         if (data.favicon_url) {
           const faviconHref =
@@ -107,9 +101,7 @@ function Navbar({ showLiveOfferBar = false }) {
     loadSiteSettings();
   }, []);
 
-  /* =====================================================
-     CHECK FOR LIVE OFFERS
-  ====================================================== */
+  /* CHECK FOR LIVE OFFERS */
 
   useEffect(() => {
     let cancelled = false;
@@ -193,17 +185,8 @@ function Navbar({ showLiveOfferBar = false }) {
         }
       }
     }
-
-    /*
-      Check immediately when Navbar loads.
-    */
     checkLiveOffer();
 
-    /*
-      Re-check every 60 seconds so an
-      upcoming offer automatically becomes
-      green/blinking when it goes live.
-    */
     const interval =
       setInterval(
         checkLiveOffer,
@@ -215,10 +198,6 @@ function Navbar({ showLiveOfferBar = false }) {
       clearInterval(interval);
     };
   }, []);
-
-  /* =====================================================
-     NAVBAR SCROLL BEHAVIOR
-  ====================================================== */
 
   useEffect(() => {
     const handleScroll = () => {
@@ -261,10 +240,6 @@ function Navbar({ showLiveOfferBar = false }) {
     };
   }, [lastScrollY]);
 
-  /* =====================================================
-     LOGO URL
-  ====================================================== */
-
   function getLogoUrl() {
     if (!logoUrl) {
       return "";
@@ -284,19 +259,12 @@ function Navbar({ showLiveOfferBar = false }) {
     return `${API_URL}${logoUrl}`;
   }
 
-  /* =====================================================
-     OFFERS NAV ITEM STYLE
-  ====================================================== */
+  /* OFFERS NAV ITEM STYLE */
 
   function getNavItemTextClass(
     item,
     active
   ) {
-    /*
-      Only the Offers item becomes
-      green + blinking when a live
-      offer exists.
-    */
     if (
       item.name === "Offers" &&
       hasLiveOffer
@@ -310,10 +278,6 @@ function Navbar({ showLiveOfferBar = false }) {
 
     return "text-slate-600 hover:text-[#17213A]";
   }
-
-  /* =====================================================
-     RENDER
-  ====================================================== */
 
   return (
     <header
@@ -329,9 +293,7 @@ function Navbar({ showLiveOfferBar = false }) {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
-        {/* =================================================
-            LOGO / BRAND
-        ================================================== */}
+        {/* LOGO / BRAND */}
 
         <Link
           to="/"
@@ -357,9 +319,7 @@ function Navbar({ showLiveOfferBar = false }) {
           </span>
         </Link>
 
-        {/* =================================================
-            DESKTOP NAVIGATION
-        ================================================== */}
+        {/* DESKTOP NAVIGATION */}
 
         <nav className="hidden items-center gap-9 md:flex">
           {navItems.map((item) => {
@@ -387,9 +347,7 @@ function Navbar({ showLiveOfferBar = false }) {
           })}
         </nav>
 
-        {/* =================================================
-            CTA
-        ================================================== */}
+        {/* CTA */}
 
         <Link
         to="/contact"
@@ -402,9 +360,7 @@ function Navbar({ showLiveOfferBar = false }) {
         Get Started
       </Link>
 
-        {/* =================================================
-            MOBILE BUTTON
-        ================================================== */}
+        {/* MOBILE BUTTON */}
 
         <button
           type="button"
@@ -424,10 +380,6 @@ function Navbar({ showLiveOfferBar = false }) {
         </button>
 
       </div>
-
-      {/* =================================================
-          MOBILE NAVIGATION
-      ================================================== */}
 
       {menuOpen && (
         <nav className="border-t border-slate-100 bg-white px-6 py-5 md:hidden">

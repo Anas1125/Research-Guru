@@ -18,10 +18,6 @@ import { apiFetch } from "../utils/api";
 function AdminServices() {
   const navigate = useNavigate();
 
-  /* =====================================================
-     STATE
-  ====================================================== */
-
   const [categories, setCategories] =
     useState([]);
 
@@ -63,10 +59,6 @@ function AdminServices() {
 
   const [sidebarOpen, setSidebarOpen] =
     useState(false);
-
-  /* =====================================================
-     FETCH DATA
-  ====================================================== */
 
   async function fetchData() {
     try {
@@ -147,10 +139,6 @@ function AdminServices() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  /* =====================================================
-     CATEGORY
-  ====================================================== */
 
   function openAddCategory() {
     setEditingCategory(null);
@@ -304,10 +292,6 @@ function AdminServices() {
       );
     }
   }
-
-  /* =====================================================
-     SERVICE
-  ====================================================== */
 
   function openAddService() {
     setEditingService(null);
@@ -543,10 +527,6 @@ function AdminServices() {
     }
   }
 
-  /* =====================================================
-     HELPERS
-  ====================================================== */
-
   function getCategoryName(
     categoryId
   ) {
@@ -567,25 +547,14 @@ function AdminServices() {
     setSidebarOpen(false);
   }
 
-  /* =====================================================
-     RENDER
-  ====================================================== */
-
   return (
     <div className="min-h-screen bg-[#F5F8FC] text-[#17213A]">
-      {/* =================================================
-          DESKTOP SIDEBAR
-      ================================================== */}
 
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
         <AdminSidebar
           currentPage="/admin/services"
         />
       </aside>
-
-      {/* =================================================
-          MOBILE SIDEBAR
-      ================================================== */}
 
       {sidebarOpen && (
         <>
@@ -621,14 +590,7 @@ function AdminServices() {
         </>
       )}
 
-      {/* =================================================
-          MAIN
-      ================================================== */}
-
       <main className="lg:ml-64">
-        {/* =================================================
-            HEADER
-        ================================================== */}
 
         <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
           <div className="flex min-h-[76px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
@@ -688,12 +650,7 @@ function AdminServices() {
           </div>
         </header>
 
-        {/* =================================================
-            CONTENT
-        ================================================== */}
-
         <div className="p-4 sm:p-6 lg:p-8">
-          {/* SUMMARY */}
 
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -728,10 +685,6 @@ function AdminServices() {
               </p>
             </div>
           </div>
-
-          {/* =================================================
-              CATEGORY FORM
-          ================================================== */}
 
           {showCategoryForm && (
             <section className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -831,10 +784,6 @@ function AdminServices() {
               </form>
             </section>
           )}
-
-          {/* =================================================
-              SERVICE FORM
-          ================================================== */}
 
           {showServiceForm && (
             <section
@@ -1003,10 +952,6 @@ function AdminServices() {
             </section>
           )}
 
-          {/* =================================================
-              CATEGORIES
-          ================================================== */}
-
           <section className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
               <div>
@@ -1138,10 +1083,6 @@ function AdminServices() {
               </div>
             )}
           </section>
-
-          {/* =================================================
-              INDIVIDUAL SERVICES
-          ================================================== */}
 
           <section className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-100 px-5 py-5 sm:px-6">
@@ -1340,8 +1281,6 @@ function AdminServices() {
               </div>
             )}
           </section>
-
-          {/* MOBILE CATEGORY ACTION */}
 
           <div className="mt-5 sm:hidden">
             <button

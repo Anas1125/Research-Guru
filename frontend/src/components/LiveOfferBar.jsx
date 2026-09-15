@@ -100,10 +100,6 @@ function LiveOfferBar() {
   const [copiedCode, setCopiedCode] =
     useState("");
 
-  /* =====================================================
-     LOAD OFFERS
-  ====================================================== */
-
   useEffect(() => {
     let cancelled = false;
 
@@ -150,10 +146,6 @@ function LiveOfferBar() {
     };
   }, []);
 
-  /* =====================================================
-     LIVE CLOCK
-  ====================================================== */
-
   useEffect(() => {
     const timer =
       setInterval(() => {
@@ -166,10 +158,6 @@ function LiveOfferBar() {
       clearInterval(timer);
     };
   }, []);
-
-  /* =====================================================
-     GET ALL LIVE OFFERS
-  ====================================================== */
 
   const liveOffers = useMemo(() => {
   return offers
@@ -215,10 +203,6 @@ function LiveOfferBar() {
     return null;
   }
 
-  /* =====================================================
-     COPY PROMO CODE
-  ====================================================== */
-
   async function handleCopy(
     promoCode
   ) {
@@ -243,10 +227,6 @@ function LiveOfferBar() {
       );
     }
   }
-
-  /* =====================================================
-     OFFER ITEM
-  ====================================================== */
 
   function OfferItem({
     offer,
@@ -437,10 +417,6 @@ function LiveOfferBar() {
     >
       <div className="flex w-full items-center">
 
-        {/* =================================================
-            FIXED LIVE OFFERS BADGE
-        ================================================== */}
-
         <div className="relative z-10 flex shrink-0 items-center bg-white px-4 py-2.5 sm:px-5">
           <div className="flex items-center gap-2.5 rounded-full bg-red-500 px-4 py-2.5 text-xs font-extrabold tracking-wide text-white shadow-sm">
             <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" />
@@ -455,15 +431,9 @@ function LiveOfferBar() {
           </div>
         </div>
 
-        {/* =================================================
-            FIXED DIVIDER
-        ================================================== */}
-
         <div className="relative z-10 h-8 w-px shrink-0 bg-[#DCE5F0]" />
 
-        {/* =================================================
-            MARQUEE VIEWPORT
-        ================================================== */}
+        {/* MARQUEE VIEWPORT */}
 
         <div
           className="min-w-0 flex-1 overflow-hidden"
@@ -489,8 +459,6 @@ function LiveOfferBar() {
           }}
         >
           <div className="offer-marquee-track flex w-max items-center">
-
-            {/* FIRST COPY */}
 
             <div className="flex shrink-0 items-center gap-5 px-5 lg:gap-6 lg:px-6">
               {liveOffers.map(
@@ -518,10 +486,6 @@ function LiveOfferBar() {
                 |
               </span>
             </div>
-
-            {/* SECOND COPY
-                Makes the marquee seamless.
-            */}
 
             <div className="flex shrink-0 items-center gap-5 px-5 lg:gap-6 lg:px-6">
               {liveOffers.map(

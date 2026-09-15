@@ -15,10 +15,6 @@ body {
   color: #0f172a;
 }
 
-/* =====================================================
-   NAVBAR ACTIVE UNDERLINE
-===================================================== */
-
 .nav-active-underline {
   position: absolute;
   bottom: 0;
@@ -60,9 +56,6 @@ body {
   animation:
     offerUrgentPulse 1.4s ease-in-out infinite;
 }
-/* =====================================================
-   LIVE OFFER CONTINUOUS MARQUEE
-===================================================== */
 
 .offer-marquee-track {
   animation: offerMarquee 70s linear infinite;
@@ -82,10 +75,6 @@ body {
     transform: translateX(-50%);
   }
 }
-
-/* =====================================================
-   ABOUT PAGE - REVIEWS MARQUEE
-===================================================== */
 
 .reviews-marquee {
   width: 100%;
@@ -121,10 +110,6 @@ body {
     animation-duration: 45s;
   }
 }
-
-/* =====================================================
-   SERVICES PAGE - PUBLISHER MARQUEE
-===================================================== */
 
 .publisher-marquee {
   width: 100%;

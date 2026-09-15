@@ -41,9 +41,7 @@ function AdminSidebar({
 
   return (
     <div className="flex h-full w-full flex-col bg-[#17213A] text-white">
-      {/* =================================================
-          BRAND
-      ================================================== */}
+      {/* Brand */}
 
       <div className="flex min-h-[76px] items-center border-b border-white/10 px-6">
         <div className="min-w-0">
@@ -73,9 +71,7 @@ function AdminSidebar({
         )}
       </div>
 
-      {/* =================================================
-          NAVIGATION
-      ================================================== */}
+          {/* Navigation */}
 
       <nav className="flex-1 space-y-1 px-4 py-6">
         <SidebarItem
@@ -152,9 +148,7 @@ function AdminSidebar({
 
       </nav>
 
-      {/* =================================================
-          ACCOUNT
-      ================================================== */}
+      {/* Account */}
 
       <div className="border-t border-white/10 p-4">
         <div className="mb-3 rounded-xl bg-white/5 px-4 py-3">
@@ -180,9 +174,7 @@ function AdminSidebar({
   );
 }
 
-/* =====================================================
-   SIDEBAR ITEM
-===================================================== */
+/* Sidebar Item */
 
 function SidebarItem({
   label,

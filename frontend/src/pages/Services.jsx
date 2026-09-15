@@ -35,19 +35,11 @@ import {
   API_URL,
 } from "../utils/api";
 
-/* =====================================================
-   SERVICE ICONS
-===================================================== */
-
 const iconMap = {
   Implementation: Code2,
   Writing: PenTool,
   Publication: Award,
 };
-
-/* =====================================================
-   STATIC PROCESS CONTENT
-===================================================== */
 
 const processSteps = [
   {
@@ -75,10 +67,6 @@ const processSteps = [
     text: "The work is reviewed against the Research Objectives, Technical Requirements, and Intended Academic Outcome.",
   },
 ];
-
-/* =====================================================
-   STATIC HELP CONTENT
-===================================================== */
 
 const receiveItems = [
   {
@@ -112,10 +100,6 @@ const receiveItems = [
     text: "Prepare research content for appropriate Journal and Publication Requirements.",
   },
 ];
-
-/* =====================================================
-   HELPERS
-===================================================== */
 
 const formatDate = (dateString) => {
   if (!dateString) {
@@ -170,10 +154,6 @@ function getServiceIcon(name) {
   return iconMap[name] || BookOpen;
 }
 
-/* =====================================================
-   SERVICES PAGE
-===================================================== */
-
 function Services() {
   const [categories, setCategories] =
     useState([]);
@@ -198,10 +178,6 @@ function Services() {
   const [servicesBackground, setServicesBackground] =
     useState("");
 
-  /* ===================================================
-     LOAD SERVICES + SITE SETTINGS
-  =================================================== */
-
   useEffect(() => {
     const loadPageData = async () => {
       try {
@@ -216,10 +192,6 @@ function Services() {
           apiFetch("/api/site-settings"),
           apiFetch("/api/clients"),
         ]);
-
-        /* -----------------------------
-           SERVICES
-        ----------------------------- */
 
         if (servicesResponse.ok) {
           const data =
@@ -238,10 +210,6 @@ function Services() {
           );
         }
 
-        /* -----------------------------
-           SITE SETTINGS
-        ----------------------------- */
-
         if (settingsResponse.ok) {
           const settings =
             await settingsResponse.json();
@@ -251,10 +219,6 @@ function Services() {
               ""
           );
         }
-
-        /* -----------------------------
-          OUR CLIENTS
-        ----------------------------- */
 
         if (clientsResponse.ok) {
           const clientData =
@@ -275,10 +239,6 @@ function Services() {
 
     loadPageData();
   }, []);
-
-  /* ===================================================
-     LOAD BLOG
-  =================================================== */
 
   useEffect(() => {
     const loadBlogs = async () => {
@@ -342,20 +302,12 @@ function Services() {
     loadBlogs();
   }, []);
 
-  /* ===================================================
-     ACTIVE CATEGORY
-  =================================================== */
-
   const activeData =
     categories.find(
       (category) =>
         category.name ===
         activeCategory
     );
-
-  /* ===================================================
-     IMPLEMENTATION DOMAINS
-  =================================================== */
 
   const implementationCategory =
     categories.find(
@@ -370,10 +322,6 @@ function Services() {
   return (
     <div className="min-h-screen bg-white text-slate-900">
       <Navbar />
-
-      {/* =====================================================
-          HERO
-      ====================================================== */}
 
       <section
         className="relative h-[calc(110vh-73px)] overflow-hidden bg-cover bg-center"
@@ -437,10 +385,6 @@ function Services() {
         </div>
       </section>
 
-      {/* =====================================================
-          INTRO STRIP
-      ====================================================== */}
-
       <section className="border-b border-slate-100 bg-white">
         <div className="mx-auto grid max-w-7xl divide-y divide-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
           {[
@@ -490,10 +434,6 @@ function Services() {
           })}
         </div>
       </section>
-
-      {/* =====================================================
-          SERVICE CATEGORIES
-      ====================================================== */}
 
       <section
         id="service-categories"
@@ -740,10 +680,6 @@ function Services() {
         </div>
       </section>
 
-      {/* =====================================================
-          WHAT YOU RECEIVE
-      ====================================================== */}
-
       <section className="bg-white px-6 py-24 lg:py-15">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
@@ -793,10 +729,6 @@ function Services() {
           </div>
         </div>
       </section>
-
-      {/* =====================================================
-          BLOG
-      ====================================================== */}
 
       <section className="bg-[#F5F8FC] px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
@@ -947,10 +879,6 @@ function Services() {
         </div>
       </section>
 
-      {/* =====================================================
-          RESEARCH DOMAINS
-      ====================================================== */}
-
       <section className="bg-[#F5F8FC] px-6 py-24 lg:py-15">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
           <div>
@@ -1032,10 +960,6 @@ function Services() {
         </div>
       </section>
 
-     {/* =====================================================
-          PUBLICATION PARTNERS
-      ===================================================== */}
-
       {clients.length > 0 && (
         <section className="bg-[#F5F8FC] py-10">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -1099,10 +1023,6 @@ function Services() {
         </section>
       )}
 
-      {/* =====================================================
-          PROCESS
-      ====================================================== */}
-
       <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
@@ -1156,10 +1076,6 @@ function Services() {
           </div>
         </div>
       </section>
-
-      {/* =====================================================
-          PUBLICATION SUPPORT
-      ====================================================== */}
 
       <section className="bg-[#F5F8FC] px-6 py-24 lg:py-20">
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
@@ -1237,10 +1153,6 @@ function Services() {
           </div>
         </div>
       </section>
-
-      {/* =====================================================
-          FAQ
-      ====================================================== */}
 
       <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-4xl">
@@ -1341,10 +1253,6 @@ function Services() {
           </div>
         </div>
       </section>
-
-      {/* =====================================================
-          CTA
-      ====================================================== */}
 
       <section className="relative overflow-hidden bg-[#17213A] px-6 py-20">
         <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-white/5 blur-3xl" />

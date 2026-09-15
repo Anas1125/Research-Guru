@@ -189,9 +189,7 @@ class ClientReviewResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-# =====================================================
 # CLIENTS
-# =====================================================
 
 class ClientCreate(BaseModel):
     name: str
@@ -215,9 +213,7 @@ class ClientResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-# =====================================================
 # OFFERS
-# =====================================================
 
 class OfferCreate(BaseModel):
     title: str

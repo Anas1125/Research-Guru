@@ -29,19 +29,11 @@ import {
   API_URL,
 } from "../utils/api";
 
-/* =====================================================
-   ICONS
-===================================================== */
-
 const iconMap = {
   Implementation: Code2,
   Publication: Award,
   Writing: PenTool,
 };
-
-/* =====================================================
-   RESEARCH LIFECYCLE
-===================================================== */
 
 const researchStages = [
   {
@@ -82,10 +74,6 @@ const researchStages = [
   },
 ];
 
-/* =====================================================
-   PRINCIPLES
-===================================================== */
-
 const principles = [
   {
     icon: Target,
@@ -109,10 +97,6 @@ const principles = [
   },
 ];
 
-/* =====================================================
-   HELPERS
-===================================================== */
-
 const getImageUrl = (imagePath) => {
   if (!imagePath) {
     return null;
@@ -131,10 +115,6 @@ const getImageUrl = (imagePath) => {
 const getCategoryIcon = (name) => {
   return iconMap[name] || BookOpen;
 };
-
-/* =====================================================
-   ABOUT PAGE
-===================================================== */
 
 function About() {
   const [categories, setCategories] = useState([]);
@@ -168,10 +148,6 @@ function About() {
   const [aboutBackground, setAboutBackground] =
     useState("");
 
-  /* ===================================================
-     LOAD BACKEND DATA
-  =================================================== */
-
   useEffect(() => {
     const loadPageData = async () => {
       try {
@@ -186,10 +162,6 @@ function About() {
           apiFetch("/api/site-settings"),
           apiFetch("/api/reviews"),
         ]);
-
-        /* -----------------------------
-           SERVICES / CATEGORIES
-        ----------------------------- */
 
         if (servicesResponse.ok) {
           const data =
@@ -213,10 +185,6 @@ function About() {
           );
         }
 
-        /* -----------------------------
-           SITE SETTINGS
-        ----------------------------- */
-
         if (settingsResponse.ok) {
           const settings =
             await settingsResponse.json();
@@ -231,10 +199,6 @@ function About() {
               ""
           );
         }
-
-        /* -----------------------------
-          CLIENT REVIEWS
-        ----------------------------- */
 
         if (reviewsResponse.ok) {
           const reviewData =
@@ -340,9 +304,7 @@ function About() {
     <div className="min-h-screen bg-white text-slate-900">
       <Navbar />
 
-      {/* =====================================================
-          HERO
-      ====================================================== */}
+      {/* HERO */}
 
       <section
         className="relative min-h-[calc(100vh-73px)] overflow-hidden bg-cover bg-center"
@@ -417,9 +379,7 @@ function About() {
         
       </section>
 
-      {/* =====================================================
-          WHO WE ARE
-      ====================================================== */}
+      {/* WHO WE ARE */}
 
       <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
@@ -519,9 +479,7 @@ function About() {
         </div>
       </section>
 
-      {/* =====================================================
-          CORE AREAS
-      ====================================================== */}
+      {/* CORE AREAS */}
 
       <section className="bg-[#F5F8FC] px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
@@ -597,9 +555,7 @@ function About() {
         </div>
       </section>
 
-      {/* =====================================================
-          RESEARCH LIFECYCLE
-      ====================================================== */}
+      {/* RESEARCH LIFECYCLE */}
 
       <section className="bg-white px-6 py-24 lg:py-20">
         <div className="mx-auto max-w-7xl">
@@ -656,9 +612,7 @@ function About() {
         </div>
       </section>
 
-      {/* =====================================================
-          PRINCIPLES
-      ====================================================== */}
+      {/* PRINCIPLES */}
 
       <section className="bg-white px-6 py-24 lg:py-8">
         <div className="mx-auto max-w-7xl">
@@ -709,9 +663,8 @@ function About() {
         </div>
       </section>
 
-            {/* =====================================================
-                CLIENT REVIEWS
-            ====================================================== */}
+            {/* CLIENT REVIEWS */}
+
             {reviews.length > 0 && (
               <section className="bg-[#F5F8FC] px-6 py-24 lg:py-15">
                 <div className="mx-auto max-w-7xl">
@@ -817,9 +770,7 @@ function About() {
               </section>
             )}
 
-      {/* =====================================================
-            SUBMIT A REVIEW
-        ====================================================== */}
+      {/* SUBMIT A REVIEW */}
         <section className="bg-white px-6 py-14 lg:py-10">
           <div className="mx-auto max-w-5xl">
             <div className="rounded-[2rem] border border-[#DCE5F0] bg-[#F8FAFC] px-6 py-8 md:px-10">
@@ -1014,9 +965,7 @@ function About() {
           </div>
         </section>
 
-      {/* =====================================================
-          CTA
-      ====================================================== */}
+      {/* CTA */}
 
       <section className="relative overflow-hidden bg-[#17213A] px-6 py-20">
         <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
