@@ -173,8 +173,7 @@ function BlogPost() {
           data.excerpt?.trim() ||
           `${articleTitle} - research guidance, academic insights, and practical information from ${siteName}.`;
 
-        const siteUrl =
-          window.location.origin;
+        const siteUrl = window.location.origin;
 
         const articleUrl =
           `${siteUrl}/blog/${encodeURIComponent(slug)}`;
@@ -365,16 +364,16 @@ function BlogPost() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white transition-colors dark:bg-[#0B1220]">
         <Navbar />
 
         <main className="flex min-h-[65vh] items-center justify-center px-6 pt-28">
           <div className="text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EEF4FA] text-[#17213A]">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EEF4FA] text-[#17213A] dark:bg-[#17213A] dark:text-blue-400">
               <BookOpen size={22} />
             </div>
 
-            <p className="mt-4 text-sm font-medium text-slate-500">
+            <p className="mt-4 text-sm font-medium text-slate-500 dark:text-slate-400">
               Loading article...
             </p>
           </div>
@@ -387,31 +386,31 @@ function BlogPost() {
 
   if (notFound || !post) {
     return (
-      <div className="min-h-screen bg-white text-[#17213A]">
+      <div className="min-h-screen bg-white text-[#17213A] transition-colors dark:bg-[#0B1220] dark:text-slate-100">
         <Navbar />
 
         <main className="flex min-h-[65vh] items-center justify-center px-6 pt-28">
           <div className="max-w-xl text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EEF4FA] text-[#17213A]">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EEF4FA] text-[#17213A] dark:bg-[#17213A] dark:text-blue-400">
               <BookOpen size={25} />
             </div>
 
-            <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
+            <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
               Research Blog
             </p>
 
-            <h1 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
+            <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-4xl">
               Article not found
             </h1>
 
-            <p className="mt-4 leading-7 text-slate-600">
+            <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
               The article you're looking for may have
               been removed or is no longer published.
             </p>
 
             <Link
               to="/blog"
-              className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0F172A]"
+              className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0F172A] dark:bg-blue-600 dark:hover:bg-blue-500"
             >
               <ArrowLeft size={16} />
               Back to Blog
@@ -442,14 +441,16 @@ function BlogPost() {
   );
 
   return (
-    <div className="min-h-screen bg-white text-[#17213A]">
+    <div className="min-h-screen bg-white text-[#17213A] transition-colors dark:bg-[#0B1220] dark:text-slate-100">
       <Navbar />
 
-      <header className="border-b border-slate-200 bg-[#F5F8FC] px-6 pb-12 pt-28 md:pb-14 md:pt-32">
+      {/* ARTICLE HEADER */}
+
+      <header className="border-b border-slate-200 bg-[#F5F8FC] px-6 pb-12 pt-28 transition-colors dark:border-white/10 dark:bg-[#0F172A] md:pb-14 md:pt-32">
         <div className="mx-auto max-w-4xl">
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#17213A]"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#17213A] dark:text-slate-400 dark:hover:text-white"
           >
             <ArrowLeft size={16} />
             Back to Blog
@@ -457,16 +458,16 @@ function BlogPost() {
 
           <div className="mt-8">
             {post.category && (
-              <span className="inline-flex rounded-full bg-[#17213A] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white">
+              <span className="inline-flex rounded-full bg-[#17213A] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white dark:bg-blue-600">
                 {post.category}
               </span>
             )}
 
-            <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-[1.08] tracking-tight md:text-5xl lg:text-6xl">
+            <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-[1.08] tracking-tight text-[#17213A] dark:text-white md:text-5xl lg:text-6xl">
               {post.title}
             </h1>
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-500">
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
               <span className="flex items-center gap-2">
                 <CalendarDays size={15} />
 
@@ -488,32 +489,36 @@ function BlogPost() {
         </div>
       </header>
 
-      {imageUrl && (
-      <section className="px-6 pt-8 md:pt-10">
-        <div className="mx-auto max-w-4xl">
-          <div className="h-[360px] overflow-hidden rounded-3xl border border-[#DCE5F0] bg-[#F5F8FC] shadow-lg shadow-[#17213A]/8 md:h-[400px]">
-            <img
-              src={imageUrl}
-              alt={post.title}
-              className="h-full w-full object-cover"
-            />
-          </div>
-        </div>
-      </section>
-    )}
+      {/* FEATURED IMAGE */}
 
-      <main className="px-6 py-12 md:py-16">
+      {imageUrl && (
+        <section className="bg-white px-6 pt-8 transition-colors dark:bg-[#0B1220] md:pt-10">
+          <div className="mx-auto max-w-4xl">
+            <div className="h-[300px] overflow-hidden rounded-3xl border border-[#DCE5F0] bg-[#F5F8FC] shadow-lg shadow-[#17213A]/8 transition-colors dark:border-white/10 dark:bg-[#111B2E] dark:shadow-black/30 sm:h-[360px] md:h-[400px]">
+              <img
+                src={imageUrl}
+                alt={post.title}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ARTICLE */}
+
+      <main className="bg-white px-6 py-12 transition-colors dark:bg-[#0B1220] md:py-16">
         <div className="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-14">
-          {/* ARTICLE */}
+          {/* ARTICLE CONTENT */}
 
           <article className="min-w-0">
             {post.excerpt && (
-              <p className="mb-9 border-l-4 border-[#17213A] pl-5 text-lg font-medium leading-8 text-slate-700 md:text-xl">
+              <p className="mb-9 border-l-4 border-[#17213A] pl-5 text-lg font-medium leading-8 text-slate-700 dark:border-blue-500 dark:text-slate-200 md:text-xl">
                 {post.excerpt}
               </p>
             )}
 
-            <div className="text-base leading-[1.9] text-slate-700 md:text-lg">
+            <div className="text-base leading-[1.9] text-slate-700 dark:text-slate-300 md:text-lg">
               {post.content
                 .split(/\n\s*\n/)
                 .filter(
@@ -536,8 +541,8 @@ function BlogPost() {
           {/* ARTICLE INFO */}
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
-            <div className="rounded-2xl border border-[#DCE5F0] bg-[#F8FAFC] p-5">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+            <div className="rounded-2xl border border-[#DCE5F0] bg-[#F8FAFC] p-5 transition-colors dark:border-white/10 dark:bg-[#111B2E]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                 Article Details
               </p>
 
@@ -547,7 +552,7 @@ function BlogPost() {
                     Category
                   </p>
 
-                  <p className="mt-1 text-sm font-semibold text-[#17213A]">
+                  <p className="mt-1 text-sm font-semibold text-[#17213A] dark:text-white">
                     {post.category ||
                       "Research"}
                   </p>
@@ -558,7 +563,7 @@ function BlogPost() {
                     Published
                   </p>
 
-                  <p className="mt-1 text-sm font-semibold text-[#17213A]">
+                  <p className="mt-1 text-sm font-semibold text-[#17213A] dark:text-white">
                     {formatDate(
                       post.published_at ||
                         post.created_at
@@ -571,7 +576,7 @@ function BlogPost() {
                     Reading Time
                   </p>
 
-                  <p className="mt-1 text-sm font-semibold text-[#17213A]">
+                  <p className="mt-1 text-sm font-semibold text-[#17213A] dark:text-white">
                     {calculateReadTime(
                       post.content
                     )}
@@ -581,9 +586,10 @@ function BlogPost() {
 
               <Link
                 to="/contact"
-                className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-[#17213A] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#0F172A]"
+                className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-[#17213A] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#0F172A] dark:bg-blue-600 dark:hover:bg-blue-500"
               >
                 Discuss Your Research
+
                 <ArrowRight size={15} />
               </Link>
             </div>
@@ -591,31 +597,33 @@ function BlogPost() {
         </div>
       </main>
 
+      {/* NEXT ARTICLE */}
+
       {nextPost &&
         nextPost.slug !== post.slug && (
-          <section className="border-t border-slate-200 bg-[#F5F8FC] px-6 py-12 md:py-14">
+          <section className="border-t border-slate-200 bg-[#F5F8FC] px-6 py-12 transition-colors dark:border-white/10 dark:bg-[#0F172A] md:py-14">
             <div className="mx-auto max-w-5xl">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
                 Continue Reading
               </p>
 
               <Link
                 to={`/blog/${nextPost.slug}`}
-                className="group mt-4 flex items-center justify-between gap-6 rounded-2xl border border-[#DCE5F0] bg-white p-6 transition duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                className="group mt-4 flex items-center justify-between gap-6 rounded-2xl border border-[#DCE5F0] bg-white p-6 transition duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10 dark:bg-[#111B2E] dark:hover:shadow-black/30"
               >
                 <div className="min-w-0">
                   {nextPost.category && (
-                    <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#17213A]">
+                    <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#17213A] dark:text-blue-400">
                       {nextPost.category}
                     </p>
                   )}
 
-                  <h2 className="mt-2 text-xl font-bold leading-snug text-[#17213A] md:text-2xl">
+                  <h2 className="mt-2 text-xl font-bold leading-snug text-[#17213A] dark:text-white md:text-2xl">
                     {nextPost.title}
                   </h2>
                 </div>
 
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#17213A] text-white transition group-hover:translate-x-1">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#17213A] text-white transition group-hover:translate-x-1 dark:bg-blue-600">
                   <ArrowRight size={18} />
                 </div>
               </Link>
@@ -623,7 +631,9 @@ function BlogPost() {
           </section>
         )}
 
-      <section className="bg-[#17213A] px-6 py-16">
+      {/* CTA */}
+
+      <section className="bg-[#17213A] px-6 py-16 transition-colors dark:bg-[#070D18]">
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-300">
             Research Support
@@ -645,6 +655,7 @@ function BlogPost() {
             className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#17213A] transition hover:bg-slate-100"
           >
             Discuss Your Requirement
+
             <ArrowRight size={16} />
           </Link>
         </div>

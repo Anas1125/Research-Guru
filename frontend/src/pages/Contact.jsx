@@ -12,10 +12,7 @@ import {
   Send,
 } from "lucide-react";
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 import {
   Link,
@@ -31,28 +28,21 @@ import {
 } from "../utils/api";
 
 function Contact() {
-  const [searchParams] =
-    useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  const [siteSettings, setSiteSettings] =
-    useState({
-      site_name: "Research Guru",
-      contact_phone: "",
-      contact_email: "",
-      contact_address: "",
-      contact_whatsapp: "",
-      contact_hours: "",
-      contact_background: "",
-    });
+  const [siteSettings, setSiteSettings] = useState({
+    site_name: "Research Guru",
+    contact_phone: "",
+    contact_email: "",
+    contact_address: "",
+    contact_whatsapp: "",
+    contact_hours: "",
+    contact_background: "",
+  });
 
-  const [researchAreas, setResearchAreas] =
-    useState([]);
-
-  const [serviceCategories, setServiceCategories] =
-    useState([]);
-
-  const [loadingData, setLoadingData] =
-    useState(true);
+  const [researchAreas, setResearchAreas] = useState([]);
+  const [serviceCategories, setServiceCategories] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
 
   const selectedCoupon =
     searchParams.get("coupon") || "";
@@ -63,27 +53,20 @@ function Contact() {
   const selectedService =
     searchParams.get("service") || "";
 
-  const [formData, setFormData] =
-    useState({
-      name: "",
-      phone: "",
-      email: "",
-      research_area:
-        selectedResearch,
-      service: selectedService,
-      research_stage: "",
-      message: "",
-      coupon: selectedCoupon.toUpperCase(),
-    });
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    research_area: selectedResearch,
+    service: selectedService,
+    research_stage: "",
+    message: "",
+    coupon: selectedCoupon.toUpperCase(),
+  });
 
-  const [submitting, setSubmitting] =
-    useState(false);
-
-  const [submitMessage, setSubmitMessage] =
-    useState("");
-
-  const [submitError, setSubmitError] =
-    useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
   const [couponChecking, setCouponChecking] =
     useState(false);
@@ -97,7 +80,8 @@ function Contact() {
   const [appliedOffer, setAppliedOffer] =
     useState(null);
 
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] =
+    useState(false);
 
   useEffect(() => {
     async function loadContactData() {
@@ -122,28 +106,22 @@ function Contact() {
               "Research Guru",
 
             contact_phone:
-              settings.contact_phone ||
-              "",
+              settings.contact_phone || "",
 
             contact_email:
-              settings.contact_email ||
-              "",
+              settings.contact_email || "",
 
             contact_address:
-              settings.contact_address ||
-              "",
+              settings.contact_address || "",
 
             contact_whatsapp:
-              settings.contact_whatsapp ||
-              "",
+              settings.contact_whatsapp || "",
 
             contact_hours:
-              settings.contact_hours ||
-              "",
+              settings.contact_hours || "",
 
             contact_background:
-              settings.contact_background ||
-              "",
+              settings.contact_background || "",
           });
         }
 
@@ -151,9 +129,7 @@ function Contact() {
           const categories =
             await servicesResponse.json();
 
-          setServiceCategories(
-            categories
-          );
+          setServiceCategories(categories);
 
           const implementation =
             categories.find(
@@ -163,8 +139,7 @@ function Contact() {
             );
 
           setResearchAreas(
-            implementation?.services ||
-              []
+            implementation?.services || []
           );
         }
       } catch (error) {
@@ -192,10 +167,9 @@ function Contact() {
         selectedService ||
         prev.service,
 
-        coupon:
-          selectedCoupon
-            ? selectedCoupon.toUpperCase()
-            : prev.coupon,
+      coupon: selectedCoupon
+        ? selectedCoupon.toUpperCase()
+        : prev.coupon,
     }));
   }, [
     selectedResearch,
@@ -203,10 +177,7 @@ function Contact() {
     selectedCoupon,
   ]);
 
-  function updateFormField(
-    field,
-    value
-  ) {
+  function updateFormField(field, value) {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -250,14 +221,19 @@ function Contact() {
   }
 
   async function handleApplyCoupon() {
-    const code = formData.coupon.trim().toUpperCase();
+    const code =
+      formData.coupon
+        .trim()
+        .toUpperCase();
 
     setCouponError("");
     setCouponSuccess("");
     setAppliedOffer(null);
 
     if (!code) {
-      setCouponError("Please enter an offer code.");
+      setCouponError(
+        "Please enter an offer code."
+      );
       return;
     }
 
@@ -265,7 +241,9 @@ function Contact() {
 
     try {
       const response = await apiFetch(
-        `/api/offers/validate?code=${encodeURIComponent(code)}`
+        `/api/offers/validate?code=${encodeURIComponent(
+          code
+        )}`
       );
 
       const data = await response
@@ -283,15 +261,16 @@ function Contact() {
 
       setFormData((prev) => ({
         ...prev,
-        coupon: data.offer_code.toUpperCase(),
+        coupon:
+          data.offer_code.toUpperCase(),
       }));
 
       const discountText =
         data.discount_type === "percentage"
           ? `${data.discount_value}% off`
           : data.discount_value
-            ? `${data.discount_value} off`
-            : "special offer";
+          ? `${data.discount_value} off`
+          : "special offer";
 
       setCouponSuccess(
         `${data.title} — ${discountText}`
@@ -306,10 +285,9 @@ function Contact() {
     }
   }
 
-  async function handleSubmit(
-    event
-  ) {
+  async function handleSubmit(event) {
     event.preventDefault();
+
     if (!agreedToTerms) {
       setSubmitError(
         "Please agree to the Terms & Conditions and Privacy Policy before submitting."
@@ -317,10 +295,14 @@ function Contact() {
       return;
     }
 
-    if (formData.coupon?.trim() && !appliedOffer) {
+    if (
+      formData.coupon?.trim() &&
+      !appliedOffer
+    ) {
       setSubmitError(
         "Please apply your offer code or clear the field."
       );
+
       setSubmitMessage("");
       return;
     }
@@ -343,6 +325,7 @@ function Contact() {
 
             body: JSON.stringify({
               ...formData,
+
               coupon: appliedOffer
                 ? appliedOffer.offer_code.toUpperCase()
                 : null,
@@ -380,6 +363,7 @@ function Contact() {
         message: "",
         coupon: "",
       });
+
       setAppliedOffer(null);
       setCouponError("");
       setCouponSuccess("");
@@ -442,12 +426,14 @@ function Contact() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900 transition-colors dark:bg-[#0B1220] dark:text-slate-100">
 
       <Navbar />
 
+      {/* HERO */}
+
       <section
-        className="relative h-[calc(110vh-73px)] overflow-hidden bg-cover bg-center"
+        className="relative h-[calc(110vh-73px)] overflow-hidden bg-cover bg-center transition-colors dark:bg-[#0F172A]"
         style={{
           backgroundImage:
             siteSettings.contact_background
@@ -458,37 +444,42 @@ function Contact() {
         }}
       >
         {siteSettings.contact_background && (
-          <div className="absolute inset-0 bg-contain bg-center bg-no-repeat lg:bg-cover" />
+          <>
+            <div className="absolute inset-0 bg-contain bg-center bg-no-repeat lg:bg-cover" />
+
+            <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/35 dark:from-[#0B1220]/95 dark:via-[#0B1220]/80 dark:to-[#0B1220]/35" />
+          </>
         )}
 
-        <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-[#DCE7F5]/40 blur-3xl" />
+        <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-[#DCE7F5]/40 blur-3xl dark:bg-blue-500/10" />
 
-        <div className="absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#E3ECF8]/50 blur-3xl" />
+        <div className="absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#E3ECF8]/50 blur-3xl dark:bg-blue-400/10" />
 
         <div className="relative mx-auto max-w-7xl px-6 py-24 lg:py-32">
 
           <div className="max-w-4xl">
 
-            <span className="inline-flex rounded-full border border-[#D5E0EE] bg-white/90 px-4 py-2 text-sm font-semibold text-[#17213A] shadow-sm backdrop-blur">
+            <span className="inline-flex rounded-full border border-[#D5E0EE] bg-white/90 px-4 py-2 text-sm font-semibold text-[#17213A] shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#111B2E]/90 dark:text-white">
               Contact{" "}
               {siteSettings.site_name ||
                 "Research Guru"}
             </span>
 
-            <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-[#17213A] md:text-6xl lg:text-7xl">
+            <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-[#17213A] dark:text-white md:text-6xl lg:text-7xl">
               Let's Talk About
+
               <span className="block">
                 Your Research.
               </span>
             </h1>
 
-            <p className="mt-7 max-w-3xl text-lg font-medium leading-8 text-slate-600 md:text-xl">
+            <p className="mt-7 max-w-3xl text-lg font-medium leading-8 text-slate-600 dark:text-slate-300 md:text-xl">
               Whether you are planning a new
               Research Project, Developing a
-              Technical Implementation, Preparing
-              a Manuscript, or looking for
-              Publication Support, tell us what
-              you are working on.
+              Technical Implementation,
+              Preparing a Manuscript, or
+              looking for Publication Support,
+              tell us what you are working on.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-x-7 gap-y-3">
@@ -500,11 +491,11 @@ function Contact() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="flex items-center gap-2 text-sm font-medium text-slate-600"
+                  className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300"
                 >
                   <CheckCircle2
                     size={18}
-                    className="text-[#17213A]"
+                    className="text-[#17213A] dark:text-blue-400"
                   />
 
                   {item}
@@ -518,17 +509,19 @@ function Contact() {
         </div>
       </section>
 
-      <section className="border-b border-slate-100 bg-white">
+      {/* CONTACT DETAILS */}
 
-        <div className="mx-auto grid max-w-7xl divide-y divide-slate-200 md:grid-cols-3 md:divide-x md:divide-y-0">
+      <section className="border-b border-slate-100 bg-white transition-colors dark:border-white/10 dark:bg-[#0B1220]">
+
+        <div className="mx-auto grid max-w-7xl divide-y divide-slate-200 dark:divide-white/10 md:grid-cols-3 md:divide-x md:divide-y-0">
 
           {/* PHONE */}
 
           <a
             href={getPhoneHref()}
-            className="group flex items-center gap-4 px-6 py-7 transition hover:bg-[#F8FAFC]"
+            className="group flex items-center gap-4 px-6 py-7 transition hover:bg-[#F8FAFC] dark:hover:bg-[#111B2E]"
           >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white dark:bg-blue-600">
               <Phone size={20} />
             </div>
 
@@ -537,7 +530,7 @@ function Contact() {
                 Call Us
               </p>
 
-              <p className="mt-1 font-bold text-[#17213A] group-hover:underline">
+              <p className="mt-1 font-bold text-[#17213A] group-hover:underline dark:text-white">
                 {getPhoneNumber()}
               </p>
             </div>
@@ -551,9 +544,9 @@ function Contact() {
                 ? `mailto:${siteSettings.contact_email}`
                 : "#"
             }
-            className="group flex items-center gap-4 px-6 py-7 transition hover:bg-[#F8FAFC]"
+            className="group flex items-center gap-4 px-6 py-7 transition hover:bg-[#F8FAFC] dark:hover:bg-[#111B2E]"
           >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white dark:bg-blue-600">
               <Mail size={20} />
             </div>
 
@@ -562,7 +555,7 @@ function Contact() {
                 Email Us
               </p>
 
-              <p className="mt-1 font-bold text-[#17213A] group-hover:underline">
+              <p className="mt-1 font-bold text-[#17213A] group-hover:underline dark:text-white">
                 {siteSettings.contact_email ||
                   "Email not available"}
               </p>
@@ -573,30 +566,29 @@ function Contact() {
 
           <div className="flex items-center gap-4 px-6 py-7">
 
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white dark:bg-blue-600">
               <MapPin size={20} />
             </div>
 
             <div>
-
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                 Location
               </p>
 
-              <p className="mt-1 font-bold leading-6 text-[#17213A]">
+              <p className="mt-1 font-bold leading-6 text-[#17213A] dark:text-white">
                 {siteSettings.contact_address ||
                   "Location not available"}
               </p>
-
             </div>
 
           </div>
 
         </div>
-
       </section>
 
-      <section className="bg-white px-6 py-24 lg:py-28">
+      {/* CONTACT FORM */}
+
+      <section className="bg-white px-6 py-24 transition-colors dark:bg-[#0B1220] lg:py-28">
 
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
 
@@ -604,16 +596,16 @@ function Contact() {
 
           <div>
 
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
               Get In Touch
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-[#17213A] md:text-4xl">
+            <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-[#17213A] dark:text-white md:text-4xl">
               Tell Us Where You Are In Your
               Research Journey.
             </h2>
 
-            <p className="mt-6 text-lg leading-8 text-slate-600">
+            <p className="mt-6 text-lg leading-8 text-slate-600 dark:text-slate-300">
               You do not need to have everything
               figured out before contacting us.
               Share the Research Area, the current
@@ -622,7 +614,7 @@ function Contact() {
               facing.
             </p>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
               This helps us understand whether you
               need support with Research Writing,
               Technical Implementation, Publication,
@@ -632,9 +624,9 @@ function Contact() {
 
             {/* WHAT TO INCLUDE */}
 
-            <div className="mt-10 rounded-[2rem] border border-[#DCE5F0] bg-[#F8FAFC] p-7">
+            <div className="mt-10 rounded-[2rem] border border-[#DCE5F0] bg-[#F8FAFC] p-7 transition-colors dark:border-white/10 dark:bg-[#111B2E]">
 
-              <h3 className="text-xl font-bold text-[#17213A]">
+              <h3 className="text-xl font-bold text-[#17213A] dark:text-white">
                 What can you tell us?
               </h3>
 
@@ -653,69 +645,75 @@ function Contact() {
                   >
                     <CheckCircle2
                       size={18}
-                      className="mt-0.5 shrink-0 text-[#17213A]"
+                      className="mt-0.5 shrink-0 text-[#17213A] dark:text-blue-400"
                     />
 
-                    <span className="text-sm leading-7 text-slate-600">
+                    <span className="text-sm leading-7 text-slate-600 dark:text-slate-300">
                       {item}
                     </span>
                   </div>
                 ))}
 
               </div>
-
             </div>
 
             {/* RESPONSE */}
-          <div className="mt-6 rounded-2xl border border-[#D6E2EF] bg-[#F8FAFC] p-6 shadow-sm">
-            <div className="flex items-start gap-4">
 
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white">
-                <Clock3 size={21} />
+            <div className="mt-6 rounded-2xl border border-[#D6E2EF] bg-[#F8FAFC] p-6 shadow-sm transition-colors dark:border-white/10 dark:bg-[#111B2E]">
+
+              <div className="flex items-start gap-4">
+
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#17213A] text-white dark:bg-blue-600">
+                  <Clock3 size={21} />
+                </div>
+
+                <div>
+
+                  <h3 className="text-lg font-bold text-[#17213A] dark:text-white">
+                    Discuss your requirement
+                  </h3>
+
+                  <p className="mt-2 text-base leading-7 text-slate-600 dark:text-slate-300">
+                    Provide enough detail for our team
+                    to understand your research
+                    requirement clearly.
+                  </p>
+
+                  {siteSettings.contact_hours && (
+                    <div className="mt-4 inline-flex items-center rounded-lg border border-[#DCE5F0] bg-white px-4 py-2.5 dark:border-white/10 dark:bg-[#0F172A]">
+
+                      <Clock3
+                        size={16}
+                        className="mr-2 text-[#2563EB]"
+                      />
+
+                      <p className="text-base font-bold text-[#17213A] dark:text-white">
+                        {siteSettings.contact_hours}
+                      </p>
+
+                    </div>
+                  )}
+
+                </div>
+
               </div>
-
-              <div>
-                <h3 className="text-lg font-bold text-[#17213A]">
-                  Discuss your requirement
-                </h3>
-
-                <p className="mt-2 text-base leading-7 text-slate-600">
-                  Provide enough detail for our team to understand your research
-                  requirement clearly.
-                </p>
-
-                {siteSettings.contact_hours && (
-                  <div className="mt-4 inline-flex items-center rounded-lg bg-white px-4 py-2.5 border border-[#DCE5F0]">
-                    <Clock3
-                      size={16}
-                      className="mr-2 text-[#2563EB]"
-                    />
-
-                    <p className="text-base font-bold text-[#17213A]">
-                      {siteSettings.contact_hours}
-                    </p>
-                  </div>
-                )}
-              </div>
-
             </div>
-          </div>
 
           </div>
 
           {/* RIGHT FORM */}
 
-          <div className="rounded-[2rem] border border-[#D9E4F1] bg-white p-7 shadow-2xl shadow-[#17213A]/10 md:p-9">
+          <div className="rounded-[2rem] border border-[#D9E4F1] bg-white p-7 shadow-2xl shadow-[#17213A]/10 transition-colors dark:border-white/10 dark:bg-[#111B2E] dark:shadow-black/30 md:p-9">
 
             <div className="mb-7">
 
-              <div className="mb-3 h-1.5 w-14 rounded-full bg-[#17213A]" />
+              <div className="mb-3 h-1.5 w-14 rounded-full bg-[#17213A] dark:bg-blue-500" />
 
-              <h2 className="text-2xl font-bold tracking-tight text-[#17213A] md:text-3xl">
+              <h2 className="text-2xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-3xl">
                 Send us your Requirement
               </h2>
 
-              <p className="mt-2 text-sm leading-6 text-slate-500">
+              <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
                 Fill in the form below and tell us
                 about your research.
               </p>
@@ -728,13 +726,16 @@ function Contact() {
             >
 
               {/* NAME + PHONE */}
+
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
                 {/* NAME */}
+
                 <div>
+
                   <label
                     htmlFor="contact-name"
-                    className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                    className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
                   >
                     Name *
                   </label>
@@ -753,15 +754,18 @@ function Contact() {
                     }
                     required
                     placeholder="Your full name"
-                    className="w-full rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10"
+                    className="w-full rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-[#17213A] caret-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:text-[#17213A] focus:ring-4 focus:ring-[#17213A]/10 dark:border-white/10 dark:bg-[#0F172A] dark:text-white dark:caret-white dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:bg-[#0F172A] dark:focus:text-white dark:focus:ring-blue-500/10"
                   />
+
                 </div>
 
                 {/* PHONE */}
+
                 <div>
+
                   <label
                     htmlFor="contact-phone"
-                    className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                    className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
                   >
                     Phone *
                   </label>
@@ -777,14 +781,21 @@ function Contact() {
                       updateFormField(
                         "phone",
                         e.target.value
-                          .replace(/[^\d+]/g, "")
-                          .replace(/(?!^)\+/g, "")
+                          .replace(
+                            /[^\d+]/g,
+                            ""
+                          )
+                          .replace(
+                            /^(?=.*\+).*\+(?=.)/,
+                            "+"
+                          )
                       )
                     }
                     required
                     placeholder="+91 00000 00000"
-                    className="w-full rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10"
+                    className="w-full rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-[#17213A] caret-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:text-[#17213A] focus:ring-4 focus:ring-[#17213A]/10 dark:border-white/10 dark:bg-[#0F172A] dark:text-white dark:caret-white dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:bg-[#0F172A] dark:focus:text-white dark:focus:ring-blue-500/10"
                   />
+
                 </div>
 
               </div>
@@ -795,7 +806,7 @@ function Contact() {
 
                 <label
                   htmlFor="contact-email"
-                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
                 >
                   Email *
                 </label>
@@ -814,7 +825,7 @@ function Contact() {
                   }
                   required
                   placeholder="you@example.com"
-                  className="w-full rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10"
+                  className="w-full rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-[#17213A] caret-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:text-[#17213A] focus:ring-4 focus:ring-[#17213A]/10 dark:border-white/10 dark:bg-[#0F172A] dark:text-white dark:caret-white dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:bg-[#0F172A] dark:focus:text-white dark:focus:ring-blue-500/10"
                 />
 
               </div>
@@ -825,7 +836,7 @@ function Contact() {
 
                 <label
                   htmlFor="contact-research-area"
-                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
                 >
                   Research Area
                 </label>
@@ -844,9 +855,8 @@ function Contact() {
                     )
                   }
                   disabled={loadingData}
-                  className="w-full cursor-pointer rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-slate-600 outline-none transition focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full cursor-pointer rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-slate-600 outline-none transition focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-[#0F172A] dark:text-slate-300 dark:focus:border-blue-500 dark:focus:bg-[#0F172A] dark:focus:ring-blue-500/10"
                 >
-
                   <option value="">
                     {loadingData
                       ? "Loading research areas..."
@@ -863,7 +873,6 @@ function Contact() {
                       </option>
                     )
                   )}
-
                 </select>
 
               </div>
@@ -874,7 +883,7 @@ function Contact() {
 
                 <label
                   htmlFor="contact-service"
-                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
                 >
                   Service Required
                 </label>
@@ -883,9 +892,7 @@ function Contact() {
                   id="contact-service"
                   name="service"
                   autoComplete="off"
-                  value={
-                    formData.service
-                  }
+                  value={formData.service}
                   onChange={(e) =>
                     updateFormField(
                       "service",
@@ -893,9 +900,8 @@ function Contact() {
                     )
                   }
                   disabled={loadingData}
-                  className="w-full cursor-pointer rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-slate-600 outline-none transition focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full cursor-pointer rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-slate-600 outline-none transition focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-[#0F172A] dark:text-slate-300 dark:focus:border-blue-500 dark:focus:bg-[#0F172A] dark:focus:ring-blue-500/10"
                 >
-
                   <option value="">
                     {loadingData
                       ? "Loading services..."
@@ -912,18 +918,17 @@ function Contact() {
                       </option>
                     )
                   )}
-
                 </select>
 
               </div>
 
-              {/* CURRENT STAGE */}
+              {/* CURRENT RESEARCH STAGE */}
 
               <div>
 
                 <label
                   htmlFor="contact-research-stage"
-                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
                 >
                   Current Research Stage
                 </label>
@@ -941,9 +946,8 @@ function Contact() {
                       e.target.value
                     )
                   }
-                  className="w-full cursor-pointer rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-slate-600 outline-none transition focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10"
+                  className="w-full cursor-pointer rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-slate-600 outline-none transition focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10 dark:border-white/10 dark:bg-[#0F172A] dark:text-slate-300 dark:focus:border-blue-500 dark:focus:bg-[#0F172A] dark:focus:ring-blue-500/10"
                 >
-
                   <option value="">
                     Select current stage
                   </option>
@@ -987,29 +991,34 @@ function Contact() {
                   <option>
                     Not sure
                   </option>
-
                 </select>
 
               </div>
 
               {/* OFFER CODE */}
+
               <div>
+
                 <label
                   htmlFor="contact-coupon"
-                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
                 >
                   Offer Code
+
                   <span className="ml-1 font-normal text-slate-400">
                     (Optional)
                   </span>
                 </label>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
+
                   <input
                     id="contact-coupon"
                     name="coupon"
                     type="text"
-                    value={formData.coupon || ""}
+                    value={
+                      formData.coupon || ""
+                    }
                     onChange={(e) => {
                       updateFormField(
                         "coupon",
@@ -1022,7 +1031,7 @@ function Contact() {
                     }}
                     placeholder="Enter offer code"
                     autoComplete="off"
-                    className="w-full rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm font-semibold uppercase tracking-wide outline-none transition placeholder:normal-case placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10"
+                    className="w-full rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm font-semibold uppercase tracking-wide text-[#17213A] caret-[#17213A] outline-none transition placeholder:normal-case placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:text-[#17213A] focus:ring-4 focus:ring-[#17213A]/10 dark:border-white/10 dark:bg-[#0F172A] dark:text-white dark:caret-white dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:bg-[#0F172A] dark:focus:text-white dark:focus:ring-blue-500/10"
                   />
 
                   <button
@@ -1030,35 +1039,41 @@ function Contact() {
                     onClick={handleApplyCoupon}
                     disabled={
                       couponChecking ||
-                      !formData.coupon?.trim()||
+                      !formData.coupon?.trim() ||
                       !!appliedOffer
                     }
-                    className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-xl bg-[#17213A] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-xl bg-[#17213A] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-600 dark:hover:bg-blue-500"
                   >
                     {couponChecking
                       ? "Checking..."
                       : appliedOffer
-                        ? "Applied"
-                        : "Apply"}
+                      ? "Applied"
+                      : "Apply"}
                   </button>
+
                 </div>
 
                 {couponError && (
-                  <p className="mt-2 text-sm font-medium text-red-600">
+                  <p className="mt-2 text-sm font-medium text-red-600 dark:text-red-400">
                     {couponError}
                   </p>
                 )}
 
-                {couponSuccess && appliedOffer && (
-                  <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-                    <p className="text-sm font-semibold text-emerald-700">
-                      ✓ Offer applied
-                    </p>
-                    <p className="mt-1 text-xs leading-5 text-emerald-600">
-                      {couponSuccess}
-                    </p>
-                  </div>
-                )}
+                {couponSuccess &&
+                  appliedOffer && (
+                    <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 dark:border-emerald-500/20 dark:bg-emerald-500/10">
+
+                      <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+                        ✓ Offer applied
+                      </p>
+
+                      <p className="mt-1 text-xs leading-5 text-emerald-600 dark:text-emerald-300">
+                        {couponSuccess}
+                      </p>
+
+                    </div>
+                  )}
+
               </div>
 
               {/* MESSAGE */}
@@ -1067,7 +1082,7 @@ function Contact() {
 
                 <label
                   htmlFor="contact-message"
-                  className="mb-1.5 block text-sm font-semibold text-[#17213A]"
+                  className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
                 >
                   Tell us about your requirement
                 </label>
@@ -1085,7 +1100,7 @@ function Contact() {
                     )
                   }
                   placeholder="Describe your research, requirements, current challenges, or the support you are looking for..."
-                  className="w-full resize-none rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:ring-4 focus:ring-[#17213A]/10"
+                  className="w-full resize-none rounded-xl border border-[#D9E2ED] bg-[#F8FAFC] px-4 py-3.5 text-sm text-[#17213A] caret-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:bg-white focus:text-[#17213A] focus:ring-4 focus:ring-[#17213A]/10 dark:border-white/10 dark:bg-[#0F172A] dark:text-white dark:caret-white dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:bg-[#0F172A] dark:focus:text-white dark:focus:ring-blue-500/10"
                 />
 
               </div>
@@ -1093,7 +1108,7 @@ function Contact() {
               {/* ERROR */}
 
               {submitError && (
-                <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium leading-6 text-red-700">
+                <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium leading-6 text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400">
                   {submitError}
                 </div>
               )}
@@ -1101,59 +1116,69 @@ function Contact() {
               {/* SUCCESS */}
 
               {submitMessage && (
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium leading-6 text-emerald-700">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium leading-6 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400">
                   {submitMessage}
                 </div>
               )}
 
-              {/* SUBMIT */}
+              {/* TERMS */}
 
               <div className="flex items-start gap-3">
+
                 <input
                   id="contact-terms"
                   type="checkbox"
                   checked={agreedToTerms}
                   onChange={(e) =>
-                    setAgreedToTerms(e.target.checked)
+                    setAgreedToTerms(
+                      e.target.checked
+                    )
                   }
-                  className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-slate-300 text-[#17213A] focus:ring-[#17213A]"
+                  className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border-slate-300 text-[#17213A] focus:ring-[#17213A] dark:border-slate-600 dark:bg-[#0F172A] dark:text-blue-500 dark:focus:ring-blue-500"
                 />
 
                 <label
                   htmlFor="contact-terms"
-                  className="text-xs leading-5 text-slate-500"
+                  className="text-xs leading-5 text-slate-500 dark:text-slate-400"
                 >
                   I agree to the{" "}
+
                   <Link
                     to="/terms-and-conditions"
-                    className="font-medium text-[#17213A] underline underline-offset-2 hover:text-slate-600"
+                    className="font-medium text-[#17213A] underline underline-offset-2 hover:text-slate-600 dark:text-blue-400 dark:hover:text-blue-300"
                   >
                     Terms & Conditions
                   </Link>{" "}
+
                   and acknowledge the{" "}
+
                   <Link
                     to="/privacy-policy"
-                    className="font-medium text-[#17213A] underline underline-offset-2 hover:text-slate-600"
+                    className="font-medium text-[#17213A] underline underline-offset-2 hover:text-slate-600 dark:text-blue-400 dark:hover:text-blue-300"
                   >
                     Privacy Policy
                   </Link>
                   .
                 </label>
+
               </div>
+
+              {/* SUBMIT */}
 
               <button
                 type="submit"
-                disabled={submitting || !agreedToTerms}
-                className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#17213A] px-6 py-4 font-semibold text-white shadow-lg shadow-[#17213A]/15 transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={
+                  submitting ||
+                  !agreedToTerms
+                }
+                className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#17213A] px-6 py-4 font-semibold text-white shadow-lg shadow-[#17213A]/15 transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-600 dark:shadow-blue-900/20 dark:hover:bg-blue-500"
               >
                 {submitting
                   ? "Sending..."
                   : "Send Research Enquiry"}
 
                 {!submitting && (
-                  <ArrowRight
-                    size={18}
-                  />
+                  <ArrowRight size={18} />
                 )}
               </button>
 
@@ -1164,28 +1189,28 @@ function Contact() {
               </p>
 
             </form>
-
           </div>
 
         </div>
-
       </section>
 
-      <section className="bg-[#F5F8FC] px-6 py-24 lg:py-15">
+      {/* WHAT HAPPENS */}
+
+      <section className="bg-[#F5F8FC] px-6 py-24 transition-colors dark:bg-[#0F172A] lg:py-24">
 
         <div className="mx-auto max-w-7xl">
 
           <div className="mx-auto max-w-3xl text-center">
 
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
               Start With A Conversation
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-5xl">
               What happens when you contact us?
             </h2>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
               A clear initial discussion helps us
               understand what your research actually
               needs.
@@ -1195,55 +1220,53 @@ function Contact() {
 
           <div className="mt-14 grid gap-5 lg:grid-cols-3">
 
-            {waysToConnect.map(
-              (item) => {
-                const Icon =
-                  item.icon;
+            {waysToConnect.map((item) => {
+              const Icon = item.icon;
 
-                return (
-                  <div
-                    key={item.title}
-                    className="rounded-3xl border border-[#DCE5F0] bg-white p-8"
-                  >
+              return (
+                <div
+                  key={item.title}
+                  className="rounded-3xl border border-[#DCE5F0] bg-white p-8 transition-colors dark:border-white/10 dark:bg-[#111B2E]"
+                >
 
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#17213A] text-white">
-                      <Icon size={21} />
-                    </div>
-
-                    <h3 className="mt-6 text-xl font-bold text-[#17213A]">
-                      {item.title}
-                    </h3>
-
-                    <p className="mt-3 leading-7 text-slate-600">
-                      {item.text}
-                    </p>
-
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#17213A] text-white dark:bg-blue-600">
+                    <Icon size={21} />
                   </div>
-                );
-              }
-            )}
+
+                  <h3 className="mt-6 text-xl font-bold text-[#17213A] dark:text-white">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                    {item.text}
+                  </p>
+
+                </div>
+              );
+            })}
 
           </div>
 
         </div>
-
       </section>
 
-      <section className="bg-white px-6 py-24 lg:py-15">
+      {/* PROCESS */}
+
+      <section className="bg-white px-6 py-24 transition-colors dark:bg-[#0B1220] lg:py-24">
 
         <div className="mx-auto max-w-7xl">
 
           <div className="max-w-3xl">
 
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
               Our Process
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-5xl">
               From your enquiry to the next step.
             </h2>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
               We keep the initial process simple so
               the research requirement can be
               understood before moving forward.
@@ -1253,47 +1276,44 @@ function Contact() {
 
           <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
 
-            {process.map(
-              (step) => {
-                const Icon =
-                  step.icon;
+            {process.map((step) => {
+              const Icon = step.icon;
 
-                return (
-                  <div
-                    key={step.number}
-                    className="rounded-3xl border border-[#DCE5F0] bg-[#F8FAFC] p-7"
-                  >
+              return (
+                <div
+                  key={step.number}
+                  className="rounded-3xl border border-[#DCE5F0] bg-[#F8FAFC] p-7 transition-colors dark:border-white/10 dark:bg-[#111B2E]"
+                >
 
-                    <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
 
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#17213A] text-white">
-                        <Icon size={20} />
-                      </div>
-
-                      <span className="text-sm font-bold text-slate-300">
-                        {step.number}
-                      </span>
-
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#17213A] text-white dark:bg-blue-600">
+                      <Icon size={20} />
                     </div>
 
-                    <h3 className="mt-7 text-xl font-bold text-[#17213A]">
-                      {step.title}
-                    </h3>
-
-                    <p className="mt-3 leading-7 text-slate-600">
-                      {step.text}
-                    </p>
+                    <span className="text-sm font-bold text-slate-300 dark:text-slate-600">
+                      {step.number}
+                    </span>
 
                   </div>
-                );
-              }
-            )}
+
+                  <h3 className="mt-7 text-xl font-bold text-[#17213A] dark:text-white">
+                    {step.title}
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                    {step.text}
+                  </p>
+
+                </div>
+              );
+            })}
 
           </div>
 
         </div>
-
       </section>
+
       <Footer />
 
     </div>

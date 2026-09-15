@@ -1,10 +1,29 @@
-import { BookOpen, Menu, X } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import {
+  BookOpen,
+  Menu,
+  X,
+  Moon,
+  Sun,
+} from "lucide-react";
 
-import { apiFetch, API_URL } from "../utils/api";
+import {
+  Link,
+  useLocation,
+} from "react-router-dom";
 
-function Navbar({ showLiveOfferBar = false }) {
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  apiFetch,
+  API_URL,
+} from "../utils/api";
+
+function Navbar({
+  showLiveOfferBar = false,
+}) {
   const [menuOpen, setMenuOpen] =
     useState(false);
 
@@ -23,15 +42,52 @@ function Navbar({ showLiveOfferBar = false }) {
   const [hasLiveOffer, setHasLiveOffer] =
     useState(false);
 
+  const [darkMode, setDarkMode] =
+    useState(() => {
+      return (
+        localStorage.getItem("theme") ===
+        "dark"
+      );
+    });
+
   const location = useLocation();
 
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Services", path: "/services" },
-    { name: "Offers", path: "/offers" },
-    { name: "Contact", path: "/contact" },
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "About",
+      path: "/about",
+    },
+    {
+      name: "Services",
+      path: "/services",
+    },
+    {
+      name: "Offers",
+      path: "/offers",
+    },
+    {
+      name: "Contact",
+      path: "/contact",
+    },
   ];
+
+  /* THEME */
+
+  useEffect(() => {
+    document.documentElement.classList.toggle(
+      "dark",
+      darkMode
+    );
+
+    localStorage.setItem(
+      "theme",
+      darkMode ? "dark" : "light"
+    );
+  }, [darkMode]);
 
   /* LOAD SITE SETTINGS */
 
@@ -185,6 +241,7 @@ function Navbar({ showLiveOfferBar = false }) {
         }
       }
     }
+
     checkLiveOffer();
 
     const interval =
@@ -198,6 +255,8 @@ function Navbar({ showLiveOfferBar = false }) {
       clearInterval(interval);
     };
   }, []);
+
+  /* NAVBAR SCROLL BEHAVIOR */
 
   useEffect(() => {
     const handleScroll = () => {
@@ -259,7 +318,7 @@ function Navbar({ showLiveOfferBar = false }) {
     return `${API_URL}${logoUrl}`;
   }
 
-  /* OFFERS NAV ITEM STYLE */
+  /* NAV ITEM STYLE */
 
   function getNavItemTextClass(
     item,
@@ -273,19 +332,56 @@ function Navbar({ showLiveOfferBar = false }) {
     }
 
     if (active) {
-      return "font-semibold text-[#17213A]";
+      return "font-semibold text-[#17213A] dark:text-white";
     }
 
-    return "text-slate-600 hover:text-[#17213A]";
+    return "text-slate-600 hover:text-[#17213A] dark:text-slate-300 dark:hover:text-white";
   }
+
+  /* THEME TOGGLE */
+
+  const themeToggle = (
+    <button
+      type="button"
+      onClick={() =>
+        setDarkMode(!darkMode)
+      }
+      aria-label={
+        darkMode
+          ? "Switch to light mode"
+          : "Switch to dark mode"
+      }
+      className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-slate-300 bg-slate-100 text-[#17213A] shadow-sm transition-all duration-300 hover:bg-slate-200 dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+    >
+      <div
+        className={`flex items-center justify-center transition-transform duration-500 ease-in-out ${
+          darkMode
+            ? "rotate-180"
+            : "rotate-0"
+        }`}
+      >
+        {darkMode ? (
+          <Sun
+            size={19}
+            strokeWidth={2}
+          />
+        ) : (
+          <Moon
+            size={19}
+            strokeWidth={2}
+          />
+        )}
+      </div>
+    </button>
+  );
 
   return (
     <header
       className={`fixed left-0 ${
-          showLiveOfferBar && hasLiveOffer
-            ? "top-[56px]"
-            : "top-0"
-        } z-[100] w-full border-b border-slate-200/70 bg-white transition-transform duration-300 ${
+        showLiveOfferBar && hasLiveOffer
+          ? "top-[56px]"
+          : "top-0"
+      } z-[100] w-full border-b border-slate-200/70 bg-white transition-transform duration-300 dark:border-white/10 dark:bg-[#0B1220] ${
         showNavbar
           ? "translate-y-0"
           : "-translate-y-full"
@@ -314,7 +410,7 @@ function Navbar({ showLiveOfferBar = false }) {
             </div>
           )}
 
-          <span className="text-2xl font-bold tracking-tight text-[#17213A]">
+          <span className="text-2xl font-bold tracking-tight text-[#17213A] dark:text-white">
             {siteName}
           </span>
         </Link>
@@ -338,7 +434,6 @@ function Navbar({ showLiveOfferBar = false }) {
               >
                 {item.name}
 
-                {/* Active Page Underline */}
                 {active && (
                   <span className="nav-active-underline" />
                 )}
@@ -347,42 +442,58 @@ function Navbar({ showLiveOfferBar = false }) {
           })}
         </nav>
 
-        {/* CTA */}
+        {/* DESKTOP THEME + CTA */}
 
-        <Link
-        to="/contact"
-        className={`hidden rounded-full bg-[#17213A] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition hover:bg-[#0F172A] md:block ${
-          location.pathname === "/contact"
-            ? "invisible"
-            : ""
-        }`}
-      >
-        Get Started
-      </Link>
+        <div className="hidden items-center gap-3 md:flex">
 
-        {/* MOBILE BUTTON */}
+          {themeToggle}
 
-        <button
-          type="button"
-          onClick={() =>
-            setMenuOpen(
-              !menuOpen
-            )
-          }
-          className="cursor-pointer text-[#17213A] md:hidden"
-          aria-label="Toggle navigation"
-        >
-          {menuOpen ? (
-            <X size={24} />
-          ) : (
-            <Menu size={24} />
-          )}
-        </button>
+          <Link
+            to="/contact"
+            className={`rounded-full bg-[#17213A] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition hover:bg-[#0F172A] dark:bg-blue-600 dark:hover:bg-blue-500 ${
+              location.pathname ===
+              "/contact"
+                ? "invisible"
+                : ""
+            }`}
+          >
+            Get Started
+          </Link>
+
+        </div>
+
+        {/* MOBILE CONTROLS */}
+
+        <div className="flex items-center gap-3 md:hidden">
+
+          {themeToggle}
+
+          <button
+            type="button"
+            onClick={() =>
+              setMenuOpen(
+                !menuOpen
+              )
+            }
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-[#17213A] transition hover:bg-slate-100 dark:text-white dark:hover:bg-white/10"
+            aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? (
+              <X size={24} />
+            ) : (
+              <Menu size={24} />
+            )}
+          </button>
+
+        </div>
 
       </div>
 
+      {/* MOBILE MENU */}
+
       {menuOpen && (
-        <nav className="border-t border-slate-100 bg-white px-6 py-5 md:hidden">
+        <nav className="border-t border-slate-100 bg-white px-6 py-5 dark:border-white/10 dark:bg-[#0B1220] md:hidden">
           <div className="flex flex-col gap-5">
 
             {navItems.map((item) => {

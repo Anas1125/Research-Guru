@@ -9,23 +9,28 @@ import {
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { apiFetch, API_URL } from "../utils/api";
+import {
+  apiFetch,
+  API_URL,
+} from "../utils/api";
 
 function Footer() {
-  const [settings, setSettings] = useState({
-    site_name: "Research Guru",
-    logo_url: "",
-    contact_phone: "",
-    contact_email: "",
-    contact_address: "",
-  });
+  const [settings, setSettings] =
+    useState({
+      site_name: "Research Guru",
+      logo_url: "",
+      contact_phone: "",
+      contact_email: "",
+      contact_address: "",
+    });
 
   useEffect(() => {
     async function loadSiteSettings() {
       try {
-        const response = await apiFetch(
-          "/api/site-settings"
-        );
+        const response =
+          await apiFetch(
+            "/api/site-settings"
+          );
 
         if (!response.ok) {
           return;
@@ -82,7 +87,7 @@ function Footer() {
   }
 
   return (
-    <footer className="bg-[#17213A] text-white">
+    <footer className="bg-[#17213A] text-white dark:bg-[#070D18]">
 
       {/* MAIN FOOTER */}
 
@@ -126,10 +131,13 @@ function Footer() {
 
             <Link
               to="/contact"
-              className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#17213A] transition hover:bg-slate-100"
+              className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#17213A] transition hover:bg-slate-100 dark:bg-slate-100 dark:hover:bg-white"
             >
               Start a Conversation
-              <ArrowUpRight size={16} />
+
+              <ArrowUpRight
+                size={16}
+              />
             </Link>
 
           </div>
@@ -270,6 +278,7 @@ function Footer() {
                 />
 
                 <div>
+
                   <p className="text-sm text-slate-300">
                     Email
                   </p>
@@ -286,6 +295,7 @@ function Footer() {
                       Not provided
                     </p>
                   )}
+
                 </div>
 
               </div>
@@ -300,6 +310,7 @@ function Footer() {
                 />
 
                 <div>
+
                   <p className="text-sm text-slate-300">
                     Location
                   </p>
@@ -320,6 +331,7 @@ function Footer() {
                       India
                     </p>
                   )}
+
                 </div>
 
               </div>
@@ -348,14 +360,14 @@ function Footer() {
 
             <Link
               to="/privacy-policy"
-             className="underline underline-offset-2 transition hover:text-white"
+              className="underline underline-offset-2 transition hover:text-white"
             >
               Privacy Policy
             </Link>
 
             <Link
               to="/terms-and-conditions"
-             className="underline underline-offset-2 transition hover:text-white"
+              className="underline underline-offset-2 transition hover:text-white"
             >
               Terms & Conditions
             </Link>

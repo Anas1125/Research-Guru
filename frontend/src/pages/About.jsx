@@ -24,10 +24,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-import {
-  apiFetch,
-  API_URL,
-} from "../utils/api";
+import { apiFetch, API_URL } from "../utils/api";
 
 const iconMap = {
   Implementation: Code2,
@@ -118,10 +115,7 @@ const getCategoryIcon = (name) => {
 
 function About() {
   const [categories, setCategories] = useState([]);
-
-  const [implementationDomains, setImplementationDomains] =
-    useState([]);
-
+  const [implementationDomains, setImplementationDomains] = useState([]);
   const [reviews, setReviews] = useState([]);
 
   const [reviewForm, setReviewForm] = useState({
@@ -131,22 +125,14 @@ function About() {
     review: "",
   });
 
-  const [reviewSubmitting, setReviewSubmitting] =
-    useState(false);
-
-  const [reviewSuccess, setReviewSuccess] =
-    useState("");
-
-  const [reviewError, setReviewError] =
-    useState("");
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewSuccess, setReviewSuccess] = useState("");
+  const [reviewError, setReviewError] = useState("");
 
   const [loading, setLoading] = useState(true);
 
-  const [siteName, setSiteName] =
-    useState("{siteName}");
-
-  const [aboutBackground, setAboutBackground] =
-    useState("");
+  const [siteName, setSiteName] = useState("{siteName}");
+  const [aboutBackground, setAboutBackground] = useState("");
 
   useEffect(() => {
     const loadPageData = async () => {
@@ -164,49 +150,34 @@ function About() {
         ]);
 
         if (servicesResponse.ok) {
-          const data =
-            await servicesResponse.json();
+          const data = await servicesResponse.json();
 
           setCategories(data);
 
-          const implementation =
-            data.find(
-              (category) =>
-                category.name ===
-                "Implementation"
-            );
+          const implementation = data.find(
+            (category) => category.name === "Implementation"
+          );
 
-          setImplementationDomains(
-            implementation?.services || []
-          );
+          setImplementationDomains(implementation?.services || []);
         } else {
-          throw new Error(
-            "Failed to load services"
-          );
+          throw new Error("Failed to load services");
         }
 
         if (settingsResponse.ok) {
-          const settings =
-            await settingsResponse.json();
+          const settings = await settingsResponse.json();
 
-          setSiteName(
-            settings.site_name ||
-              "{siteName}"
-          );
+          setSiteName(settings.site_name || "{siteName}");
 
           setAboutBackground(
-            settings.about_background ||
-              ""
+            settings.about_background || ""
           );
         }
 
         if (reviewsResponse.ok) {
-          const reviewData =
-            await reviewsResponse.json();
+          const reviewData = await reviewsResponse.json();
 
           setReviews(reviewData);
         }
-
       } catch (error) {
         console.error(
           "Failed to load About page data:",
@@ -245,22 +216,16 @@ function About() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          client_name:
-            reviewForm.client_name.trim(),
-
+          client_name: reviewForm.client_name.trim(),
           designation:
             reviewForm.designation.trim() || null,
-
           rating: reviewForm.rating,
-
-          review:
-            reviewForm.review.trim(),
+          review: reviewForm.review.trim(),
         }),
       });
 
       if (!response.ok) {
-        let message =
-          "Failed to submit your review.";
+        let message = "Failed to submit your review.";
 
         try {
           const data = await response.json();
@@ -301,7 +266,7 @@ function About() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900 dark:bg-[#0B1220] dark:text-slate-100">
       <Navbar />
 
       {/* HERO */}
@@ -309,59 +274,54 @@ function About() {
       <section
         className="relative min-h-[calc(100vh-73px)] overflow-hidden bg-cover bg-center"
         style={{
-          backgroundImage:
-            aboutBackground
-              ? `url("${getImageUrl(
-                  aboutBackground
-                )}")`
-              : "linear-gradient(to bottom right, #ffffff, #F8FAFE, #EAF1FA)",
+          backgroundImage: aboutBackground
+            ? `url("${getImageUrl(aboutBackground)}")`
+            : "linear-gradient(to bottom right, #ffffff, #F8FAFE, #EAF1FA)",
         }}
       >
         {aboutBackground && (
-          <div className="absolute inset-0 " />
+          <div className="absolute inset-0 bg-white/10 dark:bg-[#0B1220]/40" />
         )}
 
-        <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-[#DCE7F5]/40 blur-3xl" />
+        <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-[#DCE7F5]/40 blur-3xl dark:bg-blue-500/10" />
 
-        <div className="absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#E3ECF8]/50 blur-3xl" />
+        <div className="absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#E3ECF8]/50 blur-3xl dark:bg-blue-400/10" />
 
         <div className="relative mx-auto max-w-7xl px-6 py-24 lg:py-32">
           <div className="max-w-4xl">
-            <span className="inline-flex rounded-full border border-[#D5E0EE] bg-white/90 px-4 py-2 text-sm font-semibold text-[#17213A] shadow-sm backdrop-blur">
+            <span className="inline-flex rounded-full border border-[#D5E0EE] bg-white/90 px-4 py-2 text-sm font-semibold text-[#17213A] shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#17213A]/90 dark:text-white">
               About {siteName}
             </span>
 
-            <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-[#17213A] md:text-6xl lg:text-7xl">
-              Empowering Researchers  
+            <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-[#17213A] dark:text-white md:text-6xl lg:text-7xl">
+              Empowering Researchers
               <span className="block">
                 to Shape the Future.
               </span>
             </h1>
 
-            <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
-              {siteName} is a research
-              support platform focused on
-              helping Scholars, Researchers,
-              and PhD Candidates navigate the
-              Academic and Technical stages of
-              their Research with greater
-              Clarity, Structure, and Confidence.
+            <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300 md:text-xl">
+              {siteName} is a research support platform
+              focused on helping Scholars, Researchers,
+              and PhD Candidates navigate the Academic
+              and Technical stages of their Research
+              with greater Clarity, Structure, and
+              Confidence.
             </p>
 
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-              From Research Planning and
-              Literature Analysis to
-              Implementation, Academic Writing,
-              Data Analysis, and Publication
-              Support, our approach is designed
-              around the specific requirements
-              of each Research Project.
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+              From Research Planning and Literature
+              Analysis to Implementation, Academic
+              Writing, Data Analysis, and Publication
+              Support, our approach is designed around
+              the specific requirements of each Research
+              Project.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 to="/services"
-                className="inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3.5 font-semibold text-white transition hover:bg-[#0F172A]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3.5 font-semibold text-white transition hover:bg-[#0F172A] dark:bg-blue-600 dark:hover:bg-blue-500"
               >
                 Explore Services
                 <ArrowRight size={18} />
@@ -369,67 +329,57 @@ function About() {
 
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 rounded-full border border-[#CBD7E6] bg-white/90 px-6 py-3.5 font-semibold text-[#17213A] backdrop-blur transition hover:border-[#17213A]"
+                className="inline-flex items-center gap-2 rounded-full border border-[#CBD7E6] bg-white/90 px-6 py-3.5 font-semibold text-[#17213A] backdrop-blur transition hover:border-[#17213A] dark:border-white/15 dark:bg-[#17213A]/80 dark:text-white dark:hover:border-white"
               >
                 Discuss Your Research
               </Link>
             </div>
           </div>
         </div>
-        
       </section>
 
       {/* WHO WE ARE */}
 
-      <section className="bg-white px-6 py-24 lg:py-20">
+      <section className="bg-white px-6 py-24 transition-colors dark:bg-[#0B1220] lg:py-20">
         <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          {/* LEFT */}
-
           <div>
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
               Who We Are
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-[#17213A] md:text-5xl">
-              Research Support That 
+            <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-[#17213A] dark:text-white md:text-5xl">
+              Research Support That
               <span className="block">
                 Moves Your Work Forward.
               </span>
             </h2>
 
-            <p className="mt-6 text-lg leading-8 text-slate-600">
+            <p className="mt-6 text-lg leading-8 text-slate-600 dark:text-slate-300">
               Academic research can involve a
-              combination of Conceptual
-              Thinking, Extensive Literature
-              Review, Technical Development,
-              Experimentation, Analysis,
-              Documentation, and Publication.
-              Managing all of these stages can
-              become challenging as a project
-              grows.
+              combination of Conceptual Thinking,
+              Extensive Literature Review, Technical
+              Development, Experimentation, Analysis,
+              Documentation, and Publication. Managing
+              all of these stages can become challenging
+              as a project grows.
             </p>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
-              {siteName} is built to provide
-              structured support across these
-              stages. We aim to understand the
-              project first, identify where
-              support is required, and then work
-              toward a practical path forward.
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
+              {siteName} is built to provide structured
+              support across these stages. We aim to
+              understand the project first, identify where
+              support is required, and then work toward a
+              practical path forward.
             </p>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
-              Whether the requirement is
-              Academic Writing, Technical
-              Implementation, Publication
-              Preparation, or Research
-              Documentation, our Focus remains
-              on the underlying Research
-              Objective.
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
+              Whether the requirement is Academic
+              Writing, Technical Implementation,
+              Publication Preparation, or Research
+              Documentation, our Focus remains on the
+              underlying Research Objective.
             </p>
           </div>
-
-          {/* RIGHT */}
 
           <div className="grid gap-5 sm:grid-cols-2">
             {[
@@ -459,17 +409,17 @@ function About() {
               return (
                 <div
                   key={item.title}
-                  className="rounded-[2rem] border border-[#DCE5F0] bg-[#F8FAFC] p-8"
+                  className="rounded-[2rem] border border-[#DCE5F0] bg-[#F8FAFC] p-8 transition-colors dark:border-white/10 dark:bg-[#111B2E]"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#17213A] text-white">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#17213A] text-white dark:bg-blue-600">
                     <Icon size={22} />
                   </div>
 
-                  <h3 className="mt-6 text-2xl font-bold text-[#17213A]">
+                  <h3 className="mt-6 text-2xl font-bold text-[#17213A] dark:text-white">
                     {item.title}
                   </h3>
 
-                  <p className="mt-3 leading-7 text-slate-600">
+                  <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
                     {item.text}
                   </p>
                 </div>
@@ -481,68 +431,67 @@ function About() {
 
       {/* CORE AREAS */}
 
-      <section className="bg-[#F5F8FC] px-6 py-24 lg:py-20">
+      <section className="bg-[#F5F8FC] px-6 py-24 transition-colors dark:bg-[#0F172A] lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
               What We Do
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-              Research Support Built Around The Work That Matters.
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-5xl">
+              Research Support Built Around The Work
+              That Matters.
             </h2>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
-              {siteName} brings together the
-              academic and technical support
-              researchers commonly need as they
-              progress through their work.
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
+              {siteName} brings together the academic
+              and technical support researchers commonly
+              need as they progress through their work.
             </p>
           </div>
 
           {loading ? (
-            <div className="mt-12 rounded-[2rem] border border-[#DCE5F0] bg-white p-12 text-center">
-              <div className="mx-auto h-6 w-6 animate-spin rounded-full border-2 border-slate-300 border-t-[#17213A]" />
+            <div className="mt-12 rounded-[2rem] border border-[#DCE5F0] bg-white p-12 text-center dark:border-white/10 dark:bg-[#111B2E]">
+              <div className="mx-auto h-6 w-6 animate-spin rounded-full border-2 border-slate-300 border-t-[#17213A] dark:border-slate-600 dark:border-t-blue-400" />
 
-              <p className="mt-4 text-sm text-slate-500">
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
                 Loading research areas...
               </p>
             </div>
           ) : categories.length === 0 ? (
-            <div className="mt-12 rounded-[2rem] border border-[#DCE5F0] bg-white p-12 text-center">
-              <p className="text-slate-500">
+            <div className="mt-12 rounded-[2rem] border border-[#DCE5F0] bg-white p-12 text-center dark:border-white/10 dark:bg-[#111B2E]">
+              <p className="text-slate-500 dark:text-slate-400">
                 No research areas available.
               </p>
             </div>
           ) : (
             <div className="mt-12 grid gap-6 lg:grid-cols-3">
               {categories.map((category) => {
-                const Icon =
-                  getCategoryIcon(
-                    category.name
-                  );
+                const Icon = getCategoryIcon(
+                  category.name
+                );
 
                 return (
                   <div
                     key={category.id}
-                    className="flex h-full flex-col rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8"
+                    className="flex h-full flex-col rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8 dark:border-white/10 dark:bg-[#111B2E] dark:hover:shadow-black/30"
                   >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#17213A] text-white">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#17213A] text-white dark:bg-blue-600">
                       <Icon size={25} />
                     </div>
 
-                    <h3 className="mt-7 text-2xl font-bold text-[#17213A]">
+                    <h3 className="mt-7 text-2xl font-bold text-[#17213A] dark:text-white">
                       {category.name}
                     </h3>
 
-                    <p className="mt-4 text-base leading-7 text-slate-600">
+                    <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">
                       {category.description ||
                         "Research support tailored to the requirements of your project."}
                     </p>
 
                     <Link
                       to="/services#service-categories"
-                      className="mt-auto pt-6 inline-flex items-center gap-2 font-semibold text-[#17213A]"
+                      className="mt-auto inline-flex items-center gap-2 pt-6 font-semibold text-[#17213A] dark:text-blue-400"
                     >
                       Explore Services
                       <ArrowRight size={17} />
@@ -557,167 +506,163 @@ function About() {
 
       {/* RESEARCH LIFECYCLE */}
 
-      <section className="bg-white px-6 py-24 lg:py-20">
+      <section className="bg-white px-6 py-24 transition-colors dark:bg-[#0B1220] lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
               The Research Journey
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-5xl">
               Support Across The Research Lifecycle.
             </h2>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
-              Every project follows its own path,
-              but strong research often requires
-              attention across several
-              interconnected stages.
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
+              Every project follows its own path, but
+              strong research often requires attention
+              across several interconnected stages.
             </p>
           </div>
 
           <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {researchStages.map(
-              (stage) => {
-                const Icon =
-                  stage.icon;
+            {researchStages.map((stage) => {
+              const Icon = stage.icon;
 
-                return (
-                  <div
-                    key={stage.number}
-                    className="rounded-3xl border border-[#DCE5F0] bg-[#F8FAFC] p-7"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#17213A] text-white">
-                        <Icon size={20} />
-                      </div>
-
-                      <span className="text-sm font-bold text-slate-300">
-                        {stage.number}
-                      </span>
+              return (
+                <div
+                  key={stage.number}
+                  className="rounded-3xl border border-[#DCE5F0] bg-[#F8FAFC] p-7 transition-colors dark:border-white/10 dark:bg-[#111B2E]"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#17213A] text-white dark:bg-blue-600">
+                      <Icon size={20} />
                     </div>
 
-                    <h3 className="mt-7 text-xl font-bold text-[#17213A]">
-                      {stage.title}
-                    </h3>
-
-                    <p className="mt-3 leading-7 text-slate-600">
-                      {stage.text}
-                    </p>
+                    <span className="text-sm font-bold text-slate-300 dark:text-slate-600">
+                      {stage.number}
+                    </span>
                   </div>
-                );
-              }
-            )}
+
+                  <h3 className="mt-7 text-xl font-bold text-[#17213A] dark:text-white">
+                    {stage.title}
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                    {stage.text}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* PRINCIPLES */}
 
-      <section className="bg-white px-6 py-24 lg:py-8">
+      <section className="bg-white px-6 py-24 transition-colors dark:bg-[#0B1220] lg:py-8">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
               Our Approach
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-5xl">
               How We Approach Research Support.
             </h2>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
-              Our goal is not simply to complete
-              a task, but to understand the purpose
-              behind the work and provide useful,
-              structured support.
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
+              Our goal is not simply to complete a task,
+              but to understand the purpose behind the work
+              and provide useful, structured support.
             </p>
           </div>
 
           <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-            {principles.map(
-              (item) => {
-                const Icon =
-                  item.icon;
+            {principles.map((item) => {
+              const Icon = item.icon;
 
-                return (
-                  <div
-                    key={item.title}
-                    className="rounded-3xl border border-[#DCE5F0] bg-[#F8FAFC] p-7"
-                  >
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#17213A] shadow-sm">
-                      <Icon size={20} />
-                    </div>
-
-                    <h3 className="mt-6 text-xl font-bold text-[#17213A]">
-                      {item.title}
-                    </h3>
-
-                    <p className="mt-3 leading-7 text-slate-600">
-                      {item.text}
-                    </p>
+              return (
+                <div
+                  key={item.title}
+                  className="rounded-3xl border border-[#DCE5F0] bg-[#F8FAFC] p-7 transition-colors dark:border-white/10 dark:bg-[#111B2E]"
+                >
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#17213A] shadow-sm dark:bg-[#17213A] dark:text-white">
+                    <Icon size={20} />
                   </div>
-                );
-              }
-            )}
+
+                  <h3 className="mt-6 text-xl font-bold text-[#17213A] dark:text-white">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                    {item.text}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-            {/* CLIENT REVIEWS */}
+      {/* CLIENT REVIEWS */}
 
-            {reviews.length > 0 && (
-              <section className="bg-[#F5F8FC] px-6 py-24 lg:py-15">
-                <div className="mx-auto max-w-7xl">
-                  <div className="mx-auto max-w-3xl text-center">
-                    <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
-                      Client Reviews
-                    </span>
+      {reviews.length > 0 && (
+        <section className="bg-[#F5F8FC] px-6 py-24 transition-colors dark:bg-[#0F172A] lg:py-15">
+          <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-3xl text-center">
+              <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
+                Client Reviews
+              </span>
 
-                    <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
-                      Trusted By Researchers.
-                    </h2>
+              <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-5xl">
+                Trusted By Researchers.
+              </h2>
 
-                    <p className="mt-5 text-lg leading-8 text-slate-600">
-                      Real experiences from researchers who have worked
-                      with {siteName}.
-                    </p>
-                  </div>
+              <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
+                Real experiences from researchers who
+                have worked with {siteName}.
+              </p>
+            </div>
 
-                  <div className="relative mt-14 overflow-hidden">
-                    <div className="reviews-marquee">
-                      <div className="reviews-marquee-track">
-                        {[...reviews, ...reviews].map((item, index) => (
-                          <div
-                            key={`${item.id}-${index}`}
-                            className="relative flex h-full w-[320px] shrink-0 flex-col rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8 sm:w-[360px] md:w-[390px] md:p-9"
-                          >
-                            
+            <div className="relative mt-14 overflow-hidden">
+              <div className="reviews-marquee">
+                <div className="reviews-marquee-track">
+                  {[...reviews, ...reviews].map(
+                    (item, index) => (
+                      <div
+                        key={`${item.id}-${index}`}
+                        className="relative flex h-full w-[320px] shrink-0 flex-col rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17213A]/8 dark:border-white/10 dark:bg-[#111B2E] dark:hover:shadow-black/30 sm:w-[360px] md:w-[390px] md:p-9"
+                      >
                         {/* QUOTE ICON */}
-                        <div className="absolute right-7 top-7 flex h-11 w-11 items-center justify-center rounded-full bg-[#F5F8FC] text-[#17213A]">
+
+                        <div className="absolute right-7 top-7 flex h-11 w-11 items-center justify-center rounded-full bg-[#F5F8FC] text-[#17213A] dark:bg-[#17213A] dark:text-white">
                           <Quote size={22} />
                         </div>
 
                         {/* CLIENT */}
+
                         <div className="flex items-center gap-4 pr-12">
                           {item.photo_url ? (
                             <img
-                              src={getImageUrl(item.photo_url)}
+                              src={getImageUrl(
+                                item.photo_url
+                              )}
                               alt={item.client_name}
-                              className="h-16 w-16 shrink-0 rounded-full border-2 border-white object-cover shadow-md ring-1 ring-[#DCE5F0]"
+                              className="h-16 w-16 shrink-0 rounded-full border-2 border-white object-cover shadow-md ring-1 ring-[#DCE5F0] dark:border-[#111B2E] dark:ring-white/10"
                             />
                           ) : (
-                            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#EAF1FA] text-[#17213A] ring-1 ring-[#DCE5F0]">
+                            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#EAF1FA] text-[#17213A] ring-1 ring-[#DCE5F0] dark:bg-[#17213A] dark:text-slate-300 dark:ring-white/10">
                               <Users size={24} />
                             </div>
                           )}
 
                           <div className="min-w-0">
-                            <h3 className="truncate text-lg font-bold text-[#17213A]">
+                            <h3 className="truncate text-lg font-bold text-[#17213A] dark:text-white">
                               {item.client_name}
                             </h3>
 
                             {item.designation && (
-                              <p className="mt-1 truncate text-sm text-slate-500">
+                              <p className="mt-1 truncate text-sm text-slate-500 dark:text-slate-400">
                                 {item.designation}
                               </p>
                             )}
@@ -725,6 +670,7 @@ function About() {
                         </div>
 
                         {/* RATING */}
+
                         <div className="mt-6 flex items-center gap-1">
                           {Array.from({ length: 5 }).map(
                             (_, index) => (
@@ -734,240 +680,267 @@ function About() {
                                 className={
                                   index < item.rating
                                     ? "fill-[#F59E0B] text-[#F59E0B]"
-                                    : "text-slate-300"
+                                    : "text-slate-300 dark:text-slate-600"
                                 }
                               />
                             )
                           )}
 
-                          <span className="ml-2 text-sm font-semibold text-slate-500">
+                          <span className="ml-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
                             {item.rating}/5
                           </span>
                         </div>
 
                         {/* REVIEW */}
+
                         <div className="mt-6">
-                          <p className="text-lg leading-8 text-slate-600">
+                          <p className="text-lg leading-8 text-slate-600 dark:text-slate-300">
                             "{item.review}"
                           </p>
                         </div>
+
                         {/* DATE */}
-                          {item.created_at && (
-                            <p className="mt-3 text-xs font-medium text-slate-400">
-                              {new Date(item.created_at).toLocaleDateString("en-IN", {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                              })}
-                            </p>
-                          )}
+
+                        {item.created_at && (
+                          <p className="mt-3 text-xs font-medium text-slate-400 dark:text-slate-500">
+                            {new Date(
+                              item.created_at
+                            ).toLocaleDateString("en-IN", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </p>
+                        )}
                       </div>
-                    ))}
-                  </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            )}
-
-      {/* SUBMIT A REVIEW */}
-        <section className="bg-white px-6 py-14 lg:py-10">
-          <div className="mx-auto max-w-5xl">
-            <div className="rounded-[2rem] border border-[#DCE5F0] bg-[#F8FAFC] px-6 py-8 md:px-10">
-              <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-                
-                {/* LEFT */}
-                <div>
-                  <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
-                    Share Your Experience
-                  </span>
-
-                  <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#17213A]">
-                    Worked with {siteName}?
-                  </h2>
-
-                  <p className="mt-3 max-w-md leading-7 text-slate-600">
-                    We'd love to hear about your research experience.
-                    Share your feedback with us.
-                  </p>
-
-                  <p className="mt-4 text-xs leading-5 text-slate-400">
-                    Reviews are reviewed before being published.
-                  </p>
-                </div>
-
-                {/* FORM */}
-                <form
-                  onSubmit={handleReviewSubmit}
-                  className="rounded-2xl border border-[#DCE5F0] bg-white p-5 md:p-6"
-                >
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {/* NAME */}
-                    <div>
-                      <label 
-                        htmlFor="review-client-name"
-                        className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                          Your Name
-                        <span className="ml-1 text-red-500">*</span>
-                      </label>
-
-                      <input
-                        id="review-client-name"
-                        name="client_name"
-                        type="text"
-                        autoComplete="name"
-                        value={reviewForm.client_name}
-                        onChange={(event) =>
-                          setReviewForm((previous) => ({
-                            ...previous,
-                            client_name: event.target.value,
-                          }))
-                        }
-                        placeholder="Enter your name"
-                        disabled={reviewSubmitting}
-                        className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
-                      />
-                    </div>
-
-                    {/* DESIGNATION */}
-                    <div>
-                      <label 
-                        htmlFor="review-designation"
-                        className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                          Designation
-                        <span className="ml-1 font-normal text-slate-400">
-                          (optional)
-                        </span>
-                      </label>
-
-                      <input
-                        id="review-designation"
-                        name="designation"
-                        type="text"
-                        autoComplete="organization-title"
-                        value={reviewForm.designation}
-                        onChange={(event) =>
-                          setReviewForm((previous) => ({
-                            ...previous,
-                            designation: event.target.value,
-                          }))
-                        }
-                        placeholder="PhD Scholar, Professor..."
-                        disabled={reviewSubmitting}
-                        className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
-                      />
-                    </div>
-                  </div>
-
-                  {/* RATING */}
-                  <div className="mt-4">
-                    <p className="mb-2 text-sm font-semibold text-[#17213A]">
-                      Your Rating
-                    </p>
-
-                    <div className="flex items-center gap-1">
-                      {Array.from({ length: 5 }).map(
-                        (_, index) => {
-                          const ratingValue = index + 1;
-
-                          return (
-                            <button
-                              key={ratingValue}
-                              type="button"
-                              onClick={() =>
-                                setReviewForm((previous) => ({
-                                  ...previous,
-                                  rating: ratingValue,
-                                }))
-                              }
-                              disabled={reviewSubmitting}
-                              className="cursor-pointer rounded-md p-0.5 transition hover:bg-[#EAF1FA] disabled:cursor-not-allowed"
-                              aria-label={`Rate ${ratingValue} out of 5`}
-                            >
-                              <Star
-                                size={22}
-                                className={
-                                  ratingValue <= reviewForm.rating
-                                    ? "fill-[#F59E0B] text-[#F59E0B]"
-                                    : "text-slate-300"
-                                }
-                              />
-                            </button>
-                          );
-                        }
-                      )}
-
-                      <span className="ml-2 text-xs font-semibold text-slate-500">
-                        {reviewForm.rating}/5
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* REVIEW */}
-                  <div className="mt-4">
-                    <label 
-                      htmlFor="review-message"
-                      className="mb-1.5 block text-sm font-semibold text-[#17213A]">
-                        Your Review
-                      <span className="ml-1 text-red-500">*</span>
-                    </label>
-
-                    <textarea
-                     id="review-message"
-                    name="review"
-                    autoComplete="off"
-                      value={reviewForm.review}
-                      onChange={(event) =>
-                        setReviewForm((previous) => ({
-                          ...previous,
-                          review: event.target.value,
-                        }))
-                      }
-                      placeholder="Tell us about your experience..."
-                      rows={3}
-                      disabled={reviewSubmitting}
-                      className="w-full resize-none rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm leading-6 text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
-                    />
-                  </div>
-
-                  {/* MESSAGES */}
-                  {reviewSuccess && (
-                    <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium leading-5 text-emerald-700">
-                      {reviewSuccess}
-                    </div>
+                    )
                   )}
-
-                  {reviewError && (
-                    <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium leading-5 text-red-700">
-                      {reviewError}
-                    </div>
-                  )}
-
-                  {/* SUBMIT */}
-                  <div className="mt-4 flex justify-end">
-                    <button
-                      type="submit"
-                      disabled={reviewSubmitting}
-                      className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-[#17213A] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      {reviewSubmitting
-                        ? "Submitting..."
-                        : "Submit Review"}
-
-                      {!reviewSubmitting && (
-                        <ArrowRight size={17} />
-                      )}
-                    </button>
-                  </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
         </section>
+      )}
+
+      {/* SUBMIT A REVIEW */}
+
+      <section className="bg-white px-6 py-14 transition-colors dark:bg-[#0B1220] lg:py-10">
+        <div className="mx-auto max-w-5xl">
+          <div className="rounded-[2rem] border border-[#DCE5F0] bg-[#F8FAFC] px-6 py-8 transition-colors dark:border-white/10 dark:bg-[#111B2E] md:px-10">
+            <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+              {/* LEFT */}
+
+              <div>
+                <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
+                  Share Your Experience
+                </span>
+
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#17213A] dark:text-white">
+                  Worked with {siteName}?
+                </h2>
+
+                <p className="mt-3 max-w-md leading-7 text-slate-600 dark:text-slate-300">
+                  We'd love to hear about your research
+                  experience. Share your feedback with us.
+                </p>
+
+                <p className="mt-4 text-xs leading-5 text-slate-400 dark:text-slate-500">
+                  Reviews are reviewed before being
+                  published.
+                </p>
+              </div>
+
+              {/* FORM */}
+
+              <form
+                onSubmit={handleReviewSubmit}
+                className="rounded-2xl border border-[#DCE5F0] bg-white p-5 transition-colors dark:border-white/10 dark:bg-[#17213A] md:p-6"
+              >
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {/* NAME */}
+
+                  <div>
+                    <label
+                      htmlFor="review-client-name"
+                      className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
+                    >
+                      Your Name
+                      <span className="ml-1 text-red-500">
+                        *
+                      </span>
+                    </label>
+
+                    <input
+                      id="review-client-name"
+                      name="client_name"
+                      type="text"
+                      autoComplete="name"
+                      value={reviewForm.client_name}
+                      onChange={(event) =>
+                        setReviewForm((previous) => ({
+                          ...previous,
+                          client_name:
+                            event.target.value,
+                        }))
+                      }
+                      placeholder="Enter your name"
+                      disabled={reviewSubmitting}
+                      className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-[#0F172A] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/10"
+                    />
+                  </div>
+
+                  {/* DESIGNATION */}
+
+                  <div>
+                    <label
+                      htmlFor="review-designation"
+                      className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
+                    >
+                      Designation
+                      <span className="ml-1 font-normal text-slate-400">
+                        (optional)
+                      </span>
+                    </label>
+
+                    <input
+                      id="review-designation"
+                      name="designation"
+                      type="text"
+                      autoComplete="organization-title"
+                      value={reviewForm.designation}
+                      onChange={(event) =>
+                        setReviewForm((previous) => ({
+                          ...previous,
+                          designation:
+                            event.target.value,
+                        }))
+                      }
+                      placeholder="PhD Scholar, Professor..."
+                      disabled={reviewSubmitting}
+                      className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-[#0F172A] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/10"
+                    />
+                  </div>
+                </div>
+
+                {/* RATING */}
+
+                <div className="mt-4">
+                  <p className="mb-2 text-sm font-semibold text-[#17213A] dark:text-white">
+                    Your Rating
+                  </p>
+
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map(
+                      (_, index) => {
+                        const ratingValue = index + 1;
+
+                        return (
+                          <button
+                            key={ratingValue}
+                            type="button"
+                            onClick={() =>
+                              setReviewForm(
+                                (previous) => ({
+                                  ...previous,
+                                  rating: ratingValue,
+                                })
+                              )
+                            }
+                            disabled={reviewSubmitting}
+                            className="cursor-pointer rounded-md p-0.5 transition hover:bg-[#EAF1FA] disabled:cursor-not-allowed dark:hover:bg-white/10"
+                            aria-label={`Rate ${ratingValue} out of 5`}
+                          >
+                            <Star
+                              size={22}
+                              className={
+                                ratingValue <=
+                                reviewForm.rating
+                                  ? "fill-[#F59E0B] text-[#F59E0B]"
+                                  : "text-slate-300 dark:text-slate-600"
+                              }
+                            />
+                          </button>
+                        );
+                      }
+                    )}
+
+                    <span className="ml-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                      {reviewForm.rating}/5
+                    </span>
+                  </div>
+                </div>
+
+                {/* REVIEW */}
+
+                <div className="mt-4">
+                  <label
+                    htmlFor="review-message"
+                    className="mb-1.5 block text-sm font-semibold text-[#17213A] dark:text-white"
+                  >
+                    Your Review
+                    <span className="ml-1 text-red-500">
+                      *
+                    </span>
+                  </label>
+
+                  <textarea
+                    id="review-message"
+                    name="review"
+                    autoComplete="off"
+                    value={reviewForm.review}
+                    onChange={(event) =>
+                      setReviewForm((previous) => ({
+                        ...previous,
+                        review: event.target.value,
+                      }))
+                    }
+                    placeholder="Tell us about your experience..."
+                    rows={3}
+                    disabled={reviewSubmitting}
+                    className="w-full resize-none rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm leading-6 text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-[#0F172A] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/10"
+                  />
+                </div>
+
+                {/* MESSAGES */}
+
+                {reviewSuccess && (
+                  <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium leading-5 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400">
+                    {reviewSuccess}
+                  </div>
+                )}
+
+                {reviewError && (
+                  <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium leading-5 text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400">
+                    {reviewError}
+                  </div>
+                )}
+
+                {/* SUBMIT */}
+
+                <div className="mt-4 flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={reviewSubmitting}
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-[#17213A] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0F172A] disabled:cursor-not-allowed disabled:opacity-60 dark:bg-blue-600 dark:hover:bg-blue-500"
+                  >
+                    {reviewSubmitting
+                      ? "Submitting..."
+                      : "Submit Review"}
+
+                    {!reviewSubmitting && (
+                      <ArrowRight size={17} />
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
 
-      <section className="relative overflow-hidden bg-[#17213A] px-6 py-20">
+      <section className="relative overflow-hidden bg-[#17213A] px-6 py-20 dark:bg-[#070D18]">
         <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
 
         <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
@@ -986,7 +959,9 @@ function About() {
             </h2>
 
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
-              Tell us about your research requirement and let's explore how {siteName} can support your next step.
+              Tell us about your research requirement
+              and let's explore how {siteName} can support
+              your next step.
             </p>
           </div>
 

@@ -216,25 +216,29 @@ function OfferCard({
     <div
       className={`group relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border p-6 transition duration-300 ${
         status === "live"
-          ? "border-[#17213A] bg-[#17213A] shadow-lg shadow-[#17213A]/15"
-          : "border-[#DCE5F0] bg-white hover:-translate-y-1 hover:shadow-lg hover:shadow-[#17213A]/8"
+          ? "border-[#17213A] bg-[#17213A] shadow-lg shadow-[#17213A]/15 dark:border-blue-500/50 dark:bg-[#17213A]"
+          : "border-[#DCE5F0] bg-white hover:-translate-y-1 hover:shadow-lg hover:shadow-[#17213A]/8 dark:border-white/10 dark:bg-[#111B2E] dark:hover:border-blue-500/30 dark:hover:shadow-black/30"
       }`}
     >
-
       {status === "expired" && (
-        <div className="pointer-events-none absolute left-[-35%] top-1/2 z-0 h-px w-[170%] rotate-[58deg] bg-[#DCE5F0]" />
+        <div className="pointer-events-none absolute left-[-35%] top-1/2 z-0 h-px w-[170%] rotate-[58deg] bg-[#DCE5F0] dark:bg-white/100" />
       )}
 
       <div className="relative z-10 flex h-full flex-col">
 
+        {/* TOP */}
+
         <div className="flex items-start justify-between gap-3">
 
           {/* Gift Icon */}
+
           <div
             className={`flex h-12 w-12 items-center justify-center rounded-xl ${
               status === "live"
                 ? "bg-white text-[#17213A]"
-                : "bg-[#17213A] text-white"
+                : status === "expired"
+                ? "bg-red-500 text-white"
+                : "bg-[#17213A] text-white dark:bg-blue-600"
             }`}
           >
             <Gift size={21} />
@@ -262,22 +266,28 @@ function OfferCard({
 
         </div>
 
+        {/* TITLE */}
+
         <h3
           className={`mt-5 text-xl font-bold leading-tight ${
             status === "live"
               ? "text-white"
-              : "text-[#17213A]"
+              : "text-[#17213A] dark:text-white"
           }`}
         >
           {offer.title}
         </h3>
+
+        {/* DISCOUNT */}
 
         {discountText && (
           <div
             className={`mt-3 inline-flex w-fit items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-bold ${
               status === "live"
                 ? "bg-white text-[#17213A]"
-                : "bg-[#17213A] text-white"
+                : status === "expired"
+                ? "bg-red-500 text-white"
+                : "bg-[#17213A] text-white dark:bg-blue-600"
             }`}
           >
             <Tag size={13} />
@@ -285,26 +295,31 @@ function OfferCard({
           </div>
         )}
 
+        {/* DESCRIPTION */}
+
         {offer.description && (
           <p
             className={`mt-4 text-sm leading-6 ${
               status === "live"
                 ? "text-slate-300"
-                : "text-slate-600"
+                : "text-slate-600 dark:text-slate-300"
             }`}
           >
             {offer.description}
           </p>
         )}
 
+        {/* DATES */}
+
         <div className="mt-5 space-y-2.5">
 
           {/* START DATE */}
+
           <div
             className={`flex items-start gap-3 rounded-xl p-3 ${
               status === "live"
                 ? "bg-white/10"
-                : "bg-[#F8FAFC]"
+                : "bg-[#F8FAFC] dark:bg-[#0F172A]"
             }`}
           >
             <CalendarDays
@@ -312,7 +327,9 @@ function OfferCard({
               className={`mt-0.5 shrink-0 ${
                 status === "live"
                   ? "text-white"
-                  : "text-[#17213A]"
+                  : status === "expired"
+                  ? "text-red-500"
+                  : "text-[#17213A] dark:text-blue-400"
               }`}
             />
 
@@ -325,7 +342,7 @@ function OfferCard({
                 className={`mt-1 text-xs font-semibold ${
                   status === "live"
                     ? "text-white"
-                    : "text-[#17213A]"
+                    : "text-[#17213A] dark:text-slate-200"
                 }`}
               >
                 {formatDateTime(
@@ -336,11 +353,12 @@ function OfferCard({
           </div>
 
           {/* END DATE */}
+
           <div
             className={`flex items-start gap-3 rounded-xl p-3 ${
               status === "live"
                 ? "bg-white/10"
-                : "bg-[#F8FAFC]"
+                : "bg-[#F8FAFC] dark:bg-[#0F172A]"
             }`}
           >
             <CalendarDays
@@ -348,7 +366,9 @@ function OfferCard({
               className={`mt-0.5 shrink-0 ${
                 status === "live"
                   ? "text-white"
-                  : "text-[#17213A]"
+                  : status === "expired"
+                  ? "text-red-500"
+                  : "text-[#17213A] dark:text-blue-400"
               }`}
             />
 
@@ -361,7 +381,7 @@ function OfferCard({
                 className={`mt-1 text-xs font-semibold ${
                   status === "live"
                     ? "text-white"
-                    : "text-[#17213A]"
+                    : "text-[#17213A] dark:text-slate-200"
                 }`}
               >
                 {formatDateTime(
@@ -373,6 +393,8 @@ function OfferCard({
 
         </div>
 
+        {/* COUNTDOWN */}
+
         {countdown && (
           <div
             className={`mt-4 flex items-center justify-between gap-3 rounded-xl px-3.5 py-3 ${
@@ -380,7 +402,7 @@ function OfferCard({
                 ? endingSoon
                   ? "bg-red-500/10 text-red-400"
                   : "bg-emerald-500/10 text-emerald-300"
-                : "bg-amber-500/10 text-amber-600"
+                : "bg-amber-500/10 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -399,42 +421,28 @@ function OfferCard({
           </div>
         )}
 
-        {offer.offer_code && status === "live" && (
-          <div className="mt-5">
+        {/* OFFER CODE */}
 
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">
-              Offer Code
-            </p>
+        {offer.offer_code &&
+          status === "live" && (
+            <div className="mt-5">
 
-            <div
-              className={`flex items-center justify-between gap-2 rounded-xl border border-dashed px-3 py-2.5 ${
-                status === "live"
-                  ? "border-white/20 bg-white/10"
-                  : "border-[#C9D6E5] bg-[#F8FAFC]"
-              }`}
-            >
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                Offer Code
+              </p>
 
-              <span
-                className={`min-w-0 truncate font-mono text-xs font-bold tracking-wide ${
-                  status === "live"
-                    ? "text-white"
-                    : "text-[#17213A]"
-                }`}
-              >
-                {offer.offer_code.toUpperCase()}
-              </span>
+              <div className="flex items-center justify-between gap-2 rounded-xl border border-dashed border-white/20 bg-white/10 px-3 py-2.5">
 
-              {status !== "expired" && (
+                <span className="min-w-0 truncate font-mono text-xs font-bold tracking-wide text-white">
+                  {offer.offer_code.toUpperCase()}
+                </span>
+
                 <button
                   type="button"
                   onClick={
                     handleCopyCode
                   }
-                  className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-semibold transition ${
-                    status === "live"
-                      ? "bg-white text-[#17213A] hover:bg-slate-100"
-                      : "bg-white text-[#17213A] shadow-sm hover:bg-[#EEF4FA]"
-                  }`}
+                  className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-[11px] font-semibold text-[#17213A] transition hover:bg-slate-100"
                 >
                   {copied ? (
                     <>
@@ -450,11 +458,12 @@ function OfferCard({
                     </>
                   )}
                 </button>
-              )}
 
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+        {/* CARD FOOTER */}
 
         <div className="mt-auto pt-6">
 
@@ -464,7 +473,7 @@ function OfferCard({
               This offer has ended.
             </div>
           ) : status === "upcoming" ? (
-            <div className="flex items-center gap-2 text-xs font-semibold text-amber-600">
+            <div className="flex items-center gap-2 text-xs font-semibold text-amber-600 dark:text-amber-400">
               <Clock3 size={16} />
               Available when the offer starts.
             </div>
@@ -475,11 +484,13 @@ function OfferCard({
                   ? `/contact?coupon=${encodeURIComponent(
                       offer.offer_code.toUpperCase()
                     )}`
-                  : offer.cta_link || "/contact"
+                  : offer.cta_link ||
+                    "/contact"
               }
               className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#17213A] transition hover:bg-slate-100"
             >
-              {offer.cta_text || "Get Started"}
+              {offer.cta_text ||
+                "Get Started"}
 
               <ArrowRight
                 size={16}
@@ -510,40 +521,43 @@ function OfferSection({
 
   return (
     <section
-      className={`relative overflow-hidden px-6 py-20 lg:py-18 ${
+      className={`relative overflow-hidden px-6 py-20 transition-colors lg:py-18 ${
         background === "light"
-          ? "bg-[#F5F8FC]"
-          : "bg-white"
+          ? "bg-[#F5F8FC] dark:bg-[#0F172A]"
+          : "bg-white dark:bg-[#0B1220]"
       }`}
     >
       <div className="mx-auto max-w-7xl">
 
         <div className="max-w-3xl">
 
-          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
             {eyebrow}
           </span>
 
-          <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
+          <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-5xl">
             {title}
           </h2>
 
-          <p className="mt-5 text-lg leading-8 text-slate-600">
+          <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
             {description}
           </p>
 
         </div>
 
-        <div className="mt-10 flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 md:overflow-visible md:pb-0 md:snap-none lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 md:grid md:grid-cols-2 md:overflow-visible md:pb-0 md:snap-none lg:grid-cols-3 xl:grid-cols-4">
 
           {offers.map((offer) => (
-            <div 
+            <div
               key={offer.id}
-              className="w-[85%] shrink-0 snap-start sm:w-[70%] md:w-auto md:shrink">
+              className="w-[85%] shrink-0 snap-start sm:w-[70%] md:w-auto md:shrink"
+            >
               <OfferCard
                 offer={offer}
                 status={status}
-                currentTime={currentTime}
+                currentTime={
+                  currentTime
+                }
               />
             </div>
           ))}
@@ -559,8 +573,10 @@ function Offers() {
   const [offers, setOffers] =
     useState([]);
 
-  const [offersBackground, setOffersBackground] =
-    useState("");
+  const [
+    offersBackground,
+    setOffersBackground,
+  ] = useState("");
 
   const [loading, setLoading] =
     useState(true);
@@ -683,12 +699,14 @@ function Offers() {
     );
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900 transition-colors dark:bg-[#0B1220] dark:text-slate-100">
 
       <Navbar />
 
+      {/* HERO */}
+
       <section
-        className="relative h-[calc(110vh-73px)] overflow-hidden bg-cover bg-center"
+        className="relative h-[calc(110vh-73px)] overflow-hidden bg-cover bg-center transition-colors dark:bg-[#0B1220]"
         style={{
           backgroundImage:
             heroBackground
@@ -697,23 +715,23 @@ function Offers() {
         }}
       >
 
-        {heroBackground && (
-          <div className="absolute inset-0 " />
-        )}
+        {/* Background overlay */}
 
-        <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-[#DCE7F5]/45 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/65 to-white/20 dark:from-[#0B1220]/90 dark:via-[#0B1220]/70 dark:to-[#0B1220]/20" />
 
-        <div className="absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#E3ECF8]/55 blur-3xl" />
+        <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-[#DCE7F5]/45 blur-3xl dark:bg-blue-500/10" />
+
+        <div className="absolute -right-32 top-0 h-96 w-96 rounded-full bg-[#E3ECF8]/55 blur-3xl dark:bg-blue-400/10" />
 
         <div className="relative mx-auto max-w-7xl px-6 py-24 lg:py-32">
 
           <div className="max-w-4xl">
 
-            <span className="inline-flex rounded-full border border-[#D5E0EE] bg-white/90 px-4 py-2 text-sm font-semibold text-[#17213A] shadow-sm backdrop-blur">
+            <span className="inline-flex rounded-full border border-[#D5E0EE] bg-white/90 px-4 py-2 text-sm font-semibold text-[#17213A] shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#111B2E]/90 dark:text-white">
               Special Offers
             </span>
 
-            <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-[#17213A] md:text-6xl lg:text-7xl">
+            <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-[#17213A] dark:text-white md:text-6xl lg:text-7xl">
               Research Offers
 
               <span className="block">
@@ -721,7 +739,7 @@ function Offers() {
               </span>
             </h1>
 
-            <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
+            <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300 md:text-xl">
               Explore our current and upcoming
               offers across Research Support,
               Academic Writing, Technical
@@ -732,7 +750,7 @@ function Offers() {
 
               <a
                 href="#offers"
-                className="inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3.5 font-semibold text-white transition hover:bg-[#0F172A]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3.5 font-semibold text-white transition hover:bg-[#0F172A] dark:bg-blue-600 dark:hover:bg-blue-500"
               >
                 Explore Offers
 
@@ -744,7 +762,7 @@ function Offers() {
 
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 rounded-full border border-[#CBD7E6] bg-white/90 px-6 py-3.5 font-semibold text-[#17213A] backdrop-blur transition hover:border-[#17213A]"
+                className="inline-flex items-center gap-2 rounded-full border border-[#CBD7E6] bg-white/90 px-6 py-3.5 font-semibold text-[#17213A] backdrop-blur transition hover:border-[#17213A] dark:border-white/10 dark:bg-[#111B2E]/90 dark:text-white dark:hover:border-blue-400"
               >
                 Discuss Your Research
               </Link>
@@ -755,9 +773,11 @@ function Offers() {
         </div>
       </section>
 
-      <section className="border-b border-slate-100 bg-white">
+      {/* TRUST STRIP */}
 
-        <div className="mx-auto grid max-w-7xl divide-y divide-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
+      <section className="border-b border-slate-100 bg-white transition-colors dark:border-white/10 dark:bg-[#0B1220]">
+
+        <div className="mx-auto grid max-w-7xl divide-y divide-slate-200 dark:divide-white/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
 
           {[
             {
@@ -765,16 +785,19 @@ function Offers() {
               title: "Live Offers",
               text: "Offers currently available.",
             },
+
             {
               icon: Clock3,
               title: "Coming Soon",
               text: "Scheduled future offers.",
             },
+
             {
               icon: Tag,
               title: "Discounts",
               text: "Special pricing opportunities.",
             },
+
             {
               icon: CalendarDays,
               title: "Time Limited",
@@ -790,17 +813,17 @@ function Offers() {
                 className="flex items-center gap-4 px-6 py-6"
               >
 
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EEF4FA] text-[#17213A]">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EEF4FA] text-[#17213A] dark:bg-[#17213A] dark:text-blue-400">
                   <Icon size={20} />
                 </div>
 
                 <div>
 
-                  <p className="font-bold text-[#17213A]">
+                  <p className="font-bold text-[#17213A] dark:text-white">
                     {item.title}
                   </p>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     {item.text}
                   </p>
 
@@ -815,16 +838,18 @@ function Offers() {
 
       <div id="offers">
 
+        {/* LOADING */}
+
         {loading ? (
-          <section className="bg-[#F5F8FC] px-6 py-24">
+          <section className="bg-[#F5F8FC] px-6 py-24 transition-colors dark:bg-[#0F172A]">
 
             <div className="mx-auto max-w-7xl">
 
-              <div className="rounded-[2rem] border border-[#DCE5F0] bg-white p-12 text-center">
+              <div className="rounded-[2rem] border border-[#DCE5F0] bg-white p-12 text-center dark:border-white/10 dark:bg-[#111B2E]">
 
-                <div className="mx-auto h-6 w-6 animate-spin rounded-full border-2 border-slate-300 border-t-[#17213A]" />
+                <div className="mx-auto h-6 w-6 animate-spin rounded-full border-2 border-slate-300 border-t-[#17213A] dark:border-slate-600 dark:border-t-blue-500" />
 
-                <p className="mt-4 text-sm text-slate-500">
+                <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
                   Loading offers...
                 </p>
 
@@ -836,21 +861,23 @@ function Offers() {
 
         ) : error ? (
 
-          <section className="bg-[#F5F8FC] px-6 py-24">
+          /* ERROR */
+
+          <section className="bg-[#F5F8FC] px-6 py-24 transition-colors dark:bg-[#0F172A]">
 
             <div className="mx-auto max-w-3xl">
 
-              <div className="rounded-[2rem] border border-[#DCE5F0] bg-white p-12 text-center">
+              <div className="rounded-[2rem] border border-[#DCE5F0] bg-white p-12 text-center dark:border-white/10 dark:bg-[#111B2E]">
 
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EEF4FA] text-[#17213A]">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EEF4FA] text-[#17213A] dark:bg-[#17213A] dark:text-blue-400">
                   <Gift size={24} />
                 </div>
 
-                <h2 className="mt-5 text-2xl font-bold text-[#17213A]">
+                <h2 className="mt-5 text-2xl font-bold text-[#17213A] dark:text-white">
                   Unable to load offers.
                 </h2>
 
-                <p className="mt-3 text-slate-500">
+                <p className="mt-3 text-slate-500 dark:text-slate-400">
                   {error}
                 </p>
 
@@ -862,23 +889,25 @@ function Offers() {
 
         ) : offers.length === 0 ? (
 
-          <section className="bg-[#F5F8FC] px-6 py-28">
+          /* EMPTY */
+
+          <section className="bg-[#F5F8FC] px-6 py-28 transition-colors dark:bg-[#0F172A]">
 
             <div className="mx-auto max-w-3xl text-center">
 
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#17213A] shadow-sm">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#17213A] shadow-sm dark:bg-[#111B2E] dark:text-blue-400">
                 <Gift size={28} />
               </div>
 
-              <span className="mt-7 block text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+              <span className="mt-7 block text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
                 Special Offers
               </span>
 
-              <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A]">
+              <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white">
                 No offers available right now.
               </h2>
 
-              <p className="mt-5 text-lg leading-8 text-slate-600">
+              <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
                 New offers and research support
                 opportunities will appear here when
                 they become available.
@@ -886,9 +915,10 @@ function Offers() {
 
               <Link
                 to="/contact"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3.5 font-semibold text-white transition hover:bg-[#0F172A]"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#17213A] px-6 py-3.5 font-semibold text-white transition hover:bg-[#0F172A] dark:bg-blue-600 dark:hover:bg-blue-500"
               >
                 Discuss Your Requirement
+
                 <ArrowRight size={18} />
               </Link>
 
@@ -954,21 +984,23 @@ function Offers() {
 
       </div>
 
-      <section className="bg-white px-6 py-24 lg:py-20">
+      {/* HOW IT WORKS */}
+
+      <section className="bg-white px-6 py-24 transition-colors dark:bg-[#0B1220] lg:py-20">
 
         <div className="mx-auto max-w-7xl">
 
           <div className="max-w-3xl">
 
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
               How It Works
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-5xl">
               Simple Offers. Clear Requirements.
             </h2>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
               Every offer has a defined Period,
               Eligibility Details, and a clear way
               to discuss your Research Requirement.
@@ -985,12 +1017,14 @@ function Offers() {
                 title: "Choose an Offer",
                 text: "Review the available offer and check its discount, dates, and requirements.",
               },
+
               {
                 number: "02",
                 icon: CalendarDays,
                 title: "Check the Dates",
                 text: "Make sure the offer is currently live or note when an upcoming offer begins.",
               },
+
               {
                 number: "03",
                 icon: CheckCircle2,
@@ -1004,26 +1038,26 @@ function Offers() {
               return (
                 <div
                   key={item.number}
-                  className="rounded-3xl border border-[#DCE5F0] bg-[#F8FAFC] p-7"
+                  className="rounded-3xl border border-[#DCE5F0] bg-[#F8FAFC] p-7 transition-colors dark:border-white/10 dark:bg-[#111B2E]"
                 >
 
                   <div className="flex items-center justify-between">
 
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#17213A] text-white">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#17213A] text-white dark:bg-blue-600">
                       <Icon size={20} />
                     </div>
 
-                    <span className="text-sm font-bold text-slate-300">
+                    <span className="text-sm font-bold text-slate-300 dark:text-slate-600">
                       {item.number}
                     </span>
 
                   </div>
 
-                  <h3 className="mt-7 text-xl font-bold text-[#17213A]">
+                  <h3 className="mt-7 text-xl font-bold text-[#17213A] dark:text-white">
                     {item.title}
                   </h3>
 
-                  <p className="mt-3 leading-7 text-slate-600">
+                  <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
                     {item.text}
                   </p>
 
@@ -1036,21 +1070,23 @@ function Offers() {
         </div>
       </section>
 
-      <section className="bg-[#F5F8FC] px-6 py-24 lg:py-20">
+      {/* RESEARCH SUPPORT */}
+
+      <section className="bg-[#F5F8FC] px-6 py-24 transition-colors dark:bg-[#0F172A] lg:py-20">
 
         <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
 
           <div>
 
-            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A]">
+            <span className="text-sm font-semibold uppercase tracking-[0.2em] text-[#17213A] dark:text-blue-400">
               Research Support
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] md:text-5xl">
+            <h2 className="mt-4 text-4xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-5xl">
               Offers Across The Research Lifecycle.
             </h2>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
+            <p className="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">
               Our research support covers multiple
               stages of Academic and Technical Work,
               from Implementation and Writing to
@@ -1070,15 +1106,15 @@ function Offers() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="flex items-center gap-3 rounded-xl bg-white px-4 py-3.5"
+                  className="flex items-center gap-3 rounded-xl bg-white px-4 py-3.5 transition-colors dark:bg-[#111B2E]"
                 >
 
                   <CheckCircle2
                     size={18}
-                    className="shrink-0 text-[#17213A]"
+                    className="shrink-0 text-[#17213A] dark:text-blue-400"
                   />
 
-                  <span className="text-sm font-semibold text-slate-700">
+                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                     {item}
                   </span>
 
@@ -1089,17 +1125,17 @@ function Offers() {
 
           </div>
 
-          <div className="rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm md:p-10">
+          <div className="rounded-[2rem] border border-[#DCE5F0] bg-white p-8 shadow-sm transition-colors dark:border-white/10 dark:bg-[#111B2E] dark:shadow-black/20 md:p-10">
 
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#17213A] text-white">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#17213A] text-white dark:bg-blue-600">
               <Gift size={25} />
             </div>
 
-            <h3 className="mt-7 text-2xl font-bold text-[#17213A]">
+            <h3 className="mt-7 text-2xl font-bold text-[#17213A] dark:text-white">
               Have a Research Requirement?
             </h3>
 
-            <p className="mt-4 leading-7 text-slate-600">
+            <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
               Tell us about your research stage,
               objectives, and the support you need.
               Our team can help you understand the
@@ -1108,9 +1144,10 @@ function Offers() {
 
             <Link
               to="/contact"
-              className="mt-7 inline-flex items-center gap-2 font-semibold text-[#17213A]"
+              className="mt-7 inline-flex items-center gap-2 font-semibold text-[#17213A] transition hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
             >
               Discuss Your Requirement
+
               <ArrowRight size={17} />
             </Link>
 
@@ -1119,7 +1156,9 @@ function Offers() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#17213A] px-6 py-20">
+      {/* FINAL CTA */}
+
+      <section className="relative overflow-hidden bg-[#17213A] px-6 py-20 transition-colors dark:bg-[#070D18]">
 
         <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
 
@@ -1154,6 +1193,7 @@ function Offers() {
             className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-7 py-4 font-semibold text-[#17213A] shadow-lg transition hover:bg-slate-100"
           >
             Talk to an Expert
+
             <ArrowRight size={18} />
           </Link>
 

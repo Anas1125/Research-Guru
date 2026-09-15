@@ -1,19 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
+
 import {
   ArrowLeft,
   ArrowRight,
+  BookOpen,
   CalendarDays,
   Clock3,
-  BookOpen,
 } from "lucide-react";
+
 import { Link } from "react-router-dom";
+
 import Navbar from "../components/Navbar";
 
 const API_URL =
   import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
 function calculateReadTime(content) {
-  if (!content) return "1 min read";
+  if (!content) {
+    return "1 min read";
+  }
 
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.ceil(words / 200));
@@ -22,7 +27,9 @@ function calculateReadTime(content) {
 }
 
 function formatDate(dateString) {
-  if (!dateString) return "Recently published";
+  if (!dateString) {
+    return "Recently published";
+  }
 
   const date = new Date(dateString);
 
@@ -48,17 +55,26 @@ function Blog() {
         setLoading(true);
         setError("");
 
-        const response = await fetch(`${API_URL}/api/blog`);
+        const response = await fetch(
+          `${API_URL}/api/blog`
+        );
 
         if (!response.ok) {
           throw new Error("Failed to load blog posts.");
         }
 
         const data = await response.json();
+
         setBlogs(data);
       } catch (err) {
-        console.error("Failed to load blog posts:", err);
-        setError("Unable to load blog posts right now.");
+        console.error(
+          "Failed to load blog posts:",
+          err
+        );
+
+        setError(
+          "Unable to load blog posts right now."
+        );
       } finally {
         setLoading(false);
       }
@@ -81,192 +97,229 @@ function Blog() {
   }, [blogs]);
 
   return (
-    <div className="min-h-screen bg-white text-[#17213A]">
+    <div className="min-h-screen bg-white text-[#17213A] transition-colors dark:bg-[#0B1220] dark:text-slate-100">
       <Navbar />
+
       {/* HERO */}
-      <section className="relative overflow-hidden bg-[#F5F8FC] pt-32 pb-20">
-        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#EAF1FA]" />
-        <div className="absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-[#EDF3FA]" />
+
+      <section className="relative overflow-hidden bg-[#F5F8FC] pt-32 pb-20 transition-colors dark:bg-[#0F172A]">
+        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#EAF1FA] dark:bg-blue-500/10" />
+
+        <div className="absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-[#EDF3FA] dark:bg-blue-400/10" />
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="max-w-3xl">
             <Link
               to="/services"
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#CBD7E6] bg-white px-4 py-2 text-sm font-semibold text-[#17213A] shadow-sm transition hover:border-[#17213A] hover:bg-[#F8FAFC]"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#CBD7E6] bg-white px-4 py-2 text-sm font-semibold text-[#17213A] shadow-sm transition hover:border-[#17213A] hover:bg-[#F8FAFC] dark:border-white/10 dark:bg-[#17213A] dark:text-white dark:hover:border-white/20 dark:hover:bg-[#1B2942]"
             >
               <ArrowLeft size={16} />
+
               Back to Services
             </Link>
-            <p className="mb-4 text-sm font-bold uppercase tracking-[0.25em] text-slate-500">
+
+            <p className="mb-4 text-sm font-bold uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
               Research Guru Blog
             </p>
 
-            <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-6xl">
+            <h1 className="text-4xl font-bold leading-tight tracking-tight text-[#17213A] dark:text-white md:text-6xl">
               Insights for Better
               <span className="block">
                 Research & Publication
               </span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-              Explore practical insights on research methodology, academic
-              writing, implementation, publication, and the research journey.
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+              Explore practical insights on research
+              methodology, academic writing,
+              implementation, publication, and the
+              research journey.
             </p>
           </div>
         </div>
       </section>
 
       {/* BLOG GRID */}
-      <section className="py-20 md:py-24">
+
+      <section className="bg-white py-20 transition-colors dark:bg-[#0B1220] md:py-24">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
             <div>
-              <p className="text-sm font-bold uppercase tracking-[0.2em] text-slate-500">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
                 Latest Articles
               </p>
 
-              <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-                Research Knowledge That Moves You Forward
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#17213A] dark:text-white md:text-4xl">
+                Research Knowledge That Moves You
+                Forward
               </h2>
             </div>
 
-            <p className="max-w-2xl text-slate-600">
-              Guidance For Scholars, Researchers, Students, And Professionals 
-              Working Across Technical And Academic Research.
+            <p className="max-w-2xl text-slate-600 dark:text-slate-300">
+              Guidance For Scholars, Researchers,
+              Students, And Professionals Working
+              Across Technical And Academic Research.
             </p>
           </div>
 
-          {/* Loading */}
+          {/* LOADING */}
+
           {loading && (
             <div className="py-20 text-center">
-              <p className="text-slate-500">
+              <div className="mx-auto h-7 w-7 animate-spin rounded-full border-2 border-slate-300 border-t-[#17213A] dark:border-slate-600 dark:border-t-blue-400" />
+
+              <p className="mt-4 text-slate-500 dark:text-slate-400">
                 Loading articles...
               </p>
             </div>
           )}
 
-          {/* Error */}
+          {/* ERROR */}
+
           {!loading && error && (
-            <div className="rounded-3xl border border-red-200 bg-red-50 px-6 py-12 text-center">
-              <p className="font-semibold text-red-700">
+            <div className="rounded-3xl border border-red-200 bg-red-50 px-6 py-12 text-center dark:border-red-500/20 dark:bg-red-500/10">
+              <p className="font-semibold text-red-700 dark:text-red-400">
                 {error}
               </p>
             </div>
           )}
 
-          {/* Empty */}
-          {!loading && !error && publishedBlogs.length === 0 && (
-            <div className="rounded-3xl border border-slate-200 bg-[#F8FAFC] px-6 py-16 text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#17213A] text-white">
-                <BookOpen size={24} />
+          {/* EMPTY */}
+
+          {!loading &&
+            !error &&
+            publishedBlogs.length === 0 && (
+              <div className="rounded-3xl border border-slate-200 bg-[#F8FAFC] px-6 py-16 text-center transition-colors dark:border-white/10 dark:bg-[#111B2E]">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#17213A] text-white dark:bg-blue-600">
+                  <BookOpen size={24} />
+                </div>
+
+                <h3 className="mt-5 text-xl font-bold text-[#17213A] dark:text-white">
+                  No articles published yet
+                </h3>
+
+                <p className="mt-2 text-slate-500 dark:text-slate-400">
+                  New research insights will appear
+                  here once they are published.
+                </p>
               </div>
+            )}
 
-              <h3 className="mt-5 text-xl font-bold text-[#17213A]">
-                No articles published yet
-              </h3>
+          {/* POSTS */}
 
-              <p className="mt-2 text-slate-500">
-                New research insights will appear here once they are published.
-              </p>
-            </div>
-          )}
+          {!loading &&
+            !error &&
+            publishedBlogs.length > 0 && (
+              <div className="flex snap-x snap-mandatory gap-7 overflow-x-auto pb-4 md:grid md:grid-cols-2 md:overflow-visible md:pb-0 md:snap-none lg:grid-cols-3">
+                {publishedBlogs.map((blog) => (
+                  <article
+                    key={blog.id}
+                    className="group flex h-full w-[85%] shrink-0 snap-start flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-[#111B2E] dark:hover:shadow-black/30 md:w-auto md:shrink"
+                  >
+                    {/* IMAGE */}
 
-          {/* Posts */}
-          {!loading && !error && publishedBlogs.length > 0 && (
-            <div className="flex gap-7 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 md:overflow-visible md:pb-0 md:snap-none lg:grid-cols-3">
-              {publishedBlogs.map((blog) => (
-                <article
-                  key={blog.id}
-                  className="group flex h-full w-[85%] shrink-0 snap-start flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl md:w-auto md:shrink"
-                >
-                  {/* IMAGE */}
-                  <div className="relative h-52 overflow-hidden bg-[#EAF1FA]">
-                    {blog.featured_image ? (
-                      <img
-                        src={
-                          blog.featured_image.startsWith("http")
-                            ? blog.featured_image
-                            : `${API_URL}${blog.featured_image}`
-                        }
-                        alt={blog.title}
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <>
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#EAF1FA] to-[#F5F8FC]" />
+                    <div className="relative h-52 overflow-hidden bg-[#EAF1FA] dark:bg-[#17213A]">
+                      {blog.featured_image ? (
+                        <img
+                          src={
+                            blog.featured_image.startsWith(
+                              "http"
+                            )
+                              ? blog.featured_image
+                              : `${API_URL}${blog.featured_image}`
+                          }
+                          alt={blog.title}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <>
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#EAF1FA] to-[#F5F8FC] dark:from-[#17213A] dark:to-[#0F172A]" />
 
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#17213A] text-white shadow-lg">
-                            <BookOpen size={27} strokeWidth={1.8} />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#17213A] text-white shadow-lg dark:bg-blue-600">
+                              <BookOpen
+                                size={27}
+                                strokeWidth={1.8}
+                              />
+                            </div>
                           </div>
+                        </>
+                      )}
+
+                      {blog.category && (
+                        <div className="absolute left-5 top-5 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-[#17213A] shadow-sm dark:bg-[#0B1220] dark:text-white">
+                          {blog.category}
                         </div>
-                      </>
-                    )}
-
-                    {blog.category && (
-                      <div className="absolute left-5 top-5 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-[#17213A] shadow-sm">
-                        {blog.category}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* CONTENT */}
-                  <div className="flex flex-1 flex-col p-7">
-                    <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-500">
-                      <span className="flex items-center gap-1.5">
-                        <CalendarDays size={14} />
-                        {formatDate(
-                          blog.published_at || blog.created_at
-                        )}
-                      </span>
-
-                      <span className="flex items-center gap-1.5">
-                        <Clock3 size={14} />
-                        {calculateReadTime(blog.content)}
-                      </span>
+                      )}
                     </div>
 
-                    <h3 className="mt-5 text-xl font-bold leading-snug tracking-tight">
-                      {blog.title}
-                    </h3>
+                    {/* CONTENT */}
 
-                    <p className="mt-4 flex-1 text-sm leading-7 text-slate-600">
-                      {blog.excerpt}
-                    </p>
+                    <div className="flex flex-1 flex-col p-7">
+                      <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        <span className="flex items-center gap-1.5">
+                          <CalendarDays size={14} />
 
-                    <Link
-                      to={`/blog/${blog.slug}`}
-                      className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#17213A]"
-                    >
-                      Read Article
+                          {formatDate(
+                            blog.published_at ||
+                              blog.created_at
+                          )}
+                        </span>
 
-                      <ArrowRight
-                        size={16}
-                        className="transition-transform duration-200 group-hover:translate-x-1"
-                      />
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          )}
+                        <span className="flex items-center gap-1.5">
+                          <Clock3 size={14} />
+
+                          {calculateReadTime(
+                            blog.content
+                          )}
+                        </span>
+                      </div>
+
+                      <h3 className="mt-5 text-xl font-bold leading-snug tracking-tight text-[#17213A] dark:text-white">
+                        {blog.title}
+                      </h3>
+
+                      <p className="mt-4 flex-1 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                        {blog.excerpt}
+                      </p>
+
+                      <Link
+                        to={`/blog/${blog.slug}`}
+                        className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#17213A] transition-colors dark:text-blue-400"
+                      >
+                        Read Article
+
+                        <ArrowRight
+                          size={16}
+                          className="transition-transform duration-200 group-hover:translate-x-1"
+                        />
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="bg-[#17213A] py-20">
+
+      <section className="bg-[#17213A] py-20 transition-colors dark:bg-[#070D18]">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-slate-300">
             Need Research Support?
           </p>
 
           <h2 className="mt-4 text-3xl font-bold text-white md:text-5xl">
-            Let’s turn your research idea into meaningful work.
+            Let’s turn your research idea into
+            meaningful work.
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl leading-7 text-slate-300">
-            Discuss your research requirement with our team and identify the
-            right support across implementation, publication, and writing.
+            Discuss your research requirement with
+            our team and identify the right support
+            across implementation, publication, and
+            writing.
           </p>
 
           <Link
@@ -274,6 +327,7 @@ function Blog() {
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-[#17213A] transition hover:bg-slate-100"
           >
             Discuss Your Requirement
+
             <ArrowRight size={17} />
           </Link>
         </div>

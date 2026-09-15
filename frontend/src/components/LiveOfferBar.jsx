@@ -1,4 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import {
   Tag,
   Clock3,
@@ -8,13 +13,14 @@ import {
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
+
 import { apiFetch } from "../utils/api";
 
-function getOfferStatus(
+const getOfferStatus = (
   startDate,
   endDate,
   now = new Date()
-) {
+) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
 
@@ -34,15 +40,17 @@ function getOfferStatus(
   }
 
   return "expired";
-}
+};
 
-function formatCountdown(
+const formatCountdown = (
   targetDate,
   currentTime
-) {
+) => {
   const target = new Date(targetDate);
 
-  if (Number.isNaN(target.getTime())) {
+  if (
+    Number.isNaN(target.getTime())
+  ) {
     return "00d 00h 00m 00s";
   }
 
@@ -54,21 +62,23 @@ function formatCountdown(
     return "00d 00h 00m 00s";
   }
 
-  const totalSeconds = Math.floor(
-    difference / 1000
-  );
+  const totalSeconds =
+    Math.floor(difference / 1000);
 
-  const days = Math.floor(
-    totalSeconds / 86400
-  );
+  const days =
+    Math.floor(
+      totalSeconds / 86400
+    );
 
-  const hours = Math.floor(
-    (totalSeconds % 86400) / 3600
-  );
+  const hours =
+    Math.floor(
+      (totalSeconds % 86400) / 3600
+    );
 
-  const minutes = Math.floor(
-    (totalSeconds % 3600) / 60
-  );
+  const minutes =
+    Math.floor(
+      (totalSeconds % 3600) / 60
+    );
 
   const seconds =
     totalSeconds % 60;
@@ -86,7 +96,7 @@ function formatCountdown(
     2,
     "0"
   )}s`;
-}
+};
 
 function LiveOfferBar() {
   const navigate = useNavigate();
@@ -106,7 +116,9 @@ function LiveOfferBar() {
     async function loadOffers() {
       try {
         const response =
-          await apiFetch("/api/offers");
+          await apiFetch(
+            "/api/offers"
+          );
 
         if (!response.ok) {
           return;
@@ -140,6 +152,7 @@ function LiveOfferBar() {
 
     return () => {
       cancelled = true;
+
       clearInterval(
         refreshTimer
       );
@@ -159,47 +172,58 @@ function LiveOfferBar() {
     };
   }, []);
 
-  const liveOffers = useMemo(() => {
-  return offers
-    .filter((offer) => {
-      if (
-        !offer.start_date ||
-        !offer.end_date
-      ) {
-        return false;
-      }
+  const liveOffers =
+    useMemo(() => {
+      return offers
+        .filter((offer) => {
+          if (
+            !offer.start_date ||
+            !offer.end_date
+          ) {
+            return false;
+          }
 
-      return (
-        getOfferStatus(
-          offer.start_date,
-          offer.end_date,
-          currentTime
-        ) === "live"
-      );
-    })
-    .sort((a, b) => {
-      const orderA =
-        Number(a.display_order) || 0;
+          return (
+            getOfferStatus(
+              offer.start_date,
+              offer.end_date,
+              currentTime
+            ) === "live"
+          );
+        })
+        .sort((a, b) => {
+          const orderA =
+            Number(
+              a.display_order
+            ) || 0;
 
-      const orderB =
-        Number(b.display_order) || 0;
+          const orderB =
+            Number(
+              b.display_order
+            ) || 0;
 
-      if (orderA !== orderB) {
-        return orderA - orderB;
-      }
+          if (
+            orderA !== orderB
+          ) {
+            return (
+              orderA - orderB
+            );
+          }
 
-      return (
-        Number(a.id) -
-        Number(b.id)
-      );
-    })
-    .slice(0, 3);
-}, [
-  offers,
-  currentTime,
-]);
+          return (
+            Number(a.id) -
+            Number(b.id)
+          );
+        })
+        .slice(0, 3);
+    }, [
+      offers,
+      currentTime,
+    ]);
 
-  if (liveOffers.length === 0) {
+  if (
+    liveOffers.length === 0
+  ) {
     return null;
   }
 
@@ -215,7 +239,9 @@ function LiveOfferBar() {
         promoCode
       );
 
-      setCopiedCode(promoCode);
+      setCopiedCode(
+        promoCode
+      );
 
       setTimeout(() => {
         setCopiedCode("");
@@ -241,7 +267,10 @@ function LiveOfferBar() {
       currentTime.getTime();
 
     const oneDay =
-      24 * 60 * 60 * 1000;
+      24 *
+      60 *
+      60 *
+      1000;
 
     const endingSoon =
       remainingTime > 0 &&
@@ -277,25 +306,26 @@ function LiveOfferBar() {
           event.stopPropagation();
         }}
       >
+
         {/* Offer icon */}
 
-        <div className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#EEF4FA] sm:flex">
+        <div className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#EEF4FA] dark:bg-white/10 sm:flex">
           <Tag
             size={18}
-            className="text-[#17213A]"
+            className="text-[#17213A] dark:text-white"
           />
         </div>
 
         {/* Title */}
 
-        <span className="max-w-[220px] truncate text-sm font-extrabold text-[#17213A] sm:max-w-[260px] sm:text-base">
+        <span className="max-w-[220px] truncate text-sm font-extrabold text-[#17213A] dark:text-white sm:max-w-[260px] sm:text-base">
           {offer.title}
         </span>
 
         {/* Discount */}
 
         {discountText && (
-          <span className="shrink-0 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-extrabold text-red-600">
+          <span className="shrink-0 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-extrabold text-red-600 dark:bg-red-500/10 dark:text-red-400">
             {discountText}
           </span>
         )}
@@ -304,11 +334,11 @@ function LiveOfferBar() {
 
         {description && (
           <>
-            <span className="shrink-0 text-slate-300">
+            <span className="shrink-0 text-slate-300 dark:text-slate-600">
               |
             </span>
 
-            <span className="hidden max-w-[260px] truncate text-xs font-medium text-slate-500 lg:block">
+            <span className="hidden max-w-[260px] truncate text-xs font-medium text-slate-500 dark:text-slate-400 lg:block">
               {description}
             </span>
           </>
@@ -316,20 +346,18 @@ function LiveOfferBar() {
 
         {/* Countdown */}
 
-        <span className="shrink-0 text-slate-300">
+        <span className="shrink-0 text-slate-300 dark:text-slate-600">
           |
         </span>
 
         <div
           className={`flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-xs font-bold ${
             endingSoon
-              ? "bg-red-50 text-red-600"
-              : "bg-[#EEF4FA] text-[#17213A]"
+              ? "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
+              : "bg-[#EEF4FA] text-[#17213A] dark:bg-white/10 dark:text-slate-200"
           }`}
         >
-          <Clock3
-            size={14}
-          />
+          <Clock3 size={14} />
 
           <span className="hidden xl:inline">
             Ends in
@@ -344,7 +372,7 @@ function LiveOfferBar() {
 
         {promoCode && (
           <>
-            <span className="shrink-0 text-slate-300">
+            <span className="shrink-0 text-slate-300 dark:text-slate-600">
               |
             </span>
 
@@ -357,8 +385,8 @@ function LiveOfferBar() {
               }
               className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-bold transition ${
                 endingSoon
-                  ? "border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
-                  : "border-[#CBD7E6] bg-white text-[#17213A] hover:border-[#17213A]"
+                  ? "border-red-200 bg-red-50 text-red-700 hover:bg-red-100 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20"
+                  : "border-[#CBD7E6] bg-white text-[#17213A] hover:border-[#17213A] dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:border-white/30"
               }`}
             >
               <span>
@@ -395,7 +423,7 @@ function LiveOfferBar() {
           onClick={(event) => {
             event.stopPropagation();
           }}
-          className="flex shrink-0 items-center gap-2 rounded-full bg-[#17213A] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0F172A]"
+          className="flex shrink-0 items-center gap-2 rounded-full bg-[#17213A] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0F172A] dark:bg-blue-600 dark:hover:bg-blue-500"
         >
           {offer.cta_text ||
             "Get Started"}
@@ -404,20 +432,23 @@ function LiveOfferBar() {
             size={15}
           />
         </a>
+
       </div>
     );
   }
 
   return (
     <div
-      className="fixed left-0 right-0 top-0 z-[250] border-b border-[#DCE5F0] bg-white/95 shadow-md shadow-[#17213A]/10 backdrop-blur-xl"
+      className="fixed left-0 right-0 top-0 z-[250] border-b border-[#DCE5F0] bg-white/95 shadow-md shadow-[#17213A]/10 backdrop-blur-xl dark:border-white/10 dark:bg-[#0B1220]/95 dark:shadow-black/20"
       onClick={() =>
         navigate("/offers")
       }
     >
       <div className="flex w-full items-center">
 
-        <div className="relative z-10 flex shrink-0 items-center bg-white px-4 py-2.5 sm:px-5">
+        {/* LIVE OFFERS LABEL */}
+
+        <div className="relative z-10 flex shrink-0 items-center bg-white px-4 py-2.5 dark:bg-[#0B1220] sm:px-5">
           <div className="flex items-center gap-2.5 rounded-full bg-red-500 px-4 py-2.5 text-xs font-extrabold tracking-wide text-white shadow-sm">
             <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" />
 
@@ -431,7 +462,7 @@ function LiveOfferBar() {
           </div>
         </div>
 
-        <div className="relative z-10 h-8 w-px shrink-0 bg-[#DCE5F0]" />
+        <div className="relative z-10 h-8 w-px shrink-0 bg-[#DCE5F0] dark:bg-white/10" />
 
         {/* MARQUEE VIEWPORT */}
 
@@ -439,6 +470,7 @@ function LiveOfferBar() {
           className="min-w-0 flex-1 overflow-hidden"
           onMouseEnter={(event) => {
             event.stopPropagation();
+
             event.currentTarget
               .querySelector(
                 ".offer-marquee-track"
@@ -449,6 +481,7 @@ function LiveOfferBar() {
           }}
           onMouseLeave={(event) => {
             event.stopPropagation();
+
             event.currentTarget
               .querySelector(
                 ".offer-marquee-track"
@@ -462,7 +495,10 @@ function LiveOfferBar() {
 
             <div className="flex shrink-0 items-center gap-5 px-5 lg:gap-6 lg:px-6">
               {liveOffers.map(
-                (offer, index) => (
+                (
+                  offer,
+                  index
+                ) => (
                   <div
                     key={`first-${offer.id}`}
                     className="flex shrink-0 items-center gap-5 lg:gap-6"
@@ -474,7 +510,7 @@ function LiveOfferBar() {
                     {index <
                       liveOffers.length -
                         1 && (
-                      <span className="shrink-0 text-lg font-light text-slate-300">
+                      <span className="shrink-0 text-lg font-light text-slate-300 dark:text-slate-600">
                         |
                       </span>
                     )}
@@ -482,14 +518,17 @@ function LiveOfferBar() {
                 )
               )}
 
-              <span className="shrink-0 text-lg font-light text-slate-300">
+              <span className="shrink-0 text-lg font-light text-slate-300 dark:text-slate-600">
                 |
               </span>
             </div>
 
             <div className="flex shrink-0 items-center gap-5 px-5 lg:gap-6 lg:px-6">
               {liveOffers.map(
-                (offer, index) => (
+                (
+                  offer,
+                  index
+                ) => (
                   <div
                     key={`second-${offer.id}`}
                     className="flex shrink-0 items-center gap-5 lg:gap-6"
@@ -501,7 +540,7 @@ function LiveOfferBar() {
                     {index <
                       liveOffers.length -
                         1 && (
-                      <span className="shrink-0 text-lg font-light text-slate-300">
+                      <span className="shrink-0 text-lg font-light text-slate-300 dark:text-slate-600">
                         |
                       </span>
                     )}
@@ -509,13 +548,14 @@ function LiveOfferBar() {
                 )
               )}
 
-              <span className="shrink-0 text-lg font-light text-slate-300">
+              <span className="shrink-0 text-lg font-light text-slate-300 dark:text-slate-600">
                 |
               </span>
             </div>
 
           </div>
         </div>
+
       </div>
     </div>
   );
