@@ -295,7 +295,7 @@ function LiveOfferBar() {
         {/* Discount */}
 
         {discountText && (
-          <span className="shrink-0 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-extrabold text-red-600">
+          <span className="shrink-0 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-extrabold text-red-700">
             {discountText}
           </span>
         )}
@@ -323,7 +323,7 @@ function LiveOfferBar() {
         <div
           className={`flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-xs font-bold ${
             endingSoon
-              ? "bg-red-50 text-red-600"
+              ? "bg-red-50 text-red-700"
               : "bg-[#EEF4FA] text-[#17213A]"
           }`}
         >
@@ -418,7 +418,7 @@ function LiveOfferBar() {
       <div className="flex w-full items-center">
 
         <div className="relative z-10 flex shrink-0 items-center bg-white px-4 py-2.5 sm:px-5">
-          <div className="flex items-center gap-2.5 rounded-full bg-red-500 px-4 py-2.5 text-xs font-extrabold tracking-wide text-white shadow-sm">
+          <div className="flex items-center gap-2.5 rounded-full bg-red-700 px-4 py-2.5 text-xs font-extrabold tracking-wide text-white shadow-sm">
             <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" />
 
             <span className="hidden sm:inline">

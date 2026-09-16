@@ -276,7 +276,7 @@ function Navbar({ showLiveOfferBar = false }) {
       return "font-semibold text-[#17213A]";
     }
 
-    return "text-slate-600 hover:text-[#17213A]";
+    return "text-slate-800 hover:text-[#17213A]";
   }
 
   return (

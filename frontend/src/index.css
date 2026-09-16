@@ -58,7 +58,7 @@ body {
 }
 
 .offer-marquee-track {
-  animation: offerMarquee 70s linear infinite;
+  animation: offerMarquee 35s linear infinite;
   will-change: transform;
 }
 

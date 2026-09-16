@@ -1046,9 +1046,8 @@ function Home() {
                   service.name;
 
                 return (
-                  <button
+                  <div
                     key={service.id}
-                    type="button"
                     onClick={() =>
                       setActiveService(
                         service.name
@@ -1109,7 +1108,7 @@ function Home() {
                         className="transition-transform group-hover:translate-x-1"
                       />
                     </Link>
-                  </button>
+                  </div>
                 );
               })
             )}
@@ -1261,7 +1260,7 @@ function Home() {
                       <Icon size={20} />
                     </div>
 
-                    <span className="text-sm font-bold text-slate-300">
+                    <span className="text-sm font-bold text-slate-600">
                       {step.number}
                     </span>
                   </div>

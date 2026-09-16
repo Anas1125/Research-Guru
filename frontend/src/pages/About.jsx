@@ -592,7 +592,7 @@ function About() {
                         <Icon size={20} />
                       </div>
 
-                      <span className="text-sm font-bold text-slate-300">
+                      <span className="text-sm font-bold text-slate-600">
                         {stage.number}
                       </span>
                     </div>
@@ -734,7 +734,7 @@ function About() {
                                 className={
                                   index < item.rating
                                     ? "fill-[#F59E0B] text-[#F59E0B]"
-                                    : "text-slate-300"
+                                    : "text-slate-600"
                                 }
                               />
                             )
@@ -753,7 +753,7 @@ function About() {
                         </div>
                         {/* DATE */}
                           {item.created_at && (
-                            <p className="mt-3 text-xs font-medium text-slate-400">
+                            <p className="mt-3 text-xs font-medium text-slate-600">
                               {new Date(item.created_at).toLocaleDateString("en-IN", {
                                 day: "2-digit",
                                 month: "short",
@@ -791,7 +791,7 @@ function About() {
                     Share your feedback with us.
                   </p>
 
-                  <p className="mt-4 text-xs leading-5 text-slate-400">
+                  <p className="mt-4 text-xs leading-5 text-slate-600">
                     Reviews are reviewed before being published.
                   </p>
                 </div>
@@ -825,7 +825,7 @@ function About() {
                         }
                         placeholder="Enter your name"
                         disabled={reviewSubmitting}
-                        className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition placeholder:text-slate-600 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
                       />
                     </div>
 
@@ -835,7 +835,7 @@ function About() {
                         htmlFor="review-designation"
                         className="mb-1.5 block text-sm font-semibold text-[#17213A]">
                           Designation
-                        <span className="ml-1 font-normal text-slate-400">
+                        <span className="ml-1 font-normal text-slate-600">
                           (optional)
                         </span>
                       </label>
@@ -854,7 +854,7 @@ function About() {
                         }
                         placeholder="PhD Scholar, Professor..."
                         disabled={reviewSubmitting}
-                        className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="w-full rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm text-[#17213A] outline-none transition placeholder:text-slate-600 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
                       />
                     </div>
                   </div>
@@ -889,7 +889,7 @@ function About() {
                                 className={
                                   ratingValue <= reviewForm.rating
                                     ? "fill-[#F59E0B] text-[#F59E0B]"
-                                    : "text-slate-300"
+                                    : "text-slate-600"
                                 }
                               />
                             </button>
@@ -926,7 +926,7 @@ function About() {
                       placeholder="Tell us about your experience..."
                       rows={3}
                       disabled={reviewSubmitting}
-                      className="w-full resize-none rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm leading-6 text-[#17213A] outline-none transition placeholder:text-slate-400 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="w-full resize-none rounded-xl border border-[#CBD8E6] bg-white px-4 py-3 text-sm leading-6 text-[#17213A] outline-none transition placeholder:text-slate-600 focus:border-[#17213A] focus:ring-2 focus:ring-[#17213A]/10 disabled:cursor-not-allowed disabled:opacity-60"
                     />
                   </div>
 
@@ -974,18 +974,18 @@ function About() {
 
         <div className="relative mx-auto flex max-w-7xl flex-col items-start justify-between gap-10 md:flex-row md:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
+            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-200">
               Start Your Research
             </p>
 
             <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-white md:text-5xl">
               Your Research Deserves
-              <span className="block text-slate-300">
+              <span className="block text-slate-200">
                 The Right Support.
               </span>
             </h2>
 
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-200">
               Tell us about your research requirement and let's explore how {siteName} can support your next step.
             </p>
           </div>
