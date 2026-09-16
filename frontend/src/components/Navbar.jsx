@@ -26,11 +26,6 @@ function Navbar({
 }) {
   const location = useLocation();
 
-
-  /* =====================================================
-     NAVBAR STATE
-  ===================================================== */
-
   const [menuOpen, setMenuOpen] =
     useState(false);
 
@@ -44,11 +39,6 @@ function Navbar({
         : 0
     );
 
-
-  /* =====================================================
-     SITE SETTINGS
-  ===================================================== */
-
   const [siteName, setSiteName] =
     useState("Research Guru");
 
@@ -57,11 +47,6 @@ function Navbar({
 
   const [hasLiveOffer, setHasLiveOffer] =
     useState(false);
-
-
-  /* =====================================================
-     THEME
-  ===================================================== */
 
   const [darkMode, setDarkMode] =
     useState(() => {
@@ -78,11 +63,6 @@ function Navbar({
       );
     });
 
-
-  /* =====================================================
-     BULB
-  ===================================================== */
-
   const bulbRef =
     useRef(null);
 
@@ -92,12 +72,6 @@ function Navbar({
   const [bulbClicks, setBulbClicks] =
     useState(0);
 
-  /*
-   * Initial bulb position.
-   *
-   * Starts nicely inside the right side
-   * instead of touching the edge.
-   */
   const [bulbX, setBulbX] =
     useState(() => {
       if (
@@ -115,11 +89,6 @@ function Navbar({
   const bulbTimerRef =
     useRef(null);
 
-
-  /* =====================================================
-     DRAG REFS
-  ===================================================== */
-
   const isDragging =
     useRef(false);
 
@@ -134,11 +103,6 @@ function Navbar({
 
   const suppressClick =
     useRef(false);
-
-
-  /* =====================================================
-     NAVIGATION
-  ===================================================== */
 
   const navItems = [
     {
@@ -163,11 +127,6 @@ function Navbar({
     },
   ];
 
-
-  /* =====================================================
-     APPLY THEME
-  ===================================================== */
-
   useEffect(() => {
     document.documentElement.classList.toggle(
       "dark",
@@ -184,11 +143,6 @@ function Navbar({
     darkMode,
   ]);
 
-
-  /* =====================================================
-     CLEAN BULB TIMER
-  ===================================================== */
-
   useEffect(() => {
     return () => {
       if (
@@ -201,15 +155,7 @@ function Navbar({
     };
   }, []);
 
-
-  /* =====================================================
-     BULB CLICK
-  ===================================================== */
-
   function handleBulbClick() {
-    /*
-     * Ignore click caused by dragging.
-     */
     if (
       suppressClick.current
     ) {
@@ -219,21 +165,12 @@ function Navbar({
       return;
     }
 
-
-    /*
-     * Broken bulb cannot
-     * be clicked anymore.
-     */
     if (
       bulbBroken
     ) {
       return;
     }
 
-
-    /*
-     * Increase click count.
-     */
     const nextClicks =
       bulbClicks + 1;
 
@@ -241,20 +178,11 @@ function Navbar({
       nextClicks
     );
 
-
-    /*
-     * Toggle theme.
-     */
     setDarkMode(
       previous =>
         !previous
     );
 
-
-    /*
-     * Five clicks within
-     * five seconds = broken bulb.
-     */
     if (
       nextClicks >= 5
     ) {
@@ -270,7 +198,6 @@ function Navbar({
         0
       );
 
-
       if (
         bulbTimerRef.current
       ) {
@@ -282,11 +209,6 @@ function Navbar({
       return;
     }
 
-
-    /*
-     * Restart the five-second
-     * click window.
-     */
     if (
       bulbTimerRef.current
     ) {
@@ -295,26 +217,17 @@ function Navbar({
       );
     }
 
-
     bulbTimerRef.current =
       setTimeout(() => {
         setBulbClicks(
           0
         );
-      }, 5000);
+      }, 1000);
   }
-
-
-  /* =====================================================
-     BULB DRAG START
-  ===================================================== */
 
   function handleBulbPointerDown(
     event
   ) {
-    /*
-     * Only left mouse button.
-     */
     if (
       event.pointerType ===
         "mouse" &&
@@ -322,7 +235,6 @@ function Navbar({
     ) {
       return;
     }
-
 
     isDragging.current =
       true;
@@ -342,11 +254,6 @@ function Navbar({
     );
   }
 
-
-  /* =====================================================
-     BULB DRAG MOVE
-  ===================================================== */
-
   function handleBulbPointerMove(
     event
   ) {
@@ -361,10 +268,6 @@ function Navbar({
       event.clientX -
       dragStartX.current;
 
-
-    /*
-     * More than 4px = drag.
-     */
     if (
       Math.abs(
         difference
@@ -374,16 +277,6 @@ function Navbar({
         true;
     }
 
-
-    /*
-     * Allow the bulb to move
-     * very close to both edges.
-     *
-     * The bulb itself is about
-     * 82px wide, so 41px keeps
-     * the visible bulb inside
-     * the viewport.
-     */
     const minX = 41;
 
     const maxX =
@@ -397,7 +290,6 @@ function Navbar({
         maxX
       );
 
-
     const nextX =
       Math.min(
         Math.max(
@@ -408,16 +300,10 @@ function Navbar({
         safeMaxX
       );
 
-
     setBulbX(
       nextX
     );
   }
-
-
-  /* =====================================================
-     BULB DRAG END
-  ===================================================== */
 
   function handleBulbPointerUp(
     event
@@ -432,11 +318,6 @@ function Navbar({
     isDragging.current =
       false;
 
-
-    /*
-     * Prevent release from
-     * triggering bulb click.
-     */
     if (
       hasMoved.current
     ) {
@@ -444,23 +325,13 @@ function Navbar({
         true;
     }
 
-
     event.currentTarget.releasePointerCapture?.(
       event.pointerId
     );
   }
 
-
-  /* =====================================================
-     KEEP BULB INSIDE SCREEN
-  ===================================================== */
-
   useEffect(() => {
     function handleResize() {
-      /*
-       * Same 41px edge limit
-       * used by dragging.
-       */
       const minX = 41;
 
       const maxX =
@@ -501,11 +372,6 @@ function Navbar({
     };
   }, []);
 
-
-  /* =====================================================
-     LOAD SITE SETTINGS
-  ===================================================== */
-
   useEffect(() => {
     let cancelled =
       false;
@@ -518,17 +384,14 @@ function Navbar({
             "/api/site-settings"
           );
 
-
         if (
           !response.ok
         ) {
           return;
         }
 
-
         const data =
           await response.json();
-
 
         if (
           cancelled
@@ -536,22 +399,16 @@ function Navbar({
           return;
         }
 
-
         setSiteName(
           data.site_name ||
             "Research Guru"
         );
-
 
         setLogoUrl(
           data.logo_url ||
             ""
         );
 
-
-        /*
-         * FAVICON
-         */
         if (
           data.favicon_url
         ) {
@@ -600,7 +457,6 @@ function Navbar({
       }
     }
 
-
     loadSiteSettings();
 
 
@@ -609,11 +465,6 @@ function Navbar({
         true;
     };
   }, []);
-
-
-  /* =====================================================
-     CHECK LIVE OFFERS
-  ===================================================== */
 
   useEffect(() => {
     let cancelled =
@@ -642,10 +493,8 @@ function Navbar({
           return;
         }
 
-
         const offers =
           await response.json();
-
 
         if (
           !Array.isArray(
@@ -663,7 +512,6 @@ function Navbar({
           return;
         }
 
-
         const now =
           new Date();
 
@@ -678,7 +526,6 @@ function Navbar({
                 return false;
               }
 
-
               const start =
                 new Date(
                   offer.start_date
@@ -688,7 +535,6 @@ function Navbar({
                 new Date(
                   offer.end_date
                 );
-
 
               if (
                 Number.isNaN(
@@ -701,14 +547,12 @@ function Navbar({
                 return false;
               }
 
-
               return (
                 now >= start &&
                 now <= end
               );
             }
           );
-
 
         if (
           !cancelled
@@ -725,7 +569,6 @@ function Navbar({
           error
         );
 
-
         if (
           !cancelled
         ) {
@@ -736,16 +579,13 @@ function Navbar({
       }
     }
 
-
     checkLiveOffer();
-
 
     const interval =
       setInterval(
         checkLiveOffer,
         60000
       );
-
 
     return () => {
       cancelled =
@@ -757,11 +597,6 @@ function Navbar({
     };
   }, []);
 
-
-  /* =====================================================
-     NAVBAR SCROLL
-  ===================================================== */
-
   useEffect(() => {
     function handleScroll() {
       const currentScrollY =
@@ -771,10 +606,6 @@ function Navbar({
       const previousScrollY =
         lastScrollYRef.current;
 
-
-      /*
-       * Always show at the top.
-       */
       if (
         currentScrollY <= 10
       ) {
@@ -783,10 +614,6 @@ function Navbar({
         );
       }
 
-
-      /*
-       * Scrolling DOWN.
-       */
       else if (
         currentScrollY >
         previousScrollY
@@ -800,10 +627,6 @@ function Navbar({
         );
       }
 
-
-      /*
-       * Scrolling UP.
-       */
       else if (
         currentScrollY <
         previousScrollY
@@ -813,11 +636,9 @@ function Navbar({
         );
       }
 
-
       lastScrollYRef.current =
         currentScrollY;
     }
-
 
     window.addEventListener(
       "scroll",
@@ -827,7 +648,6 @@ function Navbar({
       }
     );
 
-
     return () => {
       window.removeEventListener(
         "scroll",
@@ -836,18 +656,12 @@ function Navbar({
     };
   }, []);
 
-
-  /* =====================================================
-     LOGO URL
-  ===================================================== */
-
   function getLogoUrl() {
     if (
       !logoUrl
     ) {
       return "";
     }
-
 
     if (
       logoUrl.startsWith(
@@ -865,18 +679,10 @@ function Navbar({
   }
 
 
-  /* =====================================================
-     NAV ITEM STYLE
-  ===================================================== */
-
   function getNavItemTextClass(
     item,
     active
   ) {
-    /*
-     * Live offer gets green
-     * pulsing treatment.
-     */
     if (
       item.name ===
         "Offers" &&
@@ -889,10 +695,6 @@ function Navbar({
       `;
     }
 
-
-    /*
-     * Active page.
-     */
     if (
       active
     ) {
@@ -903,10 +705,6 @@ function Navbar({
       `;
     }
 
-
-    /*
-     * Normal page.
-     */
     return `
       text-slate-600
       hover:text-[#17213A]
@@ -915,11 +713,6 @@ function Navbar({
       dark:hover:text-white
     `;
   }
-
-
-  /* =====================================================
-     HANGING BULB
-  ===================================================== */
 
   const themeToggle = (
     <div
@@ -953,8 +746,6 @@ function Navbar({
       `}
     >
 
-      {/* BULB ASSEMBLY */}
-
       <div
         ref={bulbRef}
         className="
@@ -978,10 +769,6 @@ function Navbar({
         }}
       >
 
-        {/* =============================================
-            WIRE
-        ============================================== */}
-
         <div
           className="
             h-[92px]
@@ -992,11 +779,6 @@ function Navbar({
             dark:bg-slate-400
           "
         />
-
-
-        {/* =============================================
-            BULB BUTTON
-        ============================================== */}
 
         <button
           type="button"
@@ -1057,10 +839,6 @@ function Navbar({
           {!bulbBroken && (
             <>
 
-              {/* =======================================
-                  SOCKET
-              ======================================== */}
-
               <div
                 className="
                   relative
@@ -1082,8 +860,6 @@ function Navbar({
                 "
               >
 
-                {/* TOP SHINE */}
-
                 <div
                   className="
                     absolute
@@ -1097,9 +873,6 @@ function Navbar({
                     to-transparent
                   "
                 />
-
-
-                {/* SCREW GROOVES */}
 
                 <span
                   className="
@@ -1155,11 +928,6 @@ function Navbar({
 
               </div>
 
-
-              {/* =======================================
-                  LIGHT GLOW
-              ======================================== */}
-
               <div
                 className={`
                   pointer-events-none
@@ -1192,11 +960,6 @@ function Navbar({
                   }
                 `}
               />
-
-
-              {/* =======================================
-                  BULB GLASS
-              ======================================== */}
 
               <div
                 className={`
@@ -1241,8 +1004,6 @@ function Navbar({
                 `}
               >
 
-                {/* GLASS HIGHLIGHT */}
-
                 <div
                   className="
                     pointer-events-none
@@ -1264,9 +1025,6 @@ function Navbar({
                     blur-sm
                   "
                 />
-
-
-                {/* U-SHAPED FILAMENT */}
 
                 <div
                   className={`
@@ -1323,11 +1081,6 @@ function Navbar({
             </>
           )}
 
-
-          {/* =============================================
-              BROKEN GLASS
-          ============================================== */}
-
           {bulbBroken && (
             <div
               className="
@@ -1344,8 +1097,6 @@ function Navbar({
                 -translate-x-1/2
               "
             >
-
-              {/* SHARD 1 */}
 
               <span
                 className="
@@ -1372,9 +1123,6 @@ function Navbar({
                 "
               />
 
-
-              {/* SHARD 2 */}
-
               <span
                 className="
                   absolute
@@ -1399,9 +1147,6 @@ function Navbar({
                   animate-glass-2
                 "
               />
-
-
-              {/* SHARD 3 */}
 
               <span
                 className="
@@ -1428,9 +1173,6 @@ function Navbar({
                 "
               />
 
-
-              {/* SHARD 4 */}
-
               <span
                 className="
                   absolute
@@ -1455,9 +1197,6 @@ function Navbar({
                   animate-glass-4
                 "
               />
-
-
-              {/* SHARD 5 */}
 
               <span
                 className="
@@ -1484,9 +1223,6 @@ function Navbar({
                 "
               />
 
-
-              {/* SHARD 6 */}
-
               <span
                 className="
                   absolute
@@ -1511,9 +1247,6 @@ function Navbar({
                   animate-glass-6
                 "
               />
-
-
-              {/* SMALL SHARD */}
 
               <span
                 className="
@@ -1542,11 +1275,6 @@ function Navbar({
           )}
 
         </button>
-
-
-        {/* =============================================
-            HOVER LABEL
-        ============================================== */}
 
         <div
           className="
@@ -1624,24 +1352,11 @@ function Navbar({
     </div>
   );
 
-
-  /* =====================================================
-     RETURN
-  ===================================================== */
-
   return (
     <>
 
-      {/* =================================================
-          BULB ANIMATIONS
-      ================================================= */}
-
       <style>
         {`
-
-          /* ============================================
-             NATURAL BULB SWING
-          ============================================ */
 
           @keyframes bulbSwing {
 
@@ -1696,11 +1411,6 @@ function Navbar({
               top center;
           }
 
-
-          /* ============================================
-             GLASS SHARD 1
-          ============================================ */
-
           @keyframes glass1 {
 
             0% {
@@ -1722,11 +1432,6 @@ function Navbar({
             }
 
           }
-
-
-          /* ============================================
-             GLASS SHARD 2
-          ============================================ */
 
           @keyframes glass2 {
 
@@ -1750,11 +1455,6 @@ function Navbar({
 
           }
 
-
-          /* ============================================
-             GLASS SHARD 3
-          ============================================ */
-
           @keyframes glass3 {
 
             0% {
@@ -1776,11 +1476,6 @@ function Navbar({
             }
 
           }
-
-
-          /* ============================================
-             GLASS SHARD 4
-          ============================================ */
 
           @keyframes glass4 {
 
@@ -1804,11 +1499,6 @@ function Navbar({
 
           }
 
-
-          /* ============================================
-             GLASS SHARD 5
-          ============================================ */
-
           @keyframes glass5 {
 
             0% {
@@ -1830,11 +1520,6 @@ function Navbar({
             }
 
           }
-
-
-          /* ============================================
-             GLASS SHARD 6
-          ============================================ */
 
           @keyframes glass6 {
 
@@ -1858,11 +1543,6 @@ function Navbar({
 
           }
 
-
-          /* ============================================
-             GLASS SHARD 7
-          ============================================ */
-
           @keyframes glass7 {
 
             0% {
@@ -1884,11 +1564,6 @@ function Navbar({
             }
 
           }
-
-
-          /* ============================================
-             SHARD ANIMATIONS
-          ============================================ */
 
           .animate-glass-1 {
             animation:
@@ -1955,11 +1630,6 @@ function Navbar({
         `}
       </style>
 
-
-      {/* =================================================
-          NAVBAR
-      ================================================= */}
-
       <header
         className={`
           fixed
@@ -2002,10 +1672,6 @@ function Navbar({
         `}
       >
 
-        {/* =================================================
-            NAVBAR CONTENT
-        ================================================= */}
-
         <div
           className="
             mx-auto
@@ -2020,10 +1686,6 @@ function Navbar({
             py-4
           "
         >
-
-          {/* ===============================================
-              LOGO
-          ================================================ */}
 
           <Link
             to="/"
@@ -2097,11 +1759,6 @@ function Navbar({
 
           </Link>
 
-
-          {/* ===============================================
-              DESKTOP NAV
-          ================================================ */}
-
           <nav
             className="
               hidden
@@ -2166,11 +1823,6 @@ function Navbar({
 
           </nav>
 
-
-          {/* ===============================================
-              DESKTOP GET STARTED
-          ================================================ */}
-
           <div
             className="
               hidden
@@ -2222,11 +1874,6 @@ function Navbar({
             </Link>
 
           </div>
-
-
-          {/* ===============================================
-              MOBILE MENU BUTTON
-          ================================================ */}
 
           <div
             className="
@@ -2295,11 +1942,6 @@ function Navbar({
           </div>
 
         </div>
-
-
-        {/* =================================================
-            MOBILE MENU
-        ================================================= */}
 
         {menuOpen && (
           <nav
@@ -2373,12 +2015,6 @@ function Navbar({
 
           </nav>
         )}
-
-
-        {/* =================================================
-            BULB
-            HOME ONLY
-        ================================================= */}
 
         {location.pathname === "/" &&
           themeToggle}
