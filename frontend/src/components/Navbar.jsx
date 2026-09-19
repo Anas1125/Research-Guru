@@ -20,7 +20,6 @@ import {
   API_URL,
 } from "../utils/api";
 
-
 function Navbar({
   showLiveOfferBar = false,
 }) {
@@ -263,7 +262,6 @@ function Navbar({
       return;
     }
 
-
     const difference =
       event.clientX -
       dragStartX.current;
@@ -277,12 +275,12 @@ function Navbar({
         true;
     }
 
-    const minX = 41;
+    const minX =
+      41;
 
     const maxX =
       window.innerWidth -
       41;
-
 
     const safeMaxX =
       Math.max(
@@ -314,7 +312,6 @@ function Navbar({
       return;
     }
 
-
     isDragging.current =
       false;
 
@@ -332,7 +329,8 @@ function Navbar({
 
   useEffect(() => {
     function handleResize() {
-      const minX = 41;
+      const minX =
+        41;
 
       const maxX =
         window.innerWidth -
@@ -343,7 +341,6 @@ function Navbar({
           minX,
           maxX
         );
-
 
       setBulbX(
         currentX =>
@@ -357,12 +354,10 @@ function Navbar({
       );
     }
 
-
     window.addEventListener(
       "resize",
       handleResize
     );
-
 
     return () => {
       window.removeEventListener(
@@ -375,7 +370,6 @@ function Navbar({
   useEffect(() => {
     let cancelled =
       false;
-
 
     async function loadSiteSettings() {
       try {
@@ -477,7 +471,6 @@ function Navbar({
           await apiFetch(
             "/api/offers"
           );
-
 
         if (
           !response.ok
@@ -674,10 +667,8 @@ function Navbar({
       return logoUrl;
     }
 
-
     return `${API_URL}${logoUrl}`;
   }
-
 
   function getNavItemTextClass(
     item,
@@ -718,26 +709,17 @@ function Navbar({
     <div
       className={`
         pointer-events-none
-
         absolute
         left-0
         top-full
-
         z-[200]
-
         hidden
         h-[350px]
         w-full
-
         sm:block
-
-        /*
-         * SLOWER BULB HIDE/SHOW
-         */
         transition-all
         duration-[650ms]
         ease-in-out
-
         ${
           showNavbar
             ? "translate-y-0 opacity-100"
@@ -750,18 +732,14 @@ function Navbar({
         ref={bulbRef}
         className="
           group
-
           pointer-events-none
-
           absolute
           top-0
-
           flex
           w-[184px]
           -translate-x-1/2
           flex-col
           items-center
-
           bulb-hanging-animation
         "
         style={{
@@ -782,27 +760,21 @@ function Navbar({
 
         <button
           type="button"
-
           onPointerDown={
             handleBulbPointerDown
           }
-
           onPointerMove={
             handleBulbPointerMove
           }
-
           onPointerUp={
             handleBulbPointerUp
           }
-
           onPointerCancel={
             handleBulbPointerUp
           }
-
           onClick={
             handleBulbClick
           }
-
           aria-label={
             bulbBroken
               ? "Bulb broken"
@@ -811,139 +783,112 @@ function Navbar({
 
           className="
             pointer-events-auto
-
             relative
-
+            z-20
             min-h-[170px]
             min-w-[82px]
-
             flex
             cursor-grab
-
             touch-none
             select-none
-
             flex-col
             items-center
-
             border-0
             bg-transparent
             p-0
-
             outline-none
-
             active:cursor-grabbing
           "
         >
+          <div
+            className="
+              relative
+              z-30
+              h-[52px]
+              w-[58px]
+              shrink-0
+              overflow-hidden
+              rounded-[12px]
+              bg-gradient-to-b
+              from-slate-500
+              via-slate-900
+              to-slate-700
+              shadow-[0_8px_20px_rgba(0,0,0,0.35)]
+            "
+          >
+
+            <div
+              className="
+                absolute
+                inset-x-0
+                top-0
+                h-[8px]
+                bg-gradient-to-b
+                from-white/25
+                to-transparent
+              "
+            />
+
+            <span
+              className="
+                absolute
+                left-0
+                top-[10px]
+                h-[3px]
+                w-full
+                bg-slate-400/70
+              "
+            />
+
+            <span
+              className="
+                absolute
+                left-0
+                top-[20px]
+                h-[3px]
+                w-full
+                bg-slate-400/70
+              "
+            />
+
+            <span
+              className="
+                absolute
+                left-0
+                top-[30px]
+                h-[3px]
+                w-full
+                bg-slate-400/70
+              "
+            />
+
+            <span
+              className="
+                absolute
+                left-0
+                top-[40px]
+                h-[3px]
+                w-full
+                bg-slate-400/70
+              "
+            />
+
+          </div>
+
 
           {!bulbBroken && (
             <>
 
               <div
-                className="
-                  relative
-                  z-20
-
-                  h-[52px]
-                  w-[58px]
-
-                  overflow-hidden
-
-                  rounded-[12px]
-
-                  bg-gradient-to-b
-                  from-slate-500
-                  via-slate-900
-                  to-slate-700
-
-                  shadow-[0_8px_20px_rgba(0,0,0,0.35)]
-                "
-              >
-
-                <div
-                  className="
-                    absolute
-                    inset-x-0
-                    top-0
-
-                    h-[8px]
-
-                    bg-gradient-to-b
-                    from-white/25
-                    to-transparent
-                  "
-                />
-
-                <span
-                  className="
-                    absolute
-                    left-0
-                    top-[10px]
-
-                    h-[3px]
-                    w-full
-
-                    bg-slate-400/70
-                  "
-                />
-
-                <span
-                  className="
-                    absolute
-                    left-0
-                    top-[20px]
-
-                    h-[3px]
-                    w-full
-
-                    bg-slate-400/70
-                  "
-                />
-
-                <span
-                  className="
-                    absolute
-                    left-0
-                    top-[30px]
-
-                    h-[3px]
-                    w-full
-
-                    bg-slate-400/70
-                  "
-                />
-
-                <span
-                  className="
-                    absolute
-                    left-0
-                    top-[40px]
-
-                    h-[3px]
-                    w-full
-
-                    bg-slate-400/70
-                  "
-                />
-
-              </div>
-
-              <div
                 className={`
                   pointer-events-none
-
                   absolute
                   top-[25px]
-
                   h-[180px]
                   w-[180px]
-
                   rounded-full
-
                   bg-yellow-300
-
                   blur-3xl
-
                   transition-all
                   duration-700
 
@@ -961,30 +906,23 @@ function Navbar({
                 `}
               />
 
+
               <div
                 className={`
                   relative
-
                   -mt-[1px]
-
                   h-[118px]
                   w-[82px]
-
                   overflow-hidden
-
                   rounded-t-[48%]
                   rounded-b-[52%]
-
                   border
                   border-white/80
-
                   bg-gradient-to-b
                   from-white/60
                   via-yellow-100/80
                   to-yellow-200/40
-
                   backdrop-blur-[2px]
-
                   transition-all
                   duration-700
 
@@ -1007,41 +945,30 @@ function Navbar({
                 <div
                   className="
                     pointer-events-none
-
                     absolute
-
                     left-[12px]
                     top-[12px]
-
                     h-[75px]
                     w-[10px]
-
                     rotate-[8deg]
-
                     rounded-full
-
                     bg-white/50
-
                     blur-sm
                   "
                 />
 
+
                 <div
                   className={`
                     absolute
-
                     left-1/2
                     top-1/2
-
                     h-[55px]
                     w-[42px]
-
                     -translate-x-1/2
                     -translate-y-1/2
-
                     transition-opacity
                     duration-500
-
                     ${
                       darkMode
                         ? "opacity-20"
@@ -1053,23 +980,16 @@ function Navbar({
                   <div
                     className="
                       absolute
-
                       bottom-[3px]
                       left-1/2
-
                       h-[38px]
                       w-[36px]
-
                       -translate-x-1/2
-
                       rounded-b-[50%]
-
                       border-b-[3px]
                       border-l-[3px]
                       border-r-[3px]
-
                       border-yellow-600
-
                       shadow-[0_0_8px_rgba(234,179,8,0.9)]
                     "
                   />
@@ -1085,40 +1005,29 @@ function Navbar({
             <div
               className="
                 pointer-events-none
-
                 absolute
-
                 left-1/2
                 top-[15px]
-
                 h-[190px]
                 w-[210px]
-
                 -translate-x-1/2
               "
             >
 
+
               <span
                 className="
                   absolute
-
                   left-[45px]
                   top-[5px]
-
                   h-[52px]
                   w-[18px]
-
                   rotate-[-28deg]
-
                   rounded-[45%_55%_35%_65%]
-
                   border
                   border-white/90
-
                   bg-white/20
-
                   shadow-[inset_2px_2px_7px_rgba(255,255,255,0.9)]
-
                   animate-glass-1
                 "
               />
@@ -1126,99 +1035,70 @@ function Navbar({
               <span
                 className="
                   absolute
-
                   left-[78px]
                   top-0
-
                   h-[50px]
                   w-[17px]
-
                   rotate-[18deg]
-
                   rounded-[55%_40%_60%_45%]
-
                   border
                   border-white/90
-
                   bg-white/20
-
                   shadow-[inset_2px_1px_7px_rgba(255,255,255,0.9)]
-
                   animate-glass-2
                 "
               />
 
+
               <span
                 className="
                   absolute
-
                   left-[108px]
                   top-[10px]
-
                   h-[45px]
                   w-[17px]
-
                   rotate-[52deg]
-
                   rounded-[40%_60%_45%_55%]
-
                   border
                   border-white/85
-
                   bg-white/15
-
                   shadow-[inset_-2px_2px_6px_rgba(255,255,255,0.8)]
-
                   animate-glass-3
                 "
               />
 
+
               <span
                 className="
                   absolute
-
                   left-[55px]
                   top-[45px]
-
                   h-[38px]
                   w-[14px]
-
                   rotate-[70deg]
-
                   rounded-[50%]
-
                   border
                   border-white/85
-
                   bg-white/15
-
                   shadow-[inset_2px_1px_5px_rgba(255,255,255,0.85)]
-
                   animate-glass-4
                 "
               />
 
+
               <span
                 className="
                   absolute
-
                   left-[92px]
                   top-[48px]
-
                   h-[40px]
                   w-[14px]
-
                   rotate-[-58deg]
-
                   rounded-[45%]
-
                   border
                   border-white/90
-
                   bg-white/20
-
                   shadow-[inset_-2px_1px_6px_rgba(255,255,255,0.9)]
-
                   animate-glass-5
                 "
               />
@@ -1226,47 +1106,33 @@ function Navbar({
               <span
                 className="
                   absolute
-
                   left-[125px]
                   top-[42px]
-
                   h-[32px]
                   w-[12px]
-
                   rotate-[35deg]
-
                   rounded-[50%]
-
                   border
                   border-white/80
-
                   bg-white/15
-
                   shadow-[inset_2px_1px_5px_rgba(255,255,255,0.8)]
-
                   animate-glass-6
                 "
               />
 
+
               <span
                 className="
                   absolute
-
                   left-[38px]
                   top-[50px]
-
                   h-[23px]
                   w-[9px]
-
                   rotate-[-62deg]
-
                   rounded-[50%]
-
                   border
                   border-white/75
-
                   bg-white/15
-
                   animate-glass-7
                 "
               />
@@ -1276,76 +1142,200 @@ function Navbar({
 
         </button>
 
-        <div
-          className="
-            pointer-events-none
-
-            mt-5
-
-            whitespace-nowrap
-
-            translate-y-2
-            opacity-0
-
-            transition-all
-            duration-300
-
-            group-hover:translate-y-0
-            group-hover:opacity-100
-          "
-        >
-
+        {bulbBroken ? (
           <div
-            className={`
-              rounded-full
-
-              border
-
-              px-5
-              py-2.5
-
-              text-sm
-              font-semibold
-
-              shadow-xl
-
-              backdrop-blur-md
-
-              ${
-                bulbBroken
-                  ? `
-                    border-red-300
-                    bg-red-50/95
-                    text-red-600
-                    shadow-red-500/10
-
-                    dark:border-red-500/30
-                    dark:bg-red-950/90
-                    dark:text-red-400
-                  `
-                  : `
-                    border-slate-200
-                    bg-white/95
-                    text-slate-700
-                    shadow-slate-900/10
-
-                    dark:border-white/10
-                    dark:bg-[#111827]/95
-                    dark:text-slate-200
-                  `
-              }
-            `}
+            className="
+              pointer-events-none
+              absolute
+              left-1/2
+              top-[190px]
+              z-0
+              flex
+              h-[42px]
+              w-[280px]
+              -translate-x-1/2
+              opacity-0
+              transition-opacity
+              duration-200
+              group-hover:opacity-100
+            "
           >
 
-            {bulbBroken
-              ? "Bulb broken · it's dark in here"
-              : darkMode
-                ? "Light off · click to turn on"
-                : "Light on · click to dim"}
+            <div
+              className="
+                broken-message-left
+                flex
+                h-[38px]
+                w-[140px]
+                items-center
+                justify-end
+                rounded-l-full
+                border
+                border-r-0
+                border-red-500/50
+                bg-red-950/90
+                px-3
+                text-[12px]
+                font-semibold
+                text-red-400
+                shadow-[0_4px_15px_rgba(239,68,68,0.08)]
+                backdrop-blur-md
+              "
+            >
+              Bulb broken ·
+            </div>
+
+            <div
+              className="
+                relative
+                z-30
+                h-[42px]
+                w-[8px]
+                shrink-0
+              "
+            >
+
+              <svg
+                viewBox="0 0 20 100"
+                className="
+                  absolute
+                  left-1/2
+                  top-1/2
+                  h-[42px]
+                  w-[12px]
+                  -translate-x-1/2
+                  -translate-y-1/2
+                  overflow-visible
+                "
+              >
+
+                <path
+                  d="
+                    M 11 0
+                    L 8 17
+                    L 13 31
+                    L 7 47
+                    L 12 62
+                    L 6 79
+                    L 9 100
+                  "
+                  fill="none"
+                  stroke="rgba(248,113,113,0.9)"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+
+
+                <path
+                  d="
+                    M 8 17
+                    L 3 24
+                  "
+                  fill="none"
+                  stroke="rgba(248,113,113,0.7)"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                />
+
+
+                <path
+                  d="
+                    M 7 47
+                    L 15 42
+                  "
+                  fill="none"
+                  stroke="rgba(248,113,113,0.7)"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                />
+
+                <path
+                  d="
+                    M 6 79
+                    L 15 84
+                  "
+                  fill="none"
+                  stroke="rgba(248,113,113,0.7)"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                />
+
+              </svg>
+
+            </div>
+
+            <div
+              className="
+                broken-message-right
+                flex
+                h-[38px]
+                w-[140px]
+                items-center
+                justify-start
+                rounded-r-full
+                border
+                border-l-0
+                border-red-500/50
+                bg-red-950/90
+                px-3
+                text-[12px]
+                font-semibold
+                text-red-400
+                shadow-[0_4px_15px_rgba(239,68,68,0.08)]
+                backdrop-blur-md
+              "
+            >
+              it's dark in here
+            </div>
 
           </div>
 
-        </div>
+        ) : (
+
+          <div
+            className="
+              pointer-events-none
+              mt-5
+              whitespace-nowrap
+              translate-y-2
+              opacity-0
+              transition-all
+              duration-300
+              group-hover:translate-y-0
+              group-hover:opacity-100
+            "
+          >
+
+            <div
+              className="
+                rounded-full
+                border
+                border-slate-200
+                bg-white/95
+                px-5
+                py-2.5
+                text-sm
+                font-semibold
+                text-slate-700
+                shadow-xl
+                shadow-slate-900/10
+                backdrop-blur-md
+                dark:border-white/10
+                dark:bg-[#111827]/95
+                dark:text-slate-200
+              "
+            >
+
+              {darkMode
+                ? "Light off · click to turn on"
+                : "Light on · click to dim"}
+
+            </div>
+
+          </div>
+
+        )}
 
       </div>
 
@@ -1454,7 +1444,6 @@ function Navbar({
             }
 
           }
-
           @keyframes glass3 {
 
             0% {
@@ -1465,51 +1454,38 @@ function Navbar({
 
               opacity: 1;
             }
-
             100% {
               transform:
                 translate(90px,120px)
                 rotate(270deg)
                 scale(0.55);
-
               opacity: 0;
             }
-
           }
-
           @keyframes glass4 {
-
             0% {
               transform:
                 translate(0,0)
                 rotate(70deg)
                 scale(1);
-
               opacity: 1;
             }
-
             100% {
               transform:
                 translate(-105px,95px)
                 rotate(310deg)
                 scale(0.5);
-
               opacity: 0;
             }
-
           }
-
           @keyframes glass5 {
-
             0% {
               transform:
                 translate(0,0)
                 rotate(-58deg)
                 scale(1);
-
               opacity: 1;
             }
-
             100% {
               transform:
                 translate(105px,120px)
@@ -1518,53 +1494,39 @@ function Navbar({
 
               opacity: 0;
             }
-
           }
-
           @keyframes glass6 {
-
             0% {
               transform:
                 translate(0,0)
                 rotate(35deg)
                 scale(1);
-
               opacity: 1;
             }
-
             100% {
               transform:
                 translate(125px,85px)
                 rotate(220deg)
                 scale(0.5);
-
               opacity: 0;
             }
-
           }
-
           @keyframes glass7 {
-
             0% {
               transform:
                 translate(0,0)
                 rotate(-62deg)
                 scale(1);
-
               opacity: 1;
             }
-
             100% {
               transform:
                 translate(-125px,70px)
                 rotate(-290deg)
                 scale(0.45);
-
               opacity: 0;
-            }
-
+        }
           }
-
           .animate-glass-1 {
             animation:
               glass1
@@ -1572,8 +1534,6 @@ function Navbar({
               cubic-bezier(.2,.7,.2,1)
               forwards;
           }
-
-
           .animate-glass-2 {
             animation:
               glass2
@@ -1581,8 +1541,6 @@ function Navbar({
               cubic-bezier(.2,.7,.2,1)
               forwards;
           }
-
-
           .animate-glass-3 {
             animation:
               glass3
@@ -1590,8 +1548,6 @@ function Navbar({
               cubic-bezier(.2,.7,.2,1)
               forwards;
           }
-
-
           .animate-glass-4 {
             animation:
               glass4
@@ -1599,8 +1555,6 @@ function Navbar({
               cubic-bezier(.2,.7,.2,1)
               forwards;
           }
-
-
           .animate-glass-5 {
             animation:
               glass5
@@ -1608,8 +1562,6 @@ function Navbar({
               cubic-bezier(.2,.7,.2,1)
               forwards;
           }
-
-
           .animate-glass-6 {
             animation:
               glass6
@@ -1617,8 +1569,6 @@ function Navbar({
               cubic-bezier(.2,.7,.2,1)
               forwards;
           }
-
-
           .animate-glass-7 {
             animation:
               glass7
@@ -1626,16 +1576,57 @@ function Navbar({
               cubic-bezier(.2,.7,.2,1)
               forwards;
           }
-
+          .broken-message-left {
+            transform-origin:
+              right center;
+            transform:
+              translateX(55px)
+              rotate(0deg);
+            opacity: 0;
+            transition:
+              transform
+              450ms
+              cubic-bezier(.16,1,.3,1),
+              opacity
+              250ms
+              ease;
+          }
+          .broken-message-right {
+            transform-origin:
+              left center;
+            transform:
+              translateX(-55px)
+              rotate(0deg);
+            opacity: 0;
+            transition:
+              transform
+              450ms
+              cubic-bezier(.16,1,.3,1),
+              opacity
+              250ms
+              ease;
+          }
+          .group:hover
+          .broken-message-left {
+            transform:
+              translateX(-3px)
+              rotate(-2deg);
+            opacity: 1;
+          }
+          .group:hover
+          .broken-message-right {
+            transform:
+              translateX(3px)
+              rotate(2deg);
+            opacity: 1;
+          }
         `}
       </style>
 
       <header
         className={`
           fixed
-
           left-0
-
           ${
             showLiveOfferBar &&
             hasLiveOffer
@@ -1644,26 +1635,16 @@ function Navbar({
           }
 
           z-[100]
-
           w-full
-
           overflow-visible
-
           border-b
           border-slate-200/70
-
           bg-white
-
-          /*
-           * SLOWER NAVBAR HIDE/SHOW
-           */
           transition-transform
           duration-[650ms]
           ease-in-out
-
           dark:border-white/10
           dark:bg-[#0B1220]
-
           ${
             showNavbar
               ? "translate-y-0"
@@ -1675,64 +1656,54 @@ function Navbar({
         <div
           className="
             mx-auto
-
             flex
             max-w-7xl
-
             items-center
             justify-between
-
             px-6
             py-4
           "
         >
 
+          {/* LOGO */}
+
           <Link
             to="/"
-
             className="
               flex
-
               cursor-pointer
-
               items-center
               gap-3
             "
           >
 
             {logoUrl ? (
+
               <img
                 src={getLogoUrl()}
-
                 alt={siteName}
-
                 className="
                   h-10
                   w-10
-
                   rounded-md
-
                   object-contain
                 "
               />
             ) : (
+
               <div
                 className="
                   flex
-
                   h-10
                   w-10
-
                   items-center
                   justify-center
-
                   rounded-xl
-
                   bg-[#17213A]
-
                   text-white
                 "
               >
+
                 <BookOpen
                   size={21}
                   strokeWidth={2}
@@ -1740,44 +1711,33 @@ function Navbar({
               </div>
             )}
 
-
             <span
               className="
                 text-2xl
-
                 font-bold
-
                 tracking-tight
-
                 text-[#17213A]
-
                 dark:text-white
               "
             >
               {siteName}
             </span>
-
           </Link>
 
           <nav
             className="
               hidden
-
               items-center
-
               gap-9
-
               md:flex
             "
           >
 
             {navItems.map(
               item => {
-
                 const active =
                   location.pathname ===
                   item.path;
-
 
                 return (
                   <Link
@@ -1791,22 +1751,16 @@ function Navbar({
 
                     className={`
                       relative
-
                       py-2
-
                       text-sm
-
                       transition
-
                       ${getNavItemTextClass(
                         item,
                         active
                       )}
                     `}
                   >
-
                     {item.name}
-
 
                     {active && (
                       <span
@@ -1815,53 +1769,37 @@ function Navbar({
                         "
                       />
                     )}
-
                   </Link>
                 );
               }
             )}
-
           </nav>
 
           <div
             className="
               hidden
-
               items-center
-
               gap-3
-
               md:flex
             "
           >
 
             <Link
               to="/contact"
-
               className={`
                 rounded-full
-
                 bg-[#17213A]
-
                 px-5
                 py-2.5
-
                 text-sm
-
                 font-semibold
-
                 text-white
-
                 shadow-md
                 shadow-slate-900/10
-
                 transition
-
                 hover:bg-[#0F172A]
-
                 dark:bg-blue-600
                 dark:hover:bg-blue-500
-
                 ${
                   location.pathname ===
                   "/contact"
@@ -1872,17 +1810,13 @@ function Navbar({
             >
               Get Started
             </Link>
-
           </div>
 
           <div
             className="
               flex
-
               items-center
-
               gap-3
-
               md:hidden
             "
           >
@@ -1899,34 +1833,24 @@ function Navbar({
 
               className="
                 flex
-
                 h-10
                 w-10
-
                 cursor-pointer
-
                 items-center
                 justify-center
-
                 rounded-full
-
                 text-[#17213A]
-
                 transition
-
                 hover:bg-slate-100
-
                 dark:text-white
                 dark:hover:bg-white/10
               "
-
               aria-label="Toggle navigation"
 
               aria-expanded={
                 menuOpen
               }
             >
-
               {menuOpen ? (
                 <X
                   size={24}
@@ -1936,28 +1860,21 @@ function Navbar({
                   size={24}
                 />
               )}
-
             </button>
-
           </div>
-
         </div>
 
         {menuOpen && (
+
           <nav
             className="
               border-t
-
               border-slate-100
-
               bg-white
-
               px-6
               py-5
-
               dark:border-white/10
               dark:bg-[#0B1220]
-
               md:hidden
             "
           >
@@ -1965,9 +1882,7 @@ function Navbar({
             <div
               className="
                 flex
-
                 flex-col
-
                 gap-5
               "
             >
@@ -1979,26 +1894,21 @@ function Navbar({
                     location.pathname ===
                     item.path;
 
-
                   return (
                     <Link
                       key={
                         item.path
                       }
-
                       to={
                         item.path
                       }
-
                       onClick={() =>
                         setMenuOpen(
                           false
                         )
                       }
-
                       className={`
                         transition
-
                         ${getNavItemTextClass(
                           item,
                           active
@@ -2010,9 +1920,7 @@ function Navbar({
                   );
                 }
               )}
-
             </div>
-
           </nav>
         )}
 
@@ -2020,10 +1928,8 @@ function Navbar({
           themeToggle}
 
       </header>
-
     </>
   );
 }
-
 
 export default Navbar;
