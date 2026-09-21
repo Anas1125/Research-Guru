@@ -1,5 +1,8 @@
 import os
 import uuid
+import smtplib
+from email.message import EmailMessage
+from dotenv import load_dotenv
 from datetime import datetime, timezone
 from uuid import uuid4
 from PIL import Image
@@ -73,6 +76,8 @@ from auth import (
 )
 
 from sqlalchemy import func
+
+load_dotenv()
 
 # APP
 
@@ -164,6 +169,61 @@ app.mount(
     StaticFiles(directory="uploads"),
     name="uploads",
 )
+
+def send_enquiry_email(enquiry):
+    smtp_host = os.getenv("SMTP_HOST")
+    smtp_port = int(os.getenv("SMTP_PORT", "587"))
+    smtp_username = os.getenv("SMTP_USERNAME")
+    smtp_password = os.getenv("SMTP_PASSWORD")
+    admin_email = os.getenv("ADMIN_EMAIL")
+
+    if not all([
+        smtp_host,
+        smtp_username,
+        smtp_password,
+        admin_email,
+    ]):
+        print("SMTP settings are missing.")
+        return
+
+    message = EmailMessage()
+    message["Subject"] = "🔔 New Research Guru Enquiry"
+    message["From"] = smtp_username
+    message["To"] = admin_email
+
+    message.set_content(
+        f"""
+New enquiry received from the Research Guru website.
+
+Name: {enquiry.name}
+Phone: {enquiry.phone}
+Email: {enquiry.email}
+
+Research Area: {enquiry.research_area or "Not provided"}
+Service: {enquiry.service or "Not provided"}
+Research Stage: {enquiry.research_stage or "Not provided"}
+Coupon: {enquiry.coupon or "None"}
+
+Message:
+{enquiry.message or "No message provided"}
+
+Status: {enquiry.status}
+"""
+    )
+
+    try:
+        with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.starttls()
+            server.login(
+                smtp_username,
+                smtp_password,
+            )
+            server.send_message(message)
+
+        print("Enquiry notification email sent.")
+
+    except Exception as e:
+        print(f"Failed to send enquiry email: {e}")
 
 # SEED INITIAL SERVICES
 
@@ -1723,6 +1783,8 @@ def create_contact_enquiry(
     db.add(enquiry)
     db.commit()
     db.refresh(enquiry)
+
+    send_enquiry_email(enquiry)
 
     return enquiry
 
