@@ -1791,7 +1791,7 @@ def create_contact_enquiry(
     try:
         resend.Emails.send({
             "from": "Research Guru <onboarding@resend.dev>",
-            "to": ["anasmohamed11220@gmail.com"],
+            "to": ["meuknow660@gmail.com"],
             "subject": f"New Research Guru Enquiry from {name}",
             "html": f"""
                 <h2>New Research Guru Enquiry</h2>
