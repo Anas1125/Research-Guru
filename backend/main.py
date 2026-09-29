@@ -1,6 +1,7 @@
 import os
 import uuid
 import smtplib
+import resend
 from email.message import EmailMessage
 from dotenv import load_dotenv
 from datetime import datetime, timezone
@@ -78,6 +79,8 @@ from auth import (
 from sqlalchemy import func
 
 load_dotenv()
+
+resend.api_key = os.getenv("RESEND_API_KEY")
 
 # APP
 
@@ -1784,7 +1787,32 @@ def create_contact_enquiry(
     db.commit()
     db.refresh(enquiry)
 
-    send_enquiry_email(enquiry)
+    # Send email notification
+    try:
+        resend.Emails.send({
+            "from": "Research Guru <onboarding@resend.dev>",
+            "to": ["anasmohamed11220@gmail.com"],
+            "subject": f"New Research Guru Enquiry from {name}",
+            "html": f"""
+                <h2>New Research Guru Enquiry</h2>
+
+                <p><strong>Name:</strong> {name}</p>
+                <p><strong>Phone:</strong> {phone}</p>
+                <p><strong>Email:</strong> {email}</p>
+                <p><strong>Research Area:</strong> {data.research_area or "Not provided"}</p>
+                <p><strong>Service:</strong> {data.service or "Not provided"}</p>
+                <p><strong>Research Stage:</strong> {data.research_stage or "Not provided"}</p>
+                <p><strong>Coupon:</strong> {coupon or "None"}</p>
+
+                <hr>
+
+                <h3>Message</h3>
+                <p>{data.message or "No message provided"}</p>
+            """
+        })
+
+    except Exception as error:
+        print(f"Email notification failed: {error}")
 
     return enquiry
 
