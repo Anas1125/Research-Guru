@@ -28,6 +28,8 @@ from sqlalchemy.orm import Session
 
 import models
 
+load_dotenv()
+
 from database import Base, engine, get_db
 
 from models import (
@@ -77,8 +79,6 @@ from auth import (
 )
 
 from sqlalchemy import func
-
-load_dotenv()
 
 resend.api_key = os.getenv("RESEND_API_KEY")
 
