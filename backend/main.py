@@ -18,6 +18,7 @@ from fastapi import (
     UploadFile,
     File,
     Request,
+    Response,
 )
 
 
@@ -27,6 +28,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 import models
+import storage
 
 load_dotenv()
 
@@ -141,19 +143,15 @@ app.add_middleware(
 Base.metadata.create_all(bind=engine)
 
 # FILE UPLOADS
+#
+# New uploads are stored in the database (see storage.py) because
+# Vercel's serverless filesystem is read-only. The legacy uploads/
+# directory is only read from, so images uploaded before this change
+# keep working.
 
-UPLOAD_DIR = "uploads/blog"
-
-os.makedirs(
-    UPLOAD_DIR,
-    exist_ok=True,
-)
-
-SITE_UPLOAD_DIR = "uploads/site"
-
-os.makedirs(
-    SITE_UPLOAD_DIR,
-    exist_ok=True,
+LEGACY_UPLOADS_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "uploads",
 )
 
 def validate_image(contents: bytes) -> bool:
@@ -169,9 +167,58 @@ def validate_image(contents: bytes) -> bool:
 
 app.mount(
     "/uploads",
-    StaticFiles(directory="uploads"),
+    StaticFiles(
+        directory=LEGACY_UPLOADS_DIR,
+        check_dir=False,
+    ),
     name="uploads",
 )
+
+
+# PUBLIC - SERVE STORED FILES
+
+@app.get("/api/files/{folder}/{filename}")
+def serve_stored_file(
+    folder: str,
+    filename: str,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    stored = storage.get_file(
+        db,
+        folder,
+        filename,
+    )
+
+    if not stored:
+        raise HTTPException(
+            status_code=404,
+            detail="File not found.",
+        )
+
+    etag = f'"{stored.id}"'
+
+    headers = {
+        # File names are unique per upload, so content never
+        # changes: cache at the browser and Vercel edge CDN.
+        "Cache-Control": (
+            "public, max-age=31536000, "
+            "s-maxage=31536000, immutable"
+        ),
+        "ETag": etag,
+    }
+
+    if request.headers.get("if-none-match") == etag:
+        return Response(
+            status_code=304,
+            headers=headers,
+        )
+
+    return Response(
+        content=bytes(stored.data),
+        media_type=stored.content_type,
+        headers=headers,
+    )
 
 def send_enquiry_email(enquiry):
     smtp_host = os.getenv("SMTP_HOST")
@@ -856,16 +903,17 @@ def admin_delete_client(
 @app.post("/api/admin/clients/upload-logo")
 def upload_client_logo(
     file: UploadFile = File(...),
+    db: Session = Depends(get_db),
     current_admin: AdminUser = Depends(
         get_current_admin
     ),
 ):
     allowed_extensions = {
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".webp",
-        ".svg",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".webp": "image/webp",
+        ".svg": "image/svg+xml",
     }
 
     original_name = file.filename or ""
@@ -882,21 +930,6 @@ def upload_client_logo(
             ),
         )
 
-    upload_directory = "uploads/clients"
-    os.makedirs(
-        upload_directory,
-        exist_ok=True,
-    )
-
-    filename = (
-        f"{uuid.uuid4().hex}{extension}"
-    )
-
-    file_path = os.path.join(
-        upload_directory,
-        filename,
-    )
-
     contents = file.file.read()
 
     if not validate_image(contents):
@@ -905,13 +938,17 @@ def upload_client_logo(
             detail="Invalid image file.",
         )
 
-    with open(file_path, "wb") as buffer:
-        buffer.write(contents)
+    image_url = storage.save_file(
+        db,
+        folder="clients",
+        contents=contents,
+        content_type=allowed_extensions[extension],
+        extension=extension,
+        original_name=original_name,
+    )
 
     return {
-        "image_url": (
-            f"/uploads/clients/{filename}"
-        )
+        "image_url": image_url
     }
 
 # ADMIN - CLIENT REVIEWS
@@ -1053,15 +1090,16 @@ def admin_delete_review(
 )
 def upload_review_photo(
     file: UploadFile = File(...),
+    db: Session = Depends(get_db),
     current_admin: AdminUser = Depends(
         get_current_admin
     ),
 ):
     allowed_extensions = {
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".webp",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".webp": "image/webp",
     }
 
     original_name = file.filename or ""
@@ -1075,23 +1113,6 @@ def upload_review_photo(
             detail="Only JPG, JPEG, PNG, and WEBP images are allowed.",
         )
 
-    upload_directory = "uploads/reviews"
-
-    os.makedirs(
-        upload_directory,
-        exist_ok=True,
-    )
-
-    filename = (
-        f"{uuid.uuid4().hex}"
-        f"{extension}"
-    )
-
-    file_path = os.path.join(
-        upload_directory,
-        filename,
-    )
-
     contents = file.file.read()
 
     if not validate_image(contents):
@@ -1100,12 +1121,17 @@ def upload_review_photo(
             detail="Invalid image file.",
         )
 
-    with open(file_path, "wb") as buffer:
-        buffer.write(contents)
+    image_url = storage.save_file(
+        db,
+        folder="reviews",
+        contents=contents,
+        content_type=allowed_extensions[extension],
+        extension=extension,
+        original_name=original_name,
+    )
 
     return {
-        "image_url":
-            f"/uploads/reviews/{filename}"
+        "image_url": image_url
     }
 
 # STARTUP
@@ -1534,6 +1560,7 @@ def update_site_settings(
 async def upload_site_setting_image(
     setting_key: str,
     file: UploadFile = File(...),
+    db: Session = Depends(get_db),
     current_admin: AdminUser = Depends(
         get_current_admin
     ),
@@ -1576,15 +1603,6 @@ async def upload_site_setting_image(
         file.content_type
     ]
 
-    filename = (
-        f"{uuid4().hex}{extension}"
-    )
-
-    file_path = os.path.join(
-        SITE_UPLOAD_DIR,
-        filename,
-    )
-
     try:
         contents = await file.read()
 
@@ -1605,26 +1623,26 @@ async def upload_site_setting_image(
                 ),
             )
 
-        with open(
-            file_path,
-            "wb",
-        ) as buffer:
-            buffer.write(contents)
+        image_url = storage.save_file(
+            db,
+            folder="site",
+            contents=contents,
+            content_type=file.content_type,
+            extension=extension,
+            original_name=file.filename,
+        )
 
     except HTTPException:
         raise
 
     except Exception as error:
+        db.rollback()
         raise HTTPException(
             status_code=500,
             detail=(
                 f"Failed to save image: {error}"
             ),
         )
-
-    image_url = (
-        f"/uploads/site/{filename}"
-    )
 
     return {
         "setting_key": setting_key,
@@ -1678,12 +1696,23 @@ def remove_site_setting_image(
         filename = os.path.basename(image_url)
 
         file_path = os.path.join(
-            SITE_UPLOAD_DIR,
+            LEGACY_UPLOADS_DIR,
+            "site",
             filename,
         )
 
-        if os.path.isfile(file_path):
-            os.remove(file_path)
+        # Legacy files live in the deployed bundle, which is
+        # read-only on Vercel; clearing the setting is enough.
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        except OSError:
+            pass
+    else:
+        storage.delete_file_by_url(
+            db,
+            image_url,
+        )
 
     setting.value = None
 
@@ -2300,6 +2329,7 @@ def get_admin_blog_posts(
 )
 async def upload_blog_image(
     file: UploadFile = File(...),
+    db: Session = Depends(get_db),
     current_admin: AdminUser = Depends(
         get_current_admin
     ),
@@ -2323,15 +2353,6 @@ async def upload_blog_image(
         file.content_type
     ]
 
-    filename = (
-        f"{uuid4().hex}{extension}"
-    )
-
-    file_path = os.path.join(
-        UPLOAD_DIR,
-        filename,
-    )
-
     try:
         contents = await file.read()
 
@@ -2353,16 +2374,20 @@ async def upload_blog_image(
                 ),
             )
 
-        with open(
-            file_path,
-            "wb"
-        ) as buffer:
-            buffer.write(contents)
+        image_url = storage.save_file(
+            db,
+            folder="blog",
+            contents=contents,
+            content_type=file.content_type,
+            extension=extension,
+            original_name=file.filename,
+        )
 
     except HTTPException:
         raise
 
     except Exception as error:
+        db.rollback()
         raise HTTPException(
             status_code=500,
             detail=(
@@ -2371,9 +2396,7 @@ async def upload_blog_image(
         )
 
     return {
-        "image_url": (
-            f"/uploads/blog/{filename}"
-        )
+        "image_url": image_url
     }
 
 

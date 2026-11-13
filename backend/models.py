@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, LargeBinary, DateTime, func
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -196,5 +196,27 @@ class Offer(Base):
 
     created_at = Column(
         String(50),
+        nullable=False,
+    )
+
+class StoredFile(Base):
+    """
+    Uploaded images kept in the database (Neon PostgreSQL in
+    production) so they persist on Vercel's read-only,
+    ephemeral serverless filesystem.
+    """
+
+    __tablename__ = "stored_files"
+
+    id = Column(String(32), primary_key=True)
+    folder = Column(String(50), nullable=False, index=True)
+    filename = Column(String(100), nullable=False)
+    original_name = Column(String(255), nullable=True)
+    content_type = Column(String(100), nullable=False)
+    size = Column(Integer, nullable=False)
+    data = Column(LargeBinary, nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
         nullable=False,
     )
