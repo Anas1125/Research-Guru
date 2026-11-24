@@ -128,6 +128,7 @@ app.add_middleware(
         "http://localhost:5173",
         "http://localhost:4173",
         "https://research-guru.pages.dev",
+        "https://researchguruglobal.com",
         #change to frontend url
     ],
     allow_origin_regex=r"https://[a-z0-9-]+\.research-guru\.pages\.dev",
