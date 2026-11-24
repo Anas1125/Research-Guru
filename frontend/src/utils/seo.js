@@ -1,3 +1,4 @@
+import { safeImageUrl } from './safeUrls.js';
 // One canonical production origin; update this when moving to a custom domain.
 export const SITE_URL = 'https://research-guru.pages.dev';
 export const DEFAULT_IMAGE = SITE_URL + '/og-image.png';
@@ -46,13 +47,7 @@ export function articleSeo(post, apiOrigin) {
   const url = SITE_URL + path;
   const title = post.title + ' | Research Guru';
   const description = (typeof post.excerpt === 'string' && post.excerpt.trim()) || 'Research guidance and academic insights from Research Guru.';
-  let image = DEFAULT_IMAGE;
-  try {
-    if (typeof post.featured_image === 'string' && post.featured_image) {
-      const candidate = new URL(post.featured_image, apiOrigin);
-      if (candidate.protocol === 'https:' && !candidate.username && !candidate.password) image = candidate.href;
-    }
-  } catch { /* retain default image */ }
+  const image = safeImageUrl(post.featured_image, apiOrigin) || DEFAULT_IMAGE;
   const schema = { '@context': 'https://schema.org', '@type': 'Article', headline: post.title, description, url, image: [image], publisher: {'@type': 'Organization', name: brand, url: SITE_URL + '/'} };
   if (post.published_at && !Number.isNaN(Date.parse(post.published_at))) schema.datePublished = post.published_at;
   return {title, description, robots: 'index, follow', url, image, type: 'article', schema};
