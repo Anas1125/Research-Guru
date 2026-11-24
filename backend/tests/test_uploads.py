@@ -558,3 +558,145 @@ def test_public_endpoint_rate_limits(client, rate_clock, monkeypatch, path, meth
         with SessionLocal.begin() as db:
             db.query(main.ContactEnquiry).filter_by(name="Rate test").delete()
             db.query(main.ClientReview).filter_by(client_name="Rate test").delete()
+
+
+# SQL injection regression tests. All requests target the isolated TestClient.
+# Inputs are deliberately treated as data, never executed as SQL.
+SQL_LIKE_INPUTS = ["O'Reilly", "' OR '1'='1", "test' --"]
+
+
+@pytest.mark.parametrize("value", SQL_LIKE_INPUTS)
+def test_sql_like_login_input_does_not_authenticate(client, rate_clock, value):
+    response = client.post("/api/auth/login", data={
+        "username": value, "password": "pw",
+    })
+    assert response.status_code == 401
+    assert "access_token" not in response.json()
+    assert client.post("/api/auth/login", data={
+        "username": "tester", "password": "pw",
+    }).status_code == 200
+
+
+@pytest.fixture
+def sql_test_offer():
+    code = "SQLTEST-" + secrets.token_hex(8).upper()
+    with SessionLocal.begin() as db:
+        offer = main.Offer(
+            title="SQL regression fixture", offer_code=code,
+            start_date="2000-01-01T00:00:00+00:00",
+            end_date="2099-01-01T00:00:00+00:00",
+            is_active=True, created_at="2000-01-01",
+        )
+        db.add(offer)
+    yield code
+    with SessionLocal.begin() as db:
+        db.query(main.Offer).filter_by(offer_code=code).delete()
+
+
+@pytest.mark.parametrize("value", SQL_LIKE_INPUTS)
+def test_offer_validation_requires_exact_code(client, rate_clock, sql_test_offer, value):
+    assert client.get("/api/offers/validate", params={"code": value}).status_code == 404
+    response = client.get("/api/offers/validate", params={"code": sql_test_offer})
+    assert response.status_code == 200
+    assert response.json()["offer_code"] == sql_test_offer
+
+
+@pytest.mark.parametrize("value", SQL_LIKE_INPUTS)
+def test_blog_lookup_does_not_bypass_publication_filter(client, auth_headers, value):
+    from urllib.parse import quote
+    slug = "sql-regression-" + secrets.token_hex(8)
+    with SessionLocal.begin() as db:
+        db.add(main.models.BlogPost(
+            title="Private fixture", slug=slug, content="Not public",
+            is_published=False,
+        ))
+    try:
+        assert client.get("/api/blog/" + quote(value, safe="")).status_code == 404
+        assert client.get("/api/blog/" + slug).status_code == 404
+        assert slug not in client.get("/api/seo/posts").json()
+    finally:
+        with SessionLocal.begin() as db:
+            db.query(main.models.BlogPost).filter_by(slug=slug).delete()
+
+
+def test_sql_like_numeric_id_rejected(client, auth_headers):
+    from urllib.parse import quote
+    response = client.get(
+        "/api/admin/contact/" + quote("1 OR 1=1", safe=""),
+        headers=auth_headers,
+    )
+    assert response.status_code == 422
+
+
+def test_contact_coupon_does_not_match_unrelated_offer(client, rate_clock, sql_test_offer, monkeypatch):
+    monkeypatch.setattr(main.resend.Emails, "send", lambda *_: {})
+    with SessionLocal() as db:
+        before = db.query(main.ContactEnquiry).count()
+    response = client.post("/api/contact", json={
+        "name": "SQL fixture", "phone": "12345", "email": "fixture@example.com",
+        "coupon": "' OR '1'='1",
+    })
+    assert response.status_code == 400
+    with SessionLocal() as db:
+        assert db.query(main.ContactEnquiry).count() == before
+
+
+def test_sql_like_text_roundtrips_as_data(client, auth_headers):
+    slug = "sql-literal-" + secrets.token_hex(8)
+    title = "O'Reilly; SELECT example"
+    content = "Research notes: ' OR '1'='1"
+    result = client.post("/api/admin/blog", headers=auth_headers, json={
+        "title": title, "slug": slug, "content": content, "is_published": True,
+    })
+    assert result.status_code == 200, result.text
+    try:
+        response = client.get("/api/blog/" + slug)
+        assert response.status_code == 200
+        assert response.json()["title"] == title
+        assert response.json()["content"] == content
+        assert client.get("/api/admin/users", headers=auth_headers).status_code == 200
+    finally:
+        assert client.delete(
+            f"/api/admin/blog/{result.json()['id']}", headers=auth_headers
+        ).status_code == 200
+
+
+def test_file_lookup_treats_identifier_as_data(client):
+    from urllib.parse import quote
+    # Exactly 32 characters before the extension to exercise the database lookup.
+    name = ("test' OR '1'='1").ljust(32, "x") + ".png"
+    assert client.get("/api/files/site/" + quote(name, safe="")).status_code == 404
+
+
+def test_new_raw_sql_execution_requires_explicit_review():
+    """Conservative AST guard, not a complete taint-analysis engine."""
+    import ast
+    from pathlib import Path
+
+    root = Path(BACKEND_DIR)
+    allowed_pragmas = {"PRAGMA journal_mode=WAL;", "PRAGMA busy_timeout=5000;"}
+    violations = []
+    for path in sorted(root.rglob("*.py")):
+        relative = path.relative_to(root)
+        if any(part.startswith(".") or part in {"tests", "venv", "__pycache__", "site-packages", "uploads"} for part in relative.parts):
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(relative))
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            name = node.func.attr if isinstance(node.func, ast.Attribute) else node.func.id if isinstance(node.func, ast.Name) else ""
+            if name in {"text", "literal_column", "exec_driver_sql", "executemany", "from_statement"}:
+                violations.append(f"{relative}:{node.lineno}: {name}")
+            elif name == "execute":
+                # Current reviewed exceptions: constant SQLite PRAGMAs and
+                # SQLAlchemy expression objects in the rate limiter.
+                arg = node.args[0] if node.args else None
+                if str(relative) == "database.py" and isinstance(arg, ast.Constant) and isinstance(arg.value, str) and arg.value in allowed_pragmas:
+                    continue
+                if str(relative) == "rate_limit.py" and arg is not None and ast.unparse(arg) in {
+                    "stmt",
+                    "delete(table).where(tuple_(table.c.key, table.c.window_start).in_(expired), table.c.expires_at <= now)",
+                }:
+                    continue
+                violations.append(f"{relative}:{node.lineno}: execute")
+    assert not violations, "New SQL execution requires review: " + "; ".join(violations)
