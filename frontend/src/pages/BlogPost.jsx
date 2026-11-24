@@ -1,3 +1,4 @@
+import { safeImageUrl } from "../utils/safeUrls";
 import { useEffect, useState } from "react";
 
 import {
@@ -47,19 +48,8 @@ const calculateReadTime = (content) => {
 };
 
 const getImageUrl = (imagePath) => {
-  if (!imagePath) {
-    return null;
-  }
-
-  if (
-    imagePath.startsWith("http://") ||
-    imagePath.startsWith("https://")
-  ) {
-    return imagePath;
-  }
-
-  return `${API_URL}${imagePath}`;
-};
+    return safeImageUrl(imagePath, API_URL);
+  };
 
 function BlogPost() {
   const { slug } = useParams();

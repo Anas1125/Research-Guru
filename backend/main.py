@@ -3,6 +3,7 @@ import uuid
 import smtplib
 import resend
 from email.message import EmailMessage
+from html import escape
 from dotenv import load_dotenv
 from datetime import datetime, timezone
 from uuid import uuid4
@@ -1814,27 +1815,27 @@ def create_contact_enquiry(
         resend.Emails.send({
             "from": "Research Guru <onboarding@resend.dev>",
             "to": ["meuknow660@gmail.com"],
-            "subject": f"New Research Guru Enquiry from {name}",
+            "subject": "New Research Guru Enquiry from " + " ".join(name.split()),
             "html": f"""
                 <h2>New Research Guru Enquiry</h2>
 
-                <p><strong>Name:</strong> {name}</p>
-                <p><strong>Phone:</strong> {phone}</p>
-                <p><strong>Email:</strong> {email}</p>
-                <p><strong>Research Area:</strong> {data.research_area or "Not provided"}</p>
-                <p><strong>Service:</strong> {data.service or "Not provided"}</p>
-                <p><strong>Research Stage:</strong> {data.research_stage or "Not provided"}</p>
-                <p><strong>Coupon:</strong> {coupon or "None"}</p>
+                <p><strong>Name:</strong> {escape(str(name))}</p>
+                <p><strong>Phone:</strong> {escape(str(phone))}</p>
+                <p><strong>Email:</strong> {escape(str(email))}</p>
+                <p><strong>Research Area:</strong> {escape(str(data.research_area or "Not provided"))}</p>
+                <p><strong>Service:</strong> {escape(str(data.service or "Not provided"))}</p>
+                <p><strong>Research Stage:</strong> {escape(str(data.research_stage or "Not provided"))}</p>
+                <p><strong>Coupon:</strong> {escape(str(coupon or "None"))}</p>
 
                 <hr>
 
                 <h3>Message</h3>
-                <p>{data.message or "No message provided"}</p>
+                <p>{escape(str(data.message or "No message provided"))}</p>
             """
         })
 
-    except Exception as error:
-        print(f"Email notification failed: {error}")
+    except Exception:
+        print("Email notification failed")
 
     return enquiry
 

@@ -1,3 +1,4 @@
+import { safeImageUrl } from "../utils/safeUrls";
 import {
   ArrowUpRight,
   BookOpen,
@@ -63,22 +64,7 @@ function Footer() {
   }, []);
 
   function getLogoUrl() {
-    if (!settings.logo_url) {
-      return "";
-    }
-
-    if (
-      settings.logo_url.startsWith(
-        "http://"
-      ) ||
-      settings.logo_url.startsWith(
-        "https://"
-      )
-    ) {
-      return settings.logo_url;
-    }
-
-    return `${API_URL}${settings.logo_url}`;
+    return safeImageUrl(settings.logo_url, API_URL);
   }
 
   return (

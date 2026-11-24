@@ -700,3 +700,28 @@ def test_new_raw_sql_execution_requires_explicit_review():
                     continue
                 violations.append(f"{relative}:{node.lineno}: execute")
     assert not violations, "New SQL execution requires review: " + "; ".join(violations)
+
+
+def test_contact_email_escapes_untrusted_html(client, rate_clock, monkeypatch):
+    from html import escape
+    payload = '<img src=x onerror="alert(1)">'
+    sent = []
+    monkeypatch.setattr(main.resend.Emails, "send", lambda message: sent.append(message))
+    name = "Email fixture " + payload
+    try:
+        response = client.post("/api/contact", json={
+            "name": name, "phone": "<b>123</b>", "email": "fixture@example.com",
+            "research_area": payload, "service": payload, "research_stage": payload,
+            "message": payload,
+        })
+        assert response.status_code == 200, response.text
+        assert len(sent) == 1
+        html = sent[0]["html"]
+        assert payload not in html
+        assert html.count(escape(payload)) == 5
+        assert "&lt;b&gt;123&lt;/b&gt;" in html
+        assert response.json()["name"] == name
+        assert response.json()["message"] == payload
+    finally:
+        with SessionLocal.begin() as db:
+            db.query(main.ContactEnquiry).filter_by(name=name).delete()

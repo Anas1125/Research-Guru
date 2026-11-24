@@ -1,3 +1,4 @@
+import { safeImageUrl } from "../utils/safeUrls";
 import { useEffect, useState } from "react";
 import {
   Star,
@@ -17,17 +18,8 @@ import { apiFetch, API_URL } from "../utils/api";
 
 
 function getImageUrl(path) {
-  if (!path) return null;
-
-  if (
-    path.startsWith("http://") ||
-    path.startsWith("https://")
-  ) {
-    return path;
+    return safeImageUrl(path, API_URL);
   }
-
-  return `${API_URL}${path}`;
-}
 
 
 const emptyForm = {

@@ -1,0 +1,7 @@
+# XSS and untrusted URL review
+
+The enquiry notification HTML previously interpolated user-supplied text without escaping. Escape all interpolated values at the HTML sink; preserve original text in the database. Normalize whitespace in the email subject and avoid logging provider exception contents.
+
+React's normal text rendering is used for blog content, usernames and reviews; keep that behavior rather than introducing raw HTML. The shared safeImageUrl helper accepts HTTPS external image URLs and backend /api/files/ or /uploads/ paths, including local HTTP API development. Reject other schemes, network-path references, credentials, control characters and CSS string delimiters. Apply it to public and admin image rendering and SEO article image metadata. Admin-created blob preview URLs remain separate and local. Offer CTA links accept same-site paths or HTTPS destinations; invalid stored links fall back to /contact. Existing HTTP external images may need HTTPS replacements. Existing content is not rewritten. HTTPS external images can still track visitors; restricting them to specific trusted hosts is a separate policy choice. CSP remains enforced as an additional layer.
+
+This PR does not claim exhaustive XSS immunity. File content validation and session cookies are separate milestones. Run backend and frontend regression tests and build, then verify images, favicon, offer links, blog pages and admin preview/upload workflows after deployment.
