@@ -1,3 +1,4 @@
+import { safeImageUrl } from "../utils/safeUrls";
 import {
   ArrowRight,
   CheckCircle2,
@@ -214,18 +215,7 @@ function Contact() {
   }
 
   function getImageUrl(path) {
-    if (!path) {
-      return "";
-    }
-
-    if (
-      path.startsWith("http://") ||
-      path.startsWith("https://")
-    ) {
-      return path;
-    }
-
-    return `${API_URL}${path}`;
+    return safeImageUrl(path, API_URL);
   }
 
   function getPhoneNumber() {

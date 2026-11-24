@@ -1,3 +1,4 @@
+import { safeImageUrl } from "../utils/safeUrls";
 import { useEffect, useState } from "react";
 
 import {
@@ -343,18 +344,7 @@ function AdminSettings() {
   }
 
   function getImageUrl(path) {
-    if (!path) {
-      return "";
-    }
-
-    if (
-      path.startsWith("http://") ||
-      path.startsWith("https://")
-    ) {
-      return path;
-    }
-
-    return `${API_URL}${path}`;
+    return safeImageUrl(path, API_URL);
   }
 
   function handleLogout() {

@@ -1,3 +1,4 @@
+import { safeImageUrl, safeOfferLink } from "../utils/safeUrls";
 import { useEffect, useMemo, useState } from "react";
 
 import {
@@ -22,19 +23,8 @@ import {
 } from "../utils/api";
 
 const getImageUrl = (imagePath) => {
-  if (!imagePath) {
-    return null;
-  }
-
-  if (
-    imagePath.startsWith("http://") ||
-    imagePath.startsWith("https://")
-  ) {
-    return imagePath;
-  }
-
-  return `${API_URL}${imagePath}`;
-};
+    return safeImageUrl(imagePath, API_URL);
+  };
 
 const getOfferStatus = (
   startDate,
@@ -475,7 +465,7 @@ function OfferCard({
                   ? `/contact?coupon=${encodeURIComponent(
                       offer.offer_code.toUpperCase()
                     )}`
-                  : offer.cta_link || "/contact"
+                  : safeOfferLink(offer.cta_link)
               }
               className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#17213A] transition hover:bg-slate-100"
             >

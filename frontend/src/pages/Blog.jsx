@@ -1,3 +1,4 @@
+import { safeImageUrl } from "../utils/safeUrls";
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
@@ -184,9 +185,7 @@ function Blog() {
                     {blog.featured_image ? (
                       <img
                         src={
-                          blog.featured_image.startsWith("http")
-                            ? blog.featured_image
-                            : `${API_URL}${blog.featured_image}`
+                          safeImageUrl(blog.featured_image, API_URL)
                         }
                         alt={blog.title}
                         className="h-full w-full object-cover transition duration-500 group-hover:scale-105"

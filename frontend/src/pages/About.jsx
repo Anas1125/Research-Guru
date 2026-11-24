@@ -1,3 +1,4 @@
+import { safeImageUrl } from "../utils/safeUrls";
 import { useEffect, useState } from "react";
 
 import {
@@ -98,19 +99,8 @@ const principles = [
 ];
 
 const getImageUrl = (imagePath) => {
-  if (!imagePath) {
-    return null;
-  }
-
-  if (
-    imagePath.startsWith("http://") ||
-    imagePath.startsWith("https://")
-  ) {
-    return imagePath;
-  }
-
-  return `${API_URL}${imagePath}`;
-};
+    return safeImageUrl(imagePath, API_URL);
+  };
 
 const getCategoryIcon = (name) => {
   return iconMap[name] || BookOpen;

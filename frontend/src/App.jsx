@@ -1,3 +1,4 @@
+import { safeImageUrl } from "./utils/safeUrls";
 import {
   BrowserRouter,
   Routes,
@@ -77,15 +78,7 @@ function FaviconManager() {
           return;
         }
 
-        const faviconUrl =
-          settings.favicon_url.startsWith(
-            "http://"
-          ) ||
-          settings.favicon_url.startsWith(
-            "https://"
-          )
-            ? settings.favicon_url
-            : `${API_URL}${settings.favicon_url}`;
+        const faviconUrl = safeImageUrl(settings.favicon_url, API_URL) || "/favicon.ico";
 
         let favicon = document.querySelector(
           'link[rel="icon"]'

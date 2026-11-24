@@ -1,3 +1,4 @@
+import { safeImageUrl } from "../utils/safeUrls";
 import { BookOpen, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -59,15 +60,7 @@ function Navbar({ showLiveOfferBar = false }) {
         );
 
         if (data.favicon_url) {
-          const faviconHref =
-            data.favicon_url.startsWith(
-              "http://"
-            ) ||
-            data.favicon_url.startsWith(
-              "https://"
-            )
-              ? data.favicon_url
-              : `${API_URL}${data.favicon_url}`;
+          const faviconHref = safeImageUrl(data.favicon_url, API_URL) || "/favicon.ico";
 
           let favicon =
             document.querySelector(
@@ -241,22 +234,7 @@ function Navbar({ showLiveOfferBar = false }) {
   }, [lastScrollY]);
 
   function getLogoUrl() {
-    if (!logoUrl) {
-      return "";
-    }
-
-    if (
-      logoUrl.startsWith(
-        "http://"
-      ) ||
-      logoUrl.startsWith(
-        "https://"
-      )
-    ) {
-      return logoUrl;
-    }
-
-    return `${API_URL}${logoUrl}`;
+    return safeImageUrl(logoUrl, API_URL);
   }
 
   /* OFFERS NAV ITEM STYLE */
