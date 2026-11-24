@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, LargeBinary, DateTime, func
+from sqlalchemy import Column, BigInteger, Integer, String, Text, Boolean, ForeignKey, LargeBinary, DateTime, func
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -220,3 +220,13 @@ class StoredFile(Base):
         server_default=func.now(),
         nullable=False,
     )
+
+
+class RateLimitBucket(Base):
+    """Shared, short-lived counters for serverless API rate limits."""
+    __tablename__ = "rate_limit_buckets"
+
+    key = Column(String(64), primary_key=True)
+    window_start = Column(BigInteger, primary_key=True)
+    expires_at = Column(BigInteger, nullable=False, index=True)
+    count = Column(Integer, nullable=False)

@@ -418,3 +418,141 @@ def test_admin_login_issues_bound_token(client):
     assert client.get("/api/admin/users", headers={
         "Authorization": "Bearer " + response.json()["access_token"]
     }).status_code == 200
+
+
+# Persistent rate limit tests share the existing isolated test database.
+import rate_limit
+from models import RateLimitBucket
+from fastapi import HTTPException, Request
+
+
+@pytest.fixture
+def rate_clock(monkeypatch):
+    now = [1800000000]
+    monkeypatch.setattr(rate_limit, "time", lambda: now[0])
+    monkeypatch.delenv("VERCEL", raising=False)
+    with SessionLocal.begin() as db:
+        db.query(RateLimitBucket).delete()
+    yield now
+    with SessionLocal.begin() as db:
+        db.query(RateLimitBucket).delete()
+
+
+@pytest.mark.parametrize("scope,limit,seconds", [
+    ("login-ip", 5, 60), ("login-account", 10, 900),
+    ("contact", 5, 600), ("review", 3, 600), ("offer", 20, 60),
+])
+def test_rate_limit_atomic_count_and_reset(rate_clock, scope, limit, seconds):
+    for _ in range(limit):
+        rate_limit.consume(scope, "identity", limit, seconds)
+    with pytest.raises(HTTPException) as error:
+        rate_limit.consume(scope, "identity", limit, seconds)
+    assert error.value.status_code == 429
+    assert int(error.value.headers["Retry-After"]) == seconds
+    with SessionLocal() as db:
+        row = db.query(RateLimitBucket).one()
+        assert row.count == limit
+        assert row.key != "identity"
+    rate_clock[0] += seconds
+    rate_limit.consume(scope, "identity", limit, seconds)
+
+
+def test_concurrent_rate_limit_requests(rate_clock):
+    from concurrent.futures import ThreadPoolExecutor
+
+    def attempt(_):
+        try:
+            rate_limit.consume("parallel", "same-client", 5, 60)
+            return 200
+        except HTTPException as error:
+            return error.status_code
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        statuses = list(pool.map(attempt, range(24)))
+    assert statuses.count(200) == 5
+    assert statuses.count(429) == 19
+
+
+def test_rate_limit_scope_and_identity_isolation(rate_clock):
+    rate_limit.consume("login", "a", 1, 60)
+    rate_limit.consume("login", "b", 1, 60)
+    rate_limit.consume("contact", "a", 1, 60)
+    with pytest.raises(HTTPException) as error:
+        rate_limit.consume("login", "a", 1, 60)
+    assert error.value.status_code == 429
+
+
+def test_cleanup_preserves_live_counters(rate_clock):
+    rate_limit.consume("short", "a", 1, 60)
+    rate_limit.consume("long", "a", 1, 900)
+    rate_clock[0] += 60
+    rate_limit.cleanup_expired(rate_clock[0])
+    with SessionLocal() as db:
+        assert db.query(RateLimitBucket).count() == 1
+    with pytest.raises(HTTPException) as error:
+        rate_limit.consume("long", "a", 1, 900)
+    assert error.value.status_code == 429
+
+
+def test_rate_limit_database_failure_is_closed(rate_clock, monkeypatch):
+    from sqlalchemy.exc import OperationalError
+    def unavailable():
+        raise OperationalError("test", {}, Exception("private detail"))
+    monkeypatch.setattr(rate_limit.SessionLocal, "begin", unavailable)
+    with pytest.raises(HTTPException) as error:
+        rate_limit.consume("login", "a", 5, 60)
+    assert error.value.status_code == 503
+    assert "private detail" not in error.value.detail
+
+
+def test_rate_limit_proxy_identity(rate_clock, monkeypatch):
+    request = Request({
+        "type": "http", "client": ("192.0.2.1", 12345),
+        "headers": [(b"x-forwarded-for", b"192.0.2.9"), (b"x-vercel-forwarded-for", b"198.51.100.1")],
+    })
+    assert rate_limit.client_identity(request) == "192.0.2.1"
+    monkeypatch.setenv("VERCEL", "1")
+    assert rate_limit.client_identity(request) == "198.51.100.1"
+    assert rate_limit.client_identity(Request({"type": "http", "headers": []})) == "unknown"
+
+
+def test_login_ip_limit_counts_failed_attempts(client, rate_clock):
+    for _ in range(5):
+        response = client.post("/api/auth/login", data={"username": "tester", "password": "incorrect"})
+        assert response.status_code == 401
+    response = client.post("/api/auth/login", data={"username": "tester", "password": "pw"})
+    assert response.status_code == 429
+    assert response.headers["retry-after"] == "60"
+    rate_clock[0] += 60
+    assert client.post("/api/auth/login", data={"username": "tester", "password": "pw"}).status_code == 200
+
+
+def test_login_account_limit_across_ip_windows(client, rate_clock):
+    for minute in range(2):
+        for _ in range(5):
+            assert client.post("/api/auth/login", data={"username": "nonexistent", "password": "incorrect"}).status_code == 401
+        rate_clock[0] += 60
+    response = client.post("/api/auth/login", data={"username": "nonexistent", "password": "incorrect"})
+    assert response.status_code == 429
+    assert int(response.headers["retry-after"]) == 780
+
+
+@pytest.mark.parametrize("path,method,limit,payload", [
+    ("/api/contact", "POST", 5, {"name": "Rate test", "phone": "12345", "email": "rate@example.com"}),
+    ("/api/reviews", "POST", 3, {"client_name": "Rate test", "review": "Test only"}),
+    ("/api/offers/validate?code=INVALID-TEST", "GET", 20, None),
+])
+def test_public_endpoint_rate_limits(client, rate_clock, monkeypatch, path, method, limit, payload):
+    monkeypatch.setattr(main.resend.Emails, "send", lambda *_: {})
+    try:
+        for _ in range(limit):
+            response = client.request(method, path, **({"json": payload} if payload else {}))
+            assert response.status_code == (200 if payload else 404), response.text
+        response = client.request(method, path, **({"json": payload} if payload else {}))
+        assert response.status_code == 429
+        assert "retry-after" in response.headers
+        assert response.headers["cache-control"] == "no-store"
+    finally:
+        with SessionLocal.begin() as db:
+            db.query(main.ContactEnquiry).filter_by(name="Rate test").delete()
+            db.query(main.ClientReview).filter_by(client_name="Rate test").delete()

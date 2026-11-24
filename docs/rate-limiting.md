@@ -1,0 +1,11 @@
+# Persistent API rate limiting
+
+Replaces process-local SlowAPI with atomic PostgreSQL/SQLite upserts in rate_limit_buckets. Existing Base.metadata.create_all creates the new table at backend startup (database role needs CREATE permission); no existing data or columns are altered. No Redis or new environment variables. Deploy all backend instances on the same database and JWT_SECRET.
+
+Limits (fixed UTC-aligned windows): login IP 5/minute, login account 10/15 minutes, contact IP 5/10 minutes, review IP 3/10 minutes, offer validation IP 20/minute. All processed login attempts count, including successful ones; an account can be temporarily locked out by repeated requests from others. Fixed windows allow bursts around boundaries. This is abuse mitigation, not a DDoS defense. Add edge-level protection as needed.
+
+Use Vercel's managed x-vercel-forwarded-for when VERCEL=1, not arbitrary forwarding headers. Direct local deployments use request.client.host; do not enable trust in arbitrary proxy headers. IPv6 addresses are grouped by /64. Missing identities use a shared fallback bucket. If a future Cloudflare API proxy is added, revisit trusted client identity before routing through it. Vercel may see the proxy IP instead of the end user. See https://vercel.com/docs/headers/request-headers.
+
+Rate-limit identifiers are HMAC pseudonyms using a separate message domain under JWT_SECRET. No raw IP, username or password is stored in this table. Counters are capped; expired windows are removed opportunistically in batches of up to 500. No cleanup occurs when there is no traffic. Database failure returns 503 (fail closed). Denial returns 429 with Retry-After seconds and no-store. CORS exposes Retry-After.
+
+Run tests with TEST_DATABASE_URL unset for isolated SQLite; optional PostgreSQL verification must use a separate disposable database, never production. Test suite includes concurrent callers, windows, scope separation, failure, identity and actual endpoint throttling. Production smoke check normal login and forms once only; do not deliberately lock an active account or spam production forms. Monitor 429/503 and database growth. If rolling back, restore the prior version; the new table can remain unused.
