@@ -2257,6 +2257,12 @@ def admin_delete_service(
 
 # PUBLIC BLOG
 
+@app.get("/api/seo/posts", response_model=list[str])
+def get_published_blog_slugs(db: Session = Depends(get_db)):
+    return [row[0] for row in db.query(models.BlogPost.slug).filter(
+        models.BlogPost.is_published.is_(True)
+    ).order_by(models.BlogPost.id).limit(49992).all()]
+
 @app.get(
     "/api/blog",
     response_model=list[BlogPostResponse],
