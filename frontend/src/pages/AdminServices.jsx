@@ -572,19 +572,6 @@ function AdminServices() {
               onClose={
                 handleMobileClose
               }
-              onLogout={() => {
-                localStorage.removeItem(
-                  "adminToken"
-                );
-
-                localStorage.removeItem(
-                  "adminUsername"
-                );
-
-                navigate(
-                  "/admin/login"
-                );
-              }}
             />
           </aside>
         </>

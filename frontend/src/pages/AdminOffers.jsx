@@ -498,11 +498,6 @@ export default function AdminOffers() {
               onClose={() =>
                 setMobileSidebarOpen(false)
               }
-              onLogout={() => {
-                localStorage.removeItem("adminToken");
-                localStorage.removeItem("adminUsername");
-                window.location.href = "/admin/login";
-              }}
             />
           </aside>
         </>

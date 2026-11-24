@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LockKeyhole, Eye, EyeOff } from "lucide-react";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+import { API_URL, COOKIE_AUTH, sessionFetch, clearAdminStorage } from "../utils/api";
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -44,8 +44,8 @@ function AdminLogin() {
       body.append("username", username.trim());
       body.append("password", password);
 
-      const response = await fetch(
-        `${API_URL}/api/auth/login`,
+      const response = await (COOKIE_AUTH ? sessionFetch : fetch)(
+        COOKIE_AUTH ? "/api/auth/session/login" : `${API_URL}/api/auth/login`,
         {
           method: "POST",
           headers: {
@@ -60,7 +60,7 @@ function AdminLogin() {
 
       if (!response.ok) {
         if (response.status === 429) {
-          setLockoutSeconds(60);
+          setLockoutSeconds(Math.max(1, Number(response.headers.get("Retry-After")) || 60));
           throw new Error("Too many login attempts.");
 }
 
@@ -70,10 +70,8 @@ function AdminLogin() {
         );
       }
 
-      localStorage.setItem(
-        "adminToken",
-        data.access_token
-      );
+      clearAdminStorage();
+      if (!COOKIE_AUTH) localStorage.setItem("adminToken", data.access_token);
 
       localStorage.setItem(
         "adminUsername",
