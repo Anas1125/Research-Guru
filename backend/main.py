@@ -7,9 +7,6 @@ from dotenv import load_dotenv
 from datetime import datetime, timezone
 from uuid import uuid4
 from PIL import Image
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
 
 from fastapi import (
     FastAPI,
@@ -81,6 +78,7 @@ from auth import (
 )
 
 from sqlalchemy import func
+from rate_limit import (limit_login_ip, limit_login_account, limit_contact, limit_review, limit_offer)
 
 resend.api_key = os.getenv("RESEND_API_KEY")
 
@@ -117,14 +115,6 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(SecurityHeadersMiddleware)
 
-limiter = Limiter(key_func=get_remote_address)
-
-app.state.limiter = limiter
-app.add_exception_handler(
-    RateLimitExceeded,
-    _rate_limit_exceeded_handler,
-)
-
 # CORS
 
 app.add_middleware(
@@ -139,6 +129,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Retry-After"],
 )
 
 # DATABASE
@@ -471,7 +462,7 @@ def get_offers(
 
 # PUBLIC - VALIDATE OFFER CODE
 
-@app.get("/api/offers/validate")
+@app.get("/api/offers/validate", dependencies=[Depends(limit_offer)])
 def validate_offer_code(
     code: str,
     db: Session = Depends(get_db),
@@ -721,6 +712,7 @@ def admin_delete_offer(
 @app.post(
     "/api/reviews",
     response_model=ClientReviewResponse,
+    dependencies=[Depends(limit_review)],
 )
 def submit_client_review(
     data: ClientReviewCreate,
@@ -1151,15 +1143,14 @@ def startup():
 
 # ADMIN AUTHENTICATION
 
-@app.post("/api/auth/login")
-@limiter.limit("5/minute")
-
+@app.post("/api/auth/login", dependencies=[Depends(limit_login_ip)])
 def admin_login(
-    request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ):
     
+    limit_login_account(form_data.username)
+
     admin = (
         db.query(AdminUser)
         .filter(
@@ -1729,6 +1720,7 @@ def remove_site_setting_image(
 @app.post(
     "/api/contact",
     response_model=ContactEnquiryResponse,
+    dependencies=[Depends(limit_contact)],
 )
 def create_contact_enquiry(
     data: ContactEnquiryCreate,
