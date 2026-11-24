@@ -90,8 +90,10 @@ def client():
 
 
 @pytest.fixture(scope="module")
-def auth_headers():
-    token = create_access_token({"sub": "tester"})
+def auth_headers(client):
+    with SessionLocal() as db:
+        admin = db.query(AdminUser).filter_by(username="tester").one()
+        token = create_access_token(admin)
     return {"Authorization": f"Bearer {token}"}
 
 
@@ -278,13 +280,11 @@ def test_accepts_random_jwt_configuration():
     assert require_jwt_secret(key) == key
 
 
-@pytest.mark.parametrize("missing", ["sub", "iat", "exp"])
-def test_admin_token_requires_claims(client, missing):
+@pytest.mark.parametrize("missing", ["sub", "aid", "binding", "iat", "exp"])
+def test_admin_token_requires_claims(client, auth_headers, missing):
     import jwt
-    from datetime import datetime, timezone
     from auth import SECRET_KEY
-    now = int(datetime.now(timezone.utc).timestamp())
-    claims = {"sub": "tester", "iat": now, "exp": now + 600}
+    claims = jwt.decode(auth_headers["Authorization"].split(" ", 1)[1], SECRET_KEY, algorithms=["HS256"])
     del claims[missing]
     token = jwt.encode(claims, SECRET_KEY, algorithm="HS256")
     response = client.get("/api/admin/users", headers={"Authorization": f"Bearer {token}"})
@@ -300,3 +300,121 @@ def test_new_admin_token_expires_after_one_hour(client, auth_headers):
     response = client.get("/api/admin/users", headers=auth_headers)
     assert response.status_code == 200
     assert response.headers["cache-control"] == "no-store"
+
+
+# Every admin route must reject anonymous and invalid credentials. Discover
+# routes from the application so future additions automatically get tested.
+import re
+from fastapi.routing import APIRoute
+
+
+ADMIN_ROUTES = [
+    (method, re.sub(r"\{[^}]+\}", "1", route.path))
+    for route in main.app.routes
+    if isinstance(route, APIRoute) and route.path.startswith("/api/admin/")
+    for method in sorted(route.methods)
+]
+
+
+@pytest.mark.parametrize("method,path", ADMIN_ROUTES)
+@pytest.mark.parametrize("token", [None, "invalid-token"])
+def test_admin_routes_reject_unauthorized(client, method, path, token):
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
+    kwargs = {"headers": headers, "params": {"setting_key": "logo_url"}}
+    if "upload" in path:
+        kwargs["files"] = {"file": ("test.png", _png_bytes(), "image/png")}
+    elif method in {"POST", "PUT", "PATCH"}:
+        kwargs["json"] = {}
+    response = client.request(method, path, **kwargs)
+    assert response.status_code == 401, (method, path, response.status_code, response.text)
+    assert response.headers.get("cache-control") == "no-store"
+
+
+def test_admin_user_response_excludes_password_hash(client, auth_headers):
+    response = client.get("/api/admin/users", headers=auth_headers)
+    assert response.status_code == 200
+    assert response.json()
+    assert all(set(user) == {"id", "username", "is_active"} for user in response.json())
+
+
+def test_expired_and_invalid_signature_rejected(client, auth_headers):
+    import jwt
+    from datetime import timedelta
+    from auth import SECRET_KEY
+    with SessionLocal() as db:
+        admin = db.query(AdminUser).filter_by(username="tester").one()
+        expired = create_access_token(admin, timedelta(minutes=-1))
+    claims = jwt.decode(auth_headers["Authorization"].split(" ", 1)[1], SECRET_KEY, algorithms=["HS256"])
+    invalid = jwt.encode(claims, secrets.token_hex(32), algorithm="HS256")
+    for token in (expired, invalid):
+        assert client.get("/api/admin/users", headers={"Authorization": f"Bearer {token}"}).status_code == 401
+
+
+def test_admin_token_bound_to_account_and_password(client, auth_headers):
+    import jwt
+    from auth import SECRET_KEY
+    with SessionLocal() as db:
+        account = AdminUser(username="binding-test", password_hash=hash_password("test-password-123"), is_active=True)
+        db.add(account)
+        db.commit()
+        account_id = account.id
+        old = create_access_token(account)
+    headers = {"Authorization": f"Bearer {old}"}
+    try:
+        assert client.get("/api/admin/users", headers=headers).status_code == 200
+        changed = client.put(f"/api/admin/users/{account_id}", json={"password": "new-test-password-456"}, headers=auth_headers)
+        assert changed.status_code == 200
+        assert client.get("/api/admin/users", headers=headers).status_code == 401
+        with SessionLocal() as db:
+            new_token = create_access_token(db.get(AdminUser, account_id))
+        new_headers = {"Authorization": f"Bearer {new_token}"}
+        assert client.get("/api/admin/users", headers=new_headers).status_code == 200
+        claims = jwt.decode(new_token, SECRET_KEY, algorithms=["HS256"])
+        claims["aid"] += 1
+        wrong = jwt.encode(claims, SECRET_KEY, algorithm="HS256")
+        assert client.get("/api/admin/users", headers={"Authorization": f"Bearer {wrong}"}).status_code == 401
+        assert client.put(f"/api/admin/users/{account_id}", json={"is_active": False}, headers=auth_headers).status_code == 200
+        assert client.get("/api/admin/users", headers=new_headers).status_code == 401
+    finally:
+        with SessionLocal() as db:
+            row = db.get(AdminUser, account_id)
+            if row:
+                db.delete(row)
+                db.commit()
+
+
+def test_public_draft_blog_is_hidden(client, auth_headers):
+    slug = "private-" + secrets.token_hex(8)
+    result = client.post("/api/admin/blog", json={
+        "title": "Private article", "slug": slug, "content": "Draft only", "is_published": False
+    }, headers=auth_headers)
+    assert result.status_code == 200
+    try:
+        assert client.get(f"/api/blog/{slug}").status_code == 404
+        assert slug not in client.get("/api/seo/posts").json()
+        assert all(post["slug"] != slug for post in client.get("/api/blog").json())
+    finally:
+        assert client.delete(f"/api/admin/blog/{result.json()['id']}", headers=auth_headers).status_code == 200
+
+
+def test_public_review_cannot_publish_itself(client, auth_headers):
+    name = "review-" + secrets.token_hex(8)
+    result = client.post("/api/reviews", json={
+        "client_name": name, "review": "Test moderation", "rating": 5,
+        "is_published": True, "display_order": 999
+    })
+    assert result.status_code == 200
+    try:
+        assert result.json()["is_published"] is False
+        assert result.json()["display_order"] == 0
+        assert all(review["client_name"] != name for review in client.get("/api/reviews").json())
+    finally:
+        assert client.delete(f"/api/admin/reviews/{result.json()['id']}", headers=auth_headers).status_code == 200
+
+
+def test_admin_login_issues_bound_token(client):
+    response = client.post("/api/auth/login", data={"username": "tester", "password": "pw"})
+    assert response.status_code == 200, response.text
+    assert client.get("/api/admin/users", headers={
+        "Authorization": "Bearer " + response.json()["access_token"]
+    }).status_code == 200

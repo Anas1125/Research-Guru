@@ -1189,11 +1189,7 @@ def admin_login(
             detail="Invalid username or password",
         )
 
-    token = create_access_token(
-        {
-            "sub": admin.username,
-        }
-    )
+    token = create_access_token(admin)
 
     return {
         "access_token": token,
@@ -1366,6 +1362,8 @@ def update_admin_user(
         requested_active = updates[
             "is_active"
         ]
+        if requested_active is None:
+            raise HTTPException(status_code=400, detail="Active status cannot be null")
 
         if (
             requested_active is False
