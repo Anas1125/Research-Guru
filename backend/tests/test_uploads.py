@@ -498,11 +498,13 @@ def test_rate_limit_database_failure_is_closed(rate_clock, monkeypatch):
     from sqlalchemy.exc import OperationalError
     def unavailable():
         raise OperationalError("test", {}, Exception("private detail"))
-    monkeypatch.setattr(rate_limit.SessionLocal, "begin", unavailable)
-    with pytest.raises(HTTPException) as error:
-        rate_limit.consume("login", "a", 5, 60)
-    assert error.value.status_code == 503
-    assert "private detail" not in error.value.detail
+    # Restore the shared session factory before rate_clock's teardown.
+    with monkeypatch.context() as patch:
+        patch.setattr(rate_limit.SessionLocal, "begin", unavailable)
+        with pytest.raises(HTTPException) as error:
+            rate_limit.consume("login", "a", 5, 60)
+        assert error.value.status_code == 503
+        assert "private detail" not in error.value.detail
 
 
 def test_rate_limit_proxy_identity(rate_clock, monkeypatch):
