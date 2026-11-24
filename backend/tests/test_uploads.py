@@ -848,3 +848,60 @@ def test_preexisting_non_image_mime_not_served(client):
     finally:
         with SessionLocal.begin() as db:
             db.query(StoredFile).filter_by(id=file_id).delete()
+
+
+@pytest.fixture
+def cookie_proxy(monkeypatch, rate_clock):
+    secret = secrets.token_hex(32)
+    monkeypatch.setenv("ADMIN_PROXY_SECRET", secret)
+    return {"X-RG-Proxy-Secret": secret, "X-RG-Client-IP": "192.0.2.10",
+            "Origin": "https://research-guru.pages.dev", "X-RG-CSRF": "1"}
+
+
+def test_cookie_session_lifecycle(client, cookie_proxy):
+    from models import AdminSession
+    from auth import SESSION_COOKIE, session_digest
+    response = client.post("/api/auth/session/login", headers=cookie_proxy,
+                           data={"username": "tester", "password": "pw"})
+    assert response.status_code == 200, response.text
+    assert "access_token" not in response.json()
+    cookie = response.headers["set-cookie"]
+    for flag in ("httponly", "secure", "samesite=strict", "path=/", "max-age=3600"):
+        assert flag in cookie.lower()
+    assert "domain=" not in cookie.lower()
+    token = response.cookies[SESSION_COOKIE]
+    headers = {**cookie_proxy, "Cookie": f"{SESSION_COOKIE}={token}"}
+    try:
+        with SessionLocal() as db:
+            assert db.get(AdminSession, session_digest(token)) is not None
+            assert db.get(AdminSession, token) is None
+        assert client.get("/api/auth/session/me", headers=headers).status_code == 200
+        assert client.get("/api/admin/users", headers=headers).status_code == 200
+        assert client.get("/api/admin/users", headers={"Cookie": headers["Cookie"]}).status_code == 403
+        assert client.post("/api/auth/session/logout", headers={**headers, "Origin": "https://evil.example"}).status_code == 403
+        assert client.post("/api/auth/session/logout", headers={**headers, "X-RG-CSRF": ""}).status_code == 403
+        assert client.post("/api/auth/session/logout", headers=headers).status_code == 200
+        assert client.get("/api/admin/users", headers=headers).status_code == 401
+    finally:
+        client.cookies.clear()
+
+
+def test_cookie_login_requires_trusted_proxy(client, cookie_proxy):
+    assert client.post("/api/auth/session/login", data={"username":"tester","password":"pw"}).status_code == 403
+
+
+def test_proxy_client_ip_requires_secret(cookie_proxy):
+    headers = [(k.lower().encode(), v.encode()) for k,v in cookie_proxy.items()]
+    scope = {"type":"http","client":("198.51.100.2",1234),"headers":headers}
+    assert rate_limit.client_identity(Request(scope)) == "192.0.2.10"
+    scope["headers"] = [(b"x-rg-client-ip", b"192.0.2.10")]
+    assert rate_limit.client_identity(Request(scope)) == "198.51.100.2"
+
+
+def test_legacy_bearer_can_be_disabled(client, auth_headers, cookie_proxy, monkeypatch):
+    monkeypatch.setenv("ALLOW_LEGACY_BEARER", "false")
+    assert client.get("/api/admin/users", headers=auth_headers).status_code == 401
+    assert client.post("/api/auth/login", data={"username":"tester","password":"pw"}).status_code == 403
+    assert client.post("/api/auth/session/login", headers=cookie_proxy,
+                       data={"username":"tester","password":"pw"}).status_code == 200
+    client.cookies.clear()
