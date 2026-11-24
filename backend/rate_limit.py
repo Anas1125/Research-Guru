@@ -14,6 +14,7 @@ from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.exc import SQLAlchemyError
 
 from auth import SECRET_KEY
+from proxy_auth import trusted_proxy
 from database import SessionLocal
 from models import RateLimitBucket
 
@@ -23,7 +24,9 @@ logger = logging.getLogger(__name__)
 def client_identity(request: Request) -> str:
     # Only trust the Vercel-managed header when running on Vercel.
     # Do not trust arbitrary caller-supplied X-Forwarded-For or CF headers.
-    if os.getenv("VERCEL") == "1":
+    if trusted_proxy(request):
+        raw = request.headers.get("x-rg-client-ip", "")
+    elif os.getenv("VERCEL") == "1":
         raw = request.headers.get("x-vercel-forwarded-for", "")
     else:
         raw = request.client.host if request.client else ""
