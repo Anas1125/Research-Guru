@@ -25,3 +25,16 @@ backend/.venv/
 # IDE
 .vscode/
 .idea/
+
+# Local databases and SQLite sidecars (never commit application data)
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+*.sqlite3-journal

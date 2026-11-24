@@ -76,7 +76,7 @@ Administrative functionality includes:
 Research Guru/
 ├── backend/
 │   ├── ...
-│   └── research_guru.db
+│   └── research_guru.db  (local only; ignored by Git)
 │
 ├── frontend/
 │   ├── public/
@@ -97,3 +97,9 @@ Research Guru/
 │
 ├── README.md
 └── .gitignore
+
+## Security and local setup
+
+Set a unique random `JWT_SECRET` before starting the backend. Generate it locally with `python -c 'import secrets; print(secrets.token_hex(32))'`. Store it in an untracked backend `.env` file or export it in the shell; in Vercel configure it as a production secret before deploying. Never use the old development fallback. Existing tokens signed with a replaced key become invalid. New admin tokens expire after one hour. Back up any existing local SQLite database outside the repository before pulling the commit that untracks it. Production should use a private PostgreSQL DATABASE_URL. Removing the tracked database does not remove historical copies; review its contents privately, rotate affected credentials, and address any personal data exposure and repository history separately.
+
+Backend tests: `cd backend && python -m pytest tests -q` (tests use a temporary SQLite DB and independent random signing key by default; never point TEST_DATABASE_URL at production).

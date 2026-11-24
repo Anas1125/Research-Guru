@@ -97,6 +97,9 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         response = await call_next(request)
 
+        if request.url.path.startswith(("/api/admin/", "/api/auth/")):
+            response.headers["Cache-Control"] = "no-store"
+
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
