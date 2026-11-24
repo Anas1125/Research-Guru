@@ -905,3 +905,33 @@ def test_legacy_bearer_can_be_disabled(client, auth_headers, cookie_proxy, monke
     assert client.post("/api/auth/session/login", headers=cookie_proxy,
                        data={"username":"tester","password":"pw"}).status_code == 200
     client.cookies.clear()
+
+
+@pytest.mark.parametrize("origin", ["https://research-guru.pages.dev", "https://researchguruglobal.com"])
+def test_domain_cors_allows_exact_origins(client, origin):
+    response = client.options("/api/site-settings", headers={
+        "Origin": origin, "Access-Control-Request-Method": "GET"})
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == origin
+
+
+def test_domain_cors_rejects_lookalike(client):
+    response = client.options("/api/site-settings", headers={
+        "Origin": "https://researchguruglobal.com.evil.example",
+        "Access-Control-Request-Method": "GET"})
+    assert "access-control-allow-origin" not in response.headers
+
+
+def test_custom_domain_cookie_login(client, cookie_proxy):
+    response = client.post("/api/auth/session/login",
+                           headers={**cookie_proxy, "Origin": "https://researchguruglobal.com"},
+                           data={"username": "tester", "password": "pw"})
+    assert response.status_code == 200, response.text
+    assert "__Host-rg-session=" in response.headers["set-cookie"]
+
+
+def test_custom_domain_cookie_rejects_lookalike(client, cookie_proxy):
+    response = client.post("/api/auth/session/login",
+                           headers={**cookie_proxy, "Origin": "https://researchguruglobal.com.evil.example"},
+                           data={"username": "tester", "password": "pw"})
+    assert response.status_code == 403

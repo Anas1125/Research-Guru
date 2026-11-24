@@ -1,6 +1,6 @@
 import { apiOrigin } from '../_seo-api.js';
 
-const FRONTEND = 'https://research-guru.pages.dev';
+const FRONTENDS = new Set(['https://research-guru.pages.dev', 'https://researchguruglobal.com']);
 const COOKIE = '__Host-rg-session';
 const AUTH_PATHS = new Set(['/api/auth/session/login', '/api/auth/session/me', '/api/auth/session/logout']);
 const METHODS = new Set(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD']);
@@ -11,11 +11,11 @@ function reject(status, detail) {
 
 export async function onRequest({request, env}) {
   const url = new URL(request.url);
-  if (url.origin !== FRONTEND) return reject(403, 'Production origin required');
+  if (!FRONTENDS.has(url.origin)) return reject(403, 'Production origin required');
   if (!AUTH_PATHS.has(url.pathname) && !url.pathname.startsWith('/api/admin/')) return reject(404, 'Not found');
   if (!METHODS.has(request.method)) return reject(405, 'Method not allowed');
   const unsafe = !['GET','HEAD'].includes(request.method);
-  if (unsafe && (request.headers.get('origin') !== FRONTEND || request.headers.get('x-rg-csrf') !== '1')) {
+  if (unsafe && (request.headers.get('origin') !== url.origin || request.headers.get('x-rg-csrf') !== '1')) {
     return reject(403, 'Invalid request origin');
   }
   const secret = env.ADMIN_PROXY_SECRET;

@@ -29,3 +29,21 @@ test('proxy strips attacker supplied trust headers and forwards only session coo
 test('proxy refuses unconfigured secret',async()=>{
   assert.equal((await onRequest({env:{},request:new Request(origin+'/api/auth/session/me')})).status,503);
 });
+
+const custom = 'https://researchguruglobal.com';
+test('custom domain accepts same-origin protected requests', async t => {
+  t.mock.method(globalThis,'fetch',async(url,opts)=>{
+    assert.equal(url,'https://research-guru-nu.vercel.app/api/auth/session/login');
+    assert.equal(opts.headers.get('origin'),custom);
+    assert.equal(opts.headers.get('x-rg-csrf'),'1');
+    return Response.json({ok:true});
+  });
+  const response=await onRequest({env,request:new Request(custom+'/api/auth/session/login',{method:'POST',headers:{Origin:custom,'X-RG-CSRF':'1'}})});
+  assert.equal(response.status,200);
+});
+test('both trusted hosts reject cross-origin writes and unknown deployment hosts',async()=>{
+  for(const [target,source] of [[custom,origin],[origin,custom],[custom,'https://evil.example'],['https://preview.research-guru.pages.dev',custom],[custom+'.evil.example',custom]]){
+    const response=await onRequest({env,request:new Request(target+'/api/auth/session/logout',{method:'POST',headers:{Origin:source,'X-RG-CSRF':'1'}})});
+    assert.equal(response.status,403);
+  }
+});

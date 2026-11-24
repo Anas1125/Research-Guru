@@ -5,6 +5,7 @@ import os
 from fastapi import HTTPException, Request
 
 FRONTEND_ORIGIN = "https://research-guru.pages.dev"
+TRUSTED_FRONTEND_ORIGINS = frozenset({FRONTEND_ORIGIN, "https://researchguruglobal.com"})
 
 
 def trusted_proxy(request: Request) -> bool:
@@ -19,6 +20,6 @@ def require_cookie_proxy(request: Request):
     if not trusted_proxy(request):
         raise HTTPException(403, "Trusted frontend proxy required.")
     if request.method not in {"GET", "HEAD", "OPTIONS"}:
-        if (request.headers.get("origin") != FRONTEND_ORIGIN
+        if (request.headers.get("origin") not in TRUSTED_FRONTEND_ORIGINS
                 or request.headers.get("x-rg-csrf") != "1"):
             raise HTTPException(403, "Invalid request origin.")
