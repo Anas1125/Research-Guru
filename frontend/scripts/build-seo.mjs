@@ -2,7 +2,13 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { PUBLIC_PAGES, PRIVATE_PAGES, pageSeo, replaceSeo, sitemapXml, SITE_URL } from '../src/utils/seo.js';
 export async function buildSeo(dir = 'dist') {
-  const template = await readFile(join(dir, 'index.html'), 'utf8');
+  let template = await readFile(join(dir, 'index.html'), 'utf8');
+  // Vite may strip HTML comments. Restore the marker around the known initial tags.
+  if (!template.includes('<!-- RG SEO START -->')) {
+    const initial = /<title\b[^>]*data-rg-seo[^>]*>[\s\S]*?<\/title>\s*<meta\b[^>]*data-rg-seo[^>]*>\s*<meta\b[^>]*data-rg-seo[^>]*>/i;
+    if (!initial.test(template)) throw new Error('Initial SEO tags missing');
+    template = template.replace(initial, value => '<!-- RG SEO START -->'+value+'<!-- RG SEO END -->');
+  }
   for (const path of [...Object.keys(PUBLIC_PAGES), ...PRIVATE_PAGES]) {
     const folder = join(dir, path.slice(1));
     await mkdir(folder, {recursive: true});
