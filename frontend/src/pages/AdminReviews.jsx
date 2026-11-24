@@ -161,9 +161,9 @@ function AdminReviews() {
     return;
   }
 
-  if (file.size > 10 * 1024 * 1024) {
+  if (file.size > 4 * 1024 * 1024) {
     setError(
-      "Image must be smaller than 10 MB."
+      "Image must be smaller than 4 MB."
     );
     event.target.value = "";
     return;
@@ -1044,7 +1044,7 @@ function AdminReviews() {
                 )}
 
                 <p className="mt-2 text-xs leading-5 text-slate-400">
-                    JPG, PNG, or WEBP · Maximum 10 MB
+                    JPG, PNG, or WEBP · Maximum 4 MB
                 </p>
                 </div>
 

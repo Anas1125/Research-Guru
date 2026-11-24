@@ -725,7 +725,7 @@ export default function AdminClients() {
 
                       <input
                         type="file"
-                        accept=".jpg,.jpeg,.png,.webp,.svg"
+                        accept=".jpg,.jpeg,.png,.webp"
                         onChange={
                           handleLogoUpload
                         }
@@ -738,7 +738,7 @@ export default function AdminClients() {
                     </label>
 
                     <p className="mt-2 text-xs leading-5 text-slate-400">
-                      JPG, PNG, WEBP or SVG
+                      JPG, PNG or WEBP · Max 4 MB
                     </p>
                   </div>
                 </div>

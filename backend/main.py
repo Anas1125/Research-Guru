@@ -7,7 +7,6 @@ from html import escape
 from dotenv import load_dotenv
 from datetime import datetime, timezone
 from uuid import uuid4
-from PIL import Image
 
 from fastapi import (
     FastAPI,
@@ -27,6 +26,7 @@ from sqlalchemy.orm import Session
 
 import models
 import storage
+from image_upload import sanitize_image, SAFE_CONTENT_TYPES
 
 load_dotenv()
 
@@ -102,7 +102,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        response.headers["Content-Security-Policy"] = (
+        if "Content-Security-Policy" not in response.headers:
+            response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
             "img-src 'self' data: https://images.unsplash.com; "
             "style-src 'self' 'unsafe-inline'; "
@@ -149,17 +150,6 @@ LEGACY_UPLOADS_DIR = os.path.join(
     "uploads",
 )
 
-def validate_image(contents: bytes) -> bool:
-    try:
-        from io import BytesIO
-
-        image = Image.open(BytesIO(contents))
-        image.verify()
-
-        return True
-    except Exception:
-        return False
-
 app.mount(
     "/uploads",
     StaticFiles(
@@ -185,7 +175,7 @@ def serve_stored_file(
         filename,
     )
 
-    if not stored:
+    if not stored or stored.content_type not in SAFE_CONTENT_TYPES:
         raise HTTPException(
             status_code=404,
             detail="File not found.",
@@ -201,6 +191,7 @@ def serve_stored_file(
             "s-maxage=31536000, immutable"
         ),
         "ETag": etag,
+        "Content-Security-Policy": "default-src 'none'; sandbox",
     }
 
     if request.headers.get("if-none-match") == etag:
@@ -904,48 +895,18 @@ def upload_client_logo(
         get_current_admin
     ),
 ):
-    allowed_extensions = {
-        ".jpg": "image/jpeg",
-        ".jpeg": "image/jpeg",
-        ".png": "image/png",
-        ".webp": "image/webp",
-        ".svg": "image/svg+xml",
-    }
-
-    original_name = file.filename or ""
-    extension = os.path.splitext(
-        original_name
-    )[1].lower()
-
-    if extension not in allowed_extensions:
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                "Only JPG, JPEG, PNG, WEBP, "
-                "and SVG images are allowed."
-            ),
+    image = sanitize_image(file)
+    try:
+        image_url = storage.save_file(
+            db, folder="clients", contents=image.contents,
+            content_type=image.content_type, extension=image.extension,
+            original_name=file.filename,
         )
+    except Exception:
+        db.rollback()
+        raise HTTPException(500, "Failed to save image.") from None
+    return {"image_url": image_url}
 
-    contents = file.file.read()
-
-    if not validate_image(contents):
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid image file.",
-        )
-
-    image_url = storage.save_file(
-        db,
-        folder="clients",
-        contents=contents,
-        content_type=allowed_extensions[extension],
-        extension=extension,
-        original_name=original_name,
-    )
-
-    return {
-        "image_url": image_url
-    }
 
 # ADMIN - CLIENT REVIEWS
 
@@ -1091,44 +1052,18 @@ def upload_review_photo(
         get_current_admin
     ),
 ):
-    allowed_extensions = {
-        ".jpg": "image/jpeg",
-        ".jpeg": "image/jpeg",
-        ".png": "image/png",
-        ".webp": "image/webp",
-    }
-
-    original_name = file.filename or ""
-    extension = os.path.splitext(
-        original_name
-    )[1].lower()
-
-    if extension not in allowed_extensions:
-        raise HTTPException(
-            status_code=400,
-            detail="Only JPG, JPEG, PNG, and WEBP images are allowed.",
+    image = sanitize_image(file)
+    try:
+        image_url = storage.save_file(
+            db, folder="reviews", contents=image.contents,
+            content_type=image.content_type, extension=image.extension,
+            original_name=file.filename,
         )
+    except Exception:
+        db.rollback()
+        raise HTTPException(500, "Failed to save image.") from None
+    return {"image_url": image_url}
 
-    contents = file.file.read()
-
-    if not validate_image(contents):
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid image file.",
-        )
-
-    image_url = storage.save_file(
-        db,
-        folder="reviews",
-        contents=contents,
-        content_type=allowed_extensions[extension],
-        extension=extension,
-        original_name=original_name,
-    )
-
-    return {
-        "image_url": image_url
-    }
 
 # STARTUP
 
@@ -1550,7 +1485,7 @@ def update_site_settings(
 @app.post(
     "/api/admin/site-settings/upload"
 )
-async def upload_site_setting_image(
+def upload_site_setting_image(
     setting_key: str,
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
@@ -1575,72 +1510,19 @@ async def upload_site_setting_image(
             detail="Invalid site image setting.",
         )
 
-    allowed_types = {
-        "image/jpeg": ".jpg",
-        "image/png": ".png",
-        "image/webp": ".webp",
-        "image/x-icon": ".ico",
-        "image/vnd.microsoft.icon": ".ico",
-    }
 
-    if file.content_type not in allowed_types:
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                "Only JPG, PNG, WEBP, and ICO "
-                "images are allowed."
-            ),
-        )
-
-    extension = allowed_types[
-        file.content_type
-    ]
-
+    image = sanitize_image(file, allow_ico=(setting_key == "favicon_url"))
     try:
-        contents = await file.read()
-
-        if not validate_image(contents):
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid image file.",
-            )
-
-        max_size = 10 * 1024 * 1024
-
-        if len(contents) > max_size:
-            raise HTTPException(
-                status_code=400,
-                detail=(
-                    "Image must be smaller "
-                    "than 10 MB."
-                ),
-            )
-
         image_url = storage.save_file(
-            db,
-            folder="site",
-            contents=contents,
-            content_type=file.content_type,
-            extension=extension,
+            db, folder="site", contents=image.contents,
+            content_type=image.content_type, extension=image.extension,
             original_name=file.filename,
         )
-
-    except HTTPException:
-        raise
-
-    except Exception as error:
+    except Exception:
         db.rollback()
-        raise HTTPException(
-            status_code=500,
-            detail=(
-                f"Failed to save image: {error}"
-            ),
-        )
+        raise HTTPException(500, "Failed to save image.") from None
+    return {"setting_key": setting_key, "image_url": image_url}
 
-    return {
-        "setting_key": setting_key,
-        "image_url": image_url,
-    }
 
 # ADMIN - REMOVE SITE SETTING IMAGE
 
@@ -2327,77 +2209,24 @@ def get_admin_blog_posts(
 @app.post(
     "/api/admin/blog/upload-image"
 )
-async def upload_blog_image(
+def upload_blog_image(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_admin: AdminUser = Depends(
         get_current_admin
     ),
 ):
-    allowed_types = {
-        "image/jpeg": ".jpg",
-        "image/png": ".png",
-        "image/webp": ".webp",
-    }
-
-    if file.content_type not in allowed_types:
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                "Only JPG, PNG, and WEBP "
-                "images are allowed."
-            ),
-        )
-
-    extension = allowed_types[
-        file.content_type
-    ]
-
+    image = sanitize_image(file)
     try:
-        contents = await file.read()
-
-        if not validate_image(contents):
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid image file.",
-            )
-
-        # 5 MB limit
-        max_size = 5 * 1024 * 1024
-
-        if len(contents) > max_size:
-            raise HTTPException(
-                status_code=400,
-                detail=(
-                    "Image must be smaller "
-                    "than 5 MB."
-                ),
-            )
-
         image_url = storage.save_file(
-            db,
-            folder="blog",
-            contents=contents,
-            content_type=file.content_type,
-            extension=extension,
+            db, folder="blog", contents=image.contents,
+            content_type=image.content_type, extension=image.extension,
             original_name=file.filename,
         )
-
-    except HTTPException:
-        raise
-
-    except Exception as error:
+    except Exception:
         db.rollback()
-        raise HTTPException(
-            status_code=500,
-            detail=(
-                f"Failed to save image: {error}"
-            ),
-        )
-
-    return {
-        "image_url": image_url
-    }
+        raise HTTPException(500, "Failed to save image.") from None
+    return {"image_url": image_url}
 
 
 # ADMIN BLOG - CREATE

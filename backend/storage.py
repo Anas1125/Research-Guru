@@ -13,6 +13,7 @@ are still served by the /uploads static mount in main.py.
 """
 
 import os
+import re
 from uuid import uuid4
 
 from sqlalchemy.orm import Session
@@ -69,7 +70,7 @@ def get_file(
 ) -> StoredFile | None:
     file_id = os.path.splitext(filename)[0]
 
-    if len(file_id) != 32:
+    if folder not in ALLOWED_FOLDERS or not re.fullmatch(r"[0-9a-f]{32}", file_id):
         return None
 
     stored = db.get(StoredFile, file_id)

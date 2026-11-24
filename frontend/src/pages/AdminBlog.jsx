@@ -285,13 +285,13 @@ function AdminBlog() {
     }
 
     const maxSize =
-      5 * 1024 * 1024;
+      4 * 1024 * 1024;
 
     if (
       file.size > maxSize
     ) {
       alert(
-        "Image must be smaller than 5 MB."
+        "Image must be smaller than 4 MB."
       );
 
       event.target.value =
@@ -998,7 +998,7 @@ function AdminBlog() {
                       </p>
 
                       <p className="mt-0.5 text-xs text-slate-500">
-                        JPG, PNG, or WEBP · Max 5 MB
+                        JPG, PNG, or WEBP · Max 4 MB
                       </p>
                     </div>
 
