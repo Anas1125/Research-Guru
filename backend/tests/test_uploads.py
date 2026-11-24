@@ -10,6 +10,7 @@ directory read-only for the duration of the run, to mimic Vercel.
 
 import io
 import os
+import secrets
 import stat
 import sys
 import tempfile
@@ -27,7 +28,7 @@ os.environ["DATABASE_URL"] = os.getenv(
     "TEST_DATABASE_URL",
     f"sqlite:///{os.path.join(_tmp_dir, 'test.db')}",
 )
-os.environ.setdefault("JWT_SECRET", "test-secret")
+os.environ["JWT_SECRET"] = secrets.token_hex(32)
 
 from fastapi.testclient import TestClient  # noqa: E402
 from PIL import Image  # noqa: E402
@@ -261,3 +262,41 @@ def test_legacy_uploads_still_served(client):
     assert response.status_code == 200
     with open(os.path.join(site_dir, name), "rb") as f:
         assert response.content == f.read()
+
+
+@pytest.mark.parametrize("value", [None, "", "short", " " * 64, "a" * 64,
+                                  "research-guru-dev-secret-change-this"])
+def test_rejects_insecure_jwt_configuration(value):
+    from auth import require_jwt_secret
+    with pytest.raises(RuntimeError, match="JWT_SECRET"):
+        require_jwt_secret(value)
+
+
+def test_accepts_random_jwt_configuration():
+    from auth import require_jwt_secret
+    key = secrets.token_hex(32)
+    assert require_jwt_secret(key) == key
+
+
+@pytest.mark.parametrize("missing", ["sub", "iat", "exp"])
+def test_admin_token_requires_claims(client, missing):
+    import jwt
+    from datetime import datetime, timezone
+    from auth import SECRET_KEY
+    now = int(datetime.now(timezone.utc).timestamp())
+    claims = {"sub": "tester", "iat": now, "exp": now + 600}
+    del claims[missing]
+    token = jwt.encode(claims, SECRET_KEY, algorithm="HS256")
+    response = client.get("/api/admin/users", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 401
+
+
+def test_new_admin_token_expires_after_one_hour(client, auth_headers):
+    import jwt
+    from auth import SECRET_KEY
+    token = auth_headers["Authorization"].split(" ", 1)[1]
+    claims = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+    assert claims["exp"] - claims["iat"] == 3600
+    response = client.get("/api/admin/users", headers=auth_headers)
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "no-store"

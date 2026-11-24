@@ -13,13 +13,22 @@ from models import AdminUser
 
 load_dotenv()
 
-SECRET_KEY = os.getenv(
-    "JWT_SECRET",
-    "research-guru-dev-secret-change-this",
-)
+def require_jwt_secret(value: str | None) -> str:
+    """Never issue or accept tokens using a missing or known development key."""
+    secret = value or ""
+    if (
+        len(secret.strip().encode("utf-8")) < 32
+        or len(set(secret.strip())) < 8
+        or secret.strip() == "research-guru-dev-secret-change-this"
+    ):
+        raise RuntimeError("Set JWT_SECRET to an independent random secret of at least 32 bytes.")
+    return secret
+
+
+SECRET_KEY = require_jwt_secret(os.getenv("JWT_SECRET"))
 
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 1 day
+ACCESS_TOKEN_EXPIRE_MINUTES = 60  # Administrator sessions: one hour
 
 password_hash = PasswordHash.recommended()
 
@@ -88,14 +97,18 @@ def get_current_admin(
             token,
             SECRET_KEY,
             algorithms=[ALGORITHM],
+            options={"require": ["sub", "iat", "exp"]},
         )
 
         username = payload.get("sub")
 
-        if not username:
+        if (not isinstance(username, str) or not username
+                or type(payload["iat"]) is not int
+                or type(payload["exp"]) is not int
+                or payload["exp"] <= payload["iat"]):
             raise credentials_exception
 
-    except jwt.PyJWTError:
+    except (jwt.PyJWTError, ValueError, TypeError, OverflowError):
         raise credentials_exception
 
     admin = (
