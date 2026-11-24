@@ -12,6 +12,7 @@ import { Link, useParams } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { applySeo, articleSeo, noIndex } from "../utils/seo";
 
 const API_URL =
   import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
@@ -60,38 +61,6 @@ const getImageUrl = (imagePath) => {
   return `${API_URL}${imagePath}`;
 };
 
-const setMetaTag = (attribute, key, content) => {
-  if (!content) {
-    return;
-  }
-
-  let element = document.head.querySelector(
-    `meta[${attribute}="${key}"]`
-  );
-
-  if (!element) {
-    element = document.createElement("meta");
-    element.setAttribute(attribute, key);
-    document.head.appendChild(element);
-  }
-
-  element.setAttribute("content", content);
-};
-
-const setLinkTag = (rel, href) => {
-  let element = document.head.querySelector(
-    `link[rel="${rel}"]`
-  );
-
-  if (!element) {
-    element = document.createElement("link");
-    element.setAttribute("rel", rel);
-    document.head.appendChild(element);
-  }
-
-  element.setAttribute("href", href);
-};
-
 function BlogPost() {
   const { slug } = useParams();
 
@@ -113,13 +82,7 @@ function BlogPost() {
           return;
         }
 
-        const [postResponse, settingsResponse] =
-          await Promise.all([
-            fetch(
-              `${API_URL}/api/blog/${encodeURIComponent(slug)}`
-            ),
-            fetch(`${API_URL}/api/site-settings`),
-          ]);
+        const postResponse = await fetch(`${API_URL}/api/blog/${encodeURIComponent(slug)}`);
 
         if (postResponse.status === 404) {
           if (!cancelled) {
@@ -127,19 +90,7 @@ function BlogPost() {
             setPost(null);
           }
 
-          document.title = "Article Not Found | Research Guru";
-
-          setMetaTag(
-            "name",
-            "description",
-            "The requested research article could not be found."
-          );
-
-          setMetaTag(
-            "name",
-            "robots",
-            "noindex, nofollow"
-          );
+          if (!cancelled) applySeo(noIndex("Article Not Found | Research Guru"));
 
           return;
         }
@@ -156,160 +107,7 @@ function BlogPost() {
 
         setPost(data);
 
-        let siteName = "Research Guru";
-
-        if (settingsResponse.ok) {
-          const settings =
-            await settingsResponse.json();
-
-          siteName =
-            settings.site_name || "Research Guru";
-        }
-
-        const articleTitle =
-          data.title || "Research Article";
-
-        const articleDescription =
-          data.excerpt?.trim() ||
-          `${articleTitle} - research guidance, academic insights, and practical information from ${siteName}.`;
-
-        const siteUrl =
-          window.location.origin;
-
-        const articleUrl =
-          `${siteUrl}/blog/${encodeURIComponent(slug)}`;
-
-        const articleImage =
-          getImageUrl(data.featured_image) ||
-          `${siteUrl}/og-image.jpg`;
-
-        document.title =
-          `${articleTitle} | ${siteName}`;
-
-        setMetaTag(
-          "name",
-          "description",
-          articleDescription
-        );
-
-        setMetaTag(
-          "name",
-          "robots",
-          "index, follow"
-        );
-
-        setMetaTag(
-          "property",
-          "og:title",
-          `${articleTitle} | ${siteName}`
-        );
-
-        setMetaTag(
-          "property",
-          "og:description",
-          articleDescription
-        );
-
-        setMetaTag(
-          "property",
-          "og:type",
-          "article"
-        );
-
-        setMetaTag(
-          "property",
-          "og:url",
-          articleUrl
-        );
-
-        setMetaTag(
-          "property",
-          "og:image",
-          articleImage
-        );
-
-        setMetaTag(
-          "name",
-          "twitter:card",
-          "summary_large_image"
-        );
-
-        setMetaTag(
-          "name",
-          "twitter:title",
-          `${articleTitle} | ${siteName}`
-        );
-
-        setMetaTag(
-          "name",
-          "twitter:description",
-          articleDescription
-        );
-
-        setMetaTag(
-          "name",
-          "twitter:image",
-          articleImage
-        );
-
-        setLinkTag(
-          "canonical",
-          articleUrl
-        );
-
-        const publishedDate =
-          data.published_at ||
-          data.created_at ||
-          undefined;
-
-        const structuredData = {
-          "@context": "https://schema.org",
-          "@type": "Article",
-          headline: articleTitle,
-          description: articleDescription,
-          url: articleUrl,
-          image: [articleImage],
-          publisher: {
-            "@type": "Organization",
-            name: siteName,
-            url: siteUrl,
-            logo: {
-              "@type": "ImageObject",
-              url: `${siteUrl}/og-image.jpg`,
-            },
-          },
-        };
-
-        if (publishedDate) {
-          structuredData.datePublished =
-            publishedDate;
-        }
-
-        const existingStructuredData =
-          document.head.querySelector(
-            'script[data-blog-structured-data="research-guru"]'
-          );
-
-        const structuredDataScript =
-          existingStructuredData ||
-          document.createElement("script");
-
-        structuredDataScript.type =
-          "application/ld+json";
-
-        structuredDataScript.setAttribute(
-          "data-blog-structured-data",
-          "research-guru"
-        );
-
-        structuredDataScript.textContent =
-          JSON.stringify(structuredData);
-
-        if (!existingStructuredData) {
-          document.head.appendChild(
-            structuredDataScript
-          );
-        }
+        applySeo(articleSeo(data, API_URL));
 
         const postsResponse = await fetch(
           `${API_URL}/api/blog`
@@ -348,6 +146,7 @@ function BlogPost() {
         if (!cancelled) {
           setNotFound(true);
           setPost(null);
+          applySeo(noIndex("Article Unavailable | Research Guru"));
         }
       } finally {
         if (!cancelled) {
