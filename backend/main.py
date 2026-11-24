@@ -76,9 +76,12 @@ from auth import (
     hash_password,
     verify_password,
     create_access_token,
+    legacy_bearer_enabled, start_cookie_session, get_cookie_admin,
+    end_cookie_session, revoke_admin_sessions,
 )
 
 from sqlalchemy import func
+from proxy_auth import require_cookie_proxy
 from rate_limit import (limit_login_ip, limit_login_account, limit_contact, limit_review, limit_offer)
 
 resend.api_key = os.getenv("RESEND_API_KEY")
@@ -1079,12 +1082,7 @@ def startup():
 
 # ADMIN AUTHENTICATION
 
-@app.post("/api/auth/login", dependencies=[Depends(limit_login_ip)])
-def admin_login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db),
-):
-    
+def authenticate_admin(form_data: OAuth2PasswordRequestForm, db: Session):
     limit_login_account(form_data.username)
 
     admin = (
@@ -1116,13 +1114,38 @@ def admin_login(
             detail="Invalid username or password",
         )
 
-    token = create_access_token(admin)
+    return admin
 
-    return {
-        "access_token": token,
-        "token_type": "bearer",
-        "username": admin.username,
-    }
+
+@app.post("/api/auth/login", dependencies=[Depends(limit_login_ip)])
+def admin_login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    if not legacy_bearer_enabled():
+        raise HTTPException(403, "Legacy login disabled.")
+    admin = authenticate_admin(form_data, db)
+    return {"access_token": create_access_token(admin), "token_type": "bearer", "username": admin.username}
+
+
+@app.post("/api/auth/session/login", dependencies=[Depends(require_cookie_proxy), Depends(limit_login_ip)])
+def cookie_login(request: Request, response: Response,
+                 form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    admin = authenticate_admin(form_data, db)
+    start_cookie_session(request, response, db, admin)
+    return {"username": admin.username, "expires_in": 3600}
+
+
+@app.get("/api/auth/session/me")
+def cookie_me(request: Request, db: Session = Depends(get_db)):
+    admin = get_cookie_admin(request, db)
+    return {"username": admin.username}
+
+
+@app.post("/api/auth/session/logout")
+def cookie_logout(request: Request, response: Response, db: Session = Depends(get_db)):
+    end_cookie_session(request, response, db)
+    return {"message": "Signed out"}
 
 
 # ADMIN USER MANAGEMENT
@@ -1318,6 +1341,8 @@ def update_admin_user(
         else:
             user.is_active = requested_active
 
+    if updates:
+        revoke_admin_sessions(db, user.id)
     db.commit()
     db.refresh(user)
 
@@ -1372,6 +1397,7 @@ def delete_admin_user(
             ),
         )
 
+    revoke_admin_sessions(db, user.id)
     db.delete(user)
     db.commit()
 

@@ -1,3 +1,4 @@
+import { adminLogout } from "../utils/api";
 import {
   LayoutDashboard,
   Wrench,
@@ -16,7 +17,6 @@ function AdminSidebar({
   currentPage = "",
   mobile = false,
   onClose,
-  onLogout,
 }) {
   const adminUsername =
     localStorage.getItem("adminUsername") ||
@@ -163,7 +163,7 @@ function AdminSidebar({
 
         <button
           type="button"
-          onClick={onLogout}
+          onClick={adminLogout}
           className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
         >
           <LogOut size={18} />

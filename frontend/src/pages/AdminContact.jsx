@@ -239,19 +239,6 @@ function AdminContact() {
     }
   }
 
-  function handleLogout() {
-    localStorage.removeItem(
-      "adminToken"
-    );
-
-    localStorage.removeItem(
-      "adminUsername"
-    );
-
-    navigate(
-      "/admin/login"
-    );
-  }
 
   function formatDate(
     dateString
@@ -387,7 +374,6 @@ function AdminContact() {
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
         <AdminSidebar
           currentPage="/admin/contact"
-          onLogout={handleLogout}
         />
       </aside>
 
@@ -407,7 +393,6 @@ function AdminContact() {
               onClose={() =>
                 setSidebarOpen(false)
               }
-              onLogout={handleLogout}
             />
           </aside>
         </>

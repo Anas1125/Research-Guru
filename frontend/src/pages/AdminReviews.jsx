@@ -460,11 +460,6 @@ function AdminReviews() {
         <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 lg:block">
         <AdminSidebar
             currentPage="/admin/reviews"
-            onLogout={() => {
-            localStorage.removeItem("adminToken");
-            localStorage.removeItem("adminUsername");
-            window.location.href = "/admin/login";
-            }}
         />
         </aside>
 
@@ -484,11 +479,6 @@ function AdminReviews() {
                 onClose={() =>
                 setMobileSidebarOpen(false)
                 }
-                onLogout={() => {
-                localStorage.removeItem("adminToken");
-                localStorage.removeItem("adminUsername");
-                window.location.href = "/admin/login";
-                }}
             />
             </aside>
         </>

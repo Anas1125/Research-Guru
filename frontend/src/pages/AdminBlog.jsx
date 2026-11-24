@@ -515,19 +515,6 @@ function AdminBlog() {
     return safeImageUrl(imagePath, API_URL);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem(
-      "adminToken"
-    );
-
-    localStorage.removeItem(
-      "adminUsername"
-    );
-
-    navigate(
-      "/admin/login"
-    );
-  };
 
   return (
     <div className="min-h-screen bg-[#F5F8FC] text-slate-900">
@@ -535,9 +522,6 @@ function AdminBlog() {
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
         <AdminSidebar
           currentPage="/admin/blog"
-          onLogout={
-            handleLogout
-          }
         />
       </aside>
 
@@ -560,9 +544,6 @@ function AdminBlog() {
                 setMobileMenuOpen(
                   false
                 )
-              }
-              onLogout={
-                handleLogout
               }
             />
           </aside>

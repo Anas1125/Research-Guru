@@ -199,18 +199,6 @@ function Admin() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem(
-      "adminToken"
-    );
-
-    localStorage.removeItem(
-      "adminUsername"
-    );
-
-    window.location.href =
-      "/admin/login";
-  };
 
   const username =
     localStorage.getItem(
@@ -223,7 +211,6 @@ function Admin() {
         <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
           <AdminSidebar
             currentPage="/admin"
-            onLogout={handleLogout}
           />
         </aside>
 
@@ -243,7 +230,6 @@ function Admin() {
                 onClose={() =>
                   setMobileMenuOpen(false)
                 }
-                onLogout={handleLogout}
               />
             </aside>
           </>

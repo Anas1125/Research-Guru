@@ -347,19 +347,6 @@ function AdminSettings() {
     return safeImageUrl(path, API_URL);
   }
 
-  function handleLogout() {
-    localStorage.removeItem(
-      "adminToken"
-    );
-
-    localStorage.removeItem(
-      "adminUsername"
-    );
-
-    navigate(
-      "/admin/login"
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#F5F8FC] text-[#17213A]">
@@ -367,7 +354,6 @@ function AdminSettings() {
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-[#17213A] lg:block">
         <AdminSidebar
           currentPage="/admin/settings"
-          onLogout={handleLogout}
         />
       </aside>
 
@@ -387,7 +373,6 @@ function AdminSettings() {
               onClose={() =>
                 setSidebarOpen(false)
               }
-              onLogout={handleLogout}
             />
           </aside>
         </>

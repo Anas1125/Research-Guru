@@ -230,3 +230,13 @@ class RateLimitBucket(Base):
     window_start = Column(BigInteger, primary_key=True)
     expires_at = Column(BigInteger, nullable=False, index=True)
     count = Column(Integer, nullable=False)
+
+
+class AdminSession(Base):
+    """Opaque, revocable administrator sessions; only token digests persist."""
+    __tablename__ = "admin_sessions"
+
+    token_hash = Column(String(64), primary_key=True)
+    admin_id = Column(Integer, ForeignKey("admin_users.id", ondelete="CASCADE"), nullable=False, index=True)
+    binding = Column(String(64), nullable=False)
+    expires_at = Column(BigInteger, nullable=False, index=True)
