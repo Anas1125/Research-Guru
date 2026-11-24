@@ -108,7 +108,13 @@ def _count_files():
 def _assert_served(client, url, content, content_type):
     response = client.get(url)
     assert response.status_code == 200, response.text
-    assert response.content == content
+    with Image.open(io.BytesIO(response.content)) as decoded, Image.open(io.BytesIO(content)) as original:
+        decoded.load()
+        assert decoded.format == original.format
+        assert decoded.size == original.size
+        from PIL import ImageChops
+        differences = ImageChops.difference(decoded.convert("RGB"), original.convert("RGB"))
+        assert max(high for low, high in differences.getextrema()) <= 5
     assert response.headers["content-type"] == content_type
     assert "immutable" in response.headers["cache-control"]
 
@@ -233,7 +239,7 @@ def test_review_photo_upload(client, auth_headers):
     )
     assert response.status_code == 200, response.text
     url = response.json()["image_url"]
-    assert url.startswith("/api/files/reviews/") and url.endswith(".jpeg")
+    assert url.startswith("/api/files/reviews/") and url.endswith(".jpg")
     _assert_served(client, url, data, "image/jpeg")
 
 
@@ -725,3 +731,120 @@ def test_contact_email_escapes_untrusted_html(client, rate_clock, monkeypatch):
     finally:
         with SessionLocal.begin() as db:
             db.query(main.ContactEnquiry).filter_by(name=name).delete()
+
+
+UPLOAD_PATHS = [
+    "/api/admin/site-settings/upload?setting_key=logo_url",
+    "/api/admin/blog/upload-image",
+    "/api/admin/clients/upload-logo",
+    "/api/admin/reviews/upload-photo",
+]
+
+
+@pytest.mark.parametrize("path", UPLOAD_PATHS)
+@pytest.mark.parametrize("filename,content_type,kind", [
+    ("fake.png", "image/png", "html"),
+    ("fake.png", "image/png", "jpeg"),
+    ("fake.jpg", "image/png", "png"),
+    ("fake.svg", "image/svg+xml", "svg"),
+    ("fake.png", "text/html", "png"),
+])
+def test_upload_rejects_disguised_images(client, auth_headers, path, filename, content_type, kind):
+    contents = {"html": b"<html>not an image</html>", "jpeg": _jpeg_bytes(),
+                "png": _png_bytes(), "svg": b'<svg xmlns="http://www.w3.org/2000/svg"/>'}[kind]
+    before = _count_files()
+    response = client.post(path, headers=auth_headers, files={"file": (filename, contents, content_type)})
+    assert response.status_code == 400, response.text
+    assert _count_files() == before
+
+
+@pytest.mark.parametrize("path", UPLOAD_PATHS)
+def test_upload_rejects_oversized_files(client, auth_headers, path):
+    from image_upload import MAX_BYTES
+    before = _count_files()
+    response = client.post(path, headers=auth_headers, files={
+        "file": ("large.png", b"x" * (MAX_BYTES + 1), "image/png")
+    })
+    assert response.status_code == 413
+    assert _count_files() == before
+
+
+def test_upload_strips_metadata_and_trailing_content(client, auth_headers):
+    from PIL.PngImagePlugin import PngInfo
+    info = PngInfo()
+    info.add_text("Comment", "private metadata marker")
+    buffer = io.BytesIO()
+    Image.new("RGBA", (16, 16), (20, 40, 60, 100)).save(buffer, "PNG", pnginfo=info)
+    data = buffer.getvalue() + b"<html>trailing-marker</html>"
+    response = client.post(UPLOAD_PATHS[1], headers=auth_headers, files={
+        "file": ("../../photo.png", data, "image/png")
+    })
+    assert response.status_code == 200, response.text
+    url = response.json()["image_url"]
+    assert re.fullmatch(r"/api/files/blog/[0-9a-f]{32}\.png", url)
+    served = client.get(url)
+    assert served.status_code == 200
+    assert b"trailing-marker" not in served.content
+    assert b"private metadata marker" not in served.content
+    assert "sandbox" in served.headers["content-security-policy"]
+    with Image.open(io.BytesIO(served.content)) as image:
+        assert image.convert("RGBA").getpixel((0, 0)) == (20, 40, 60, 100)
+        assert "Comment" not in image.info
+
+
+def test_upload_rejects_excess_dimensions(client, auth_headers):
+    buffer = io.BytesIO()
+    Image.new("RGB", (4097, 2)).save(buffer, "PNG")
+    response = client.post(UPLOAD_PATHS[1], headers=auth_headers, files={
+        "file": ("wide.png", buffer.getvalue(), "image/png")
+    })
+    assert response.status_code == 400
+
+
+def test_upload_rejects_animated_png(client, auth_headers):
+    buffer = io.BytesIO()
+    frames = [Image.new("RGB", (8, 8), color) for color in ("red", "blue")]
+    frames[0].save(buffer, "PNG", save_all=True, append_images=frames[1:], duration=100, loop=0)
+    response = client.post(UPLOAD_PATHS[1], headers=auth_headers, files={
+        "file": ("animated.png", buffer.getvalue(), "image/png")
+    })
+    assert response.status_code == 400
+
+
+def test_favicon_ico_only_for_favicon(client, auth_headers):
+    buffer = io.BytesIO()
+    Image.new("RGBA", (32, 32), (20, 40, 60, 255)).save(buffer, "ICO")
+    files = {"file": ("icon.ico", buffer.getvalue(), "image/vnd.microsoft.icon")}
+    assert client.post(UPLOAD_PATHS[0], headers=auth_headers, files=files).status_code == 400
+    response = client.post("/api/admin/site-settings/upload?setting_key=favicon_url", headers=auth_headers, files=files)
+    assert response.status_code == 200, response.text
+    served = client.get(response.json()["image_url"])
+    assert served.headers["content-type"] == "image/x-icon"
+    with Image.open(io.BytesIO(served.content)) as image:
+        assert image.format == "ICO"
+        assert image.size == (32, 32)
+
+
+def test_webp_upload(client, auth_headers):
+    buffer = io.BytesIO()
+    Image.new("RGB", (16, 16), "blue").save(buffer, "WEBP")
+    response = client.post(UPLOAD_PATHS[1], headers=auth_headers, files={
+        "file": ("test.webp", buffer.getvalue(), "image/webp")
+    })
+    assert response.status_code == 200, response.text
+    served = client.get(response.json()["image_url"])
+    assert served.headers["content-type"] == "image/webp"
+    with Image.open(io.BytesIO(served.content)) as image:
+        assert image.format == "WEBP"
+
+
+def test_preexisting_non_image_mime_not_served(client):
+    file_id = secrets.token_hex(16)
+    with SessionLocal.begin() as db:
+        db.add(StoredFile(id=file_id, folder="site", filename=file_id+".png",
+                          content_type="text/html", size=4, data=b"test"))
+    try:
+        assert client.get("/api/files/site/"+file_id+".png").status_code == 404
+    finally:
+        with SessionLocal.begin() as db:
+            db.query(StoredFile).filter_by(id=file_id).delete()
