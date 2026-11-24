@@ -1,4 +1,7 @@
 import os
+import hashlib
+import hmac
+import json
 from datetime import datetime, timedelta, timezone
 
 import jwt
@@ -51,17 +54,31 @@ def verify_password(
     )
 
 
+def credential_binding(admin: AdminUser) -> str:
+    # Bind tokens to the actual account and its current credentials without
+    # exposing the password hash or requiring a database schema change.
+    message = json.dumps(
+        ["research-guru-admin-v1", admin.id, admin.username, admin.password_hash],
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hmac.new(SECRET_KEY.encode("utf-8"), message, hashlib.sha256).hexdigest()
+
+
 def create_access_token(
-    data: dict,
+    admin: AdminUser,
     expires_delta: timedelta | None = None,
 ) -> str:
-    to_encode = data.copy()
+    to_encode = {
+        "sub": admin.username,
+        "aid": admin.id,
+        "binding": credential_binding(admin),
+    }
 
     now = datetime.now(timezone.utc)
 
     expire = (
         now + expires_delta
-        if expires_delta
+        if expires_delta is not None
         else now + timedelta(
             minutes=ACCESS_TOKEN_EXPIRE_MINUTES
         )
@@ -97,12 +114,17 @@ def get_current_admin(
             token,
             SECRET_KEY,
             algorithms=[ALGORITHM],
-            options={"require": ["sub", "iat", "exp"]},
+            options={"require": ["sub", "aid", "binding", "iat", "exp"]},
         )
 
-        username = payload.get("sub")
+        username = payload["sub"]
+        account_id = payload["aid"]
+        binding = payload["binding"]
 
         if (not isinstance(username, str) or not username
+                or type(account_id) is not int or not 0 < account_id <= 2147483647
+                or not isinstance(binding, str) or len(binding) != 64
+                or not binding.isascii()
                 or type(payload["iat"]) is not int
                 or type(payload["exp"]) is not int
                 or payload["exp"] <= payload["iat"]):
@@ -114,13 +136,14 @@ def get_current_admin(
     admin = (
         db.query(AdminUser)
         .filter(
+            AdminUser.id == account_id,
             AdminUser.username == username,
             AdminUser.is_active == True,
         )
         .first()
     )
 
-    if not admin:
+    if not admin or not hmac.compare_digest(binding, credential_binding(admin)):
         raise credentials_exception
 
     return admin
